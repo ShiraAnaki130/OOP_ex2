@@ -302,32 +302,56 @@ public void addNode(node_data n) {
 }
 @Override
 public void connect(int src, int dest, double w) {
-	// TODO Auto-generated method stub
-	
+	if(map.containsKey(src)&&map.containsKey(dest)&&(src!=dest)){
+		if(!nodes_edges.get(src).hasNi(dest)) {
+	       edge_data toAdd=new EdgeData(src,dest,w);
+	       nodes_edges.get(src).addNi(dest, toAdd);
+	       MC++;
+	       e_size++;
+		}	
+	}
+	return;
 }
 
 @Override
 public Collection<node_data> getV() {
-	// TODO Auto-generated method stub
-	return null;
+	return map.values();
 }
 
 @Override
 public Collection<edge_data> getE(int node_id) {
-	// TODO Auto-generated method stub
+	if(map.containsKey(node_id)) {
+		return nodes_edges.get(node_id).getNi().values();
+	}
 	return null;
 }
 
 @Override
 public node_data removeNode(int key) {
-	// TODO Auto-generated method stub
-	return null;
+	node_data toRemove=getNode(key);
+	if(toRemove==null) return toRemove;
+	for(node_data node:getV()) {
+		 if(nodes_edges.get(node.getKey()).hasNi(key)) {
+			  nodes_edges.get(node.getKey()).removeNode(key);
+			  e_size--;
+		   }
+	   }
+	e_size-=getE(key).size();
+	nodes_edges.remove(key);
+	MC++;
+	return map.remove(key);
 }
+	
 
 @Override
 public edge_data removeEdge(int src, int dest) {
-	// TODO Auto-generated method stub
-	return null;
+	edge_data toRemove=getEdge(src,dest);
+	if(toRemove!=null) {
+		nodes_edges.get(src).removeNode(dest);
+		MC++;
+		e_size--;
+	}
+	return toRemove;
 }
 /**
  * This function finds in O(1), the numbers of the nodes in the graph.
