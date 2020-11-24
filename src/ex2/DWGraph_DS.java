@@ -2,7 +2,6 @@ package ex2;
 
 import java.util.Collection;
 import java.util.HashMap;
-
 public class DWGraph_DS implements directed_weighted_graph {
 	
 private static class NodeData implements node_data{
@@ -186,20 +185,40 @@ private class EdgeData implements edge_data{
 	}
 	
 }
+/**
+ * This private class represents all the edges getting out of a given node.
+ * uses a data structure from the type of HahMap.
+ */
 private class edges_direction{
 	HashMap<Integer,edge_data> edgesNi;
 	public edges_direction() {
 		edgesNi=new HashMap<Integer,edge_data>();
 	}
+	/**
+	 * This function returns the collection with all the edges which getting out of this given node.  
+	 * @return HashMap-a data structure which representing the edges collection of this given node.
+	 */
+	public HashMap<Integer,edge_data> getNi() {
+		return edgesNi;
+	}
+	/**
+	 * This function checks if there is an edge from this to other
+	 * @param other- this is a node_id which this node may be connected to. 
+	 * @return returns true in case there is an edge from this to other,or false in case there isn't.
+	 */
 	public boolean hasNi(int other) {
 		if(edgesNi.containsKey(other)) return true;
 		return false;
 	}
+	/**
+	 * This function adds node other to be another neighbor of this current node_info. 
+	 * @param other- this is the node which need to be add as a new neighbor.
+	 */
 	public void addNi(int other, edge_data edge) {
 		edgesNi.put(other, edge);
 	}
 	/**
-	 * This function removes the edge this<-->other.
+	 * This function removes the edge this -->other.
 	 * @param other- this is the node which the edge ends at.
 	 */
 	public void removeNode(int other) {
@@ -208,10 +227,10 @@ private class edges_direction{
 		
 	}
 	/**
-	 * This function returns the weight of the edge between 
-	 * this<-->other,in case the edge between them is existent.
-	 * @param other- this is the other node,which the edge is connected between.
-	 * @return the weight of the edge between this<-->other,or -1 in case the edge isn't existent. 
+	 * This function returns the weight of the edge from this to other: 
+	 * this-->other,in case the edge is existent.
+	 * @param other- this is the other node_id,which may the edge ends at.
+	 * @return the weight of the edge from this-->(to)other,or -1 in case the edge isn't existent. 
 	 */
 	public double getWeight(int other) {
 		if(hasNi(other)) {
@@ -219,30 +238,68 @@ private class edges_direction{
 		}
 		return -1;
 	}
+	/**
+	 * This function returns the edge_data of the edge from this to the node of this given id.
+	 * @param key- this is the id of the node which the edge from this node ends at.
+	 * @return the edge_data of this edge, or null if the edge isn't existent.
+	 */
+	public edge_data getE(int key){
+		return edgesNi.get(key);
+	}
 }
 //DWGraph_DS:
 
-HashMap<Integer,node_data> map;
-HashMap<Integer,edges_direction> nodes_edges;
+private HashMap<Integer,node_data> map;
+private HashMap<Integer,edges_direction> nodes_edges;
+private int MC;
+private int e_size;
 
+public DWGraph_DS(){
+	this.map = new HashMap<>();
+	this.nodes_edges = new HashMap<>();
+	this.MC = 0;
+	this.e_size= 0;
+}
+/**
+ * This function returns the node_data by the node_id.
+ * @param key - this is the node_id.
+ * @return the node_data by the node_id, null if none.
+ */
 @Override
 public node_data getNode(int key) {
-	// TODO Auto-generated method stub
-	return null;
+	return map.get(key);
 }
-
+/**
+ * This function returns,in O(1),the data of the edge (src-->dest), null if none.
+ * @param src- this is the node_id which the edge start at.
+ * @param dest- this is the nide_id which the edge ends at.
+ * @return the data of the edge getting out of src to dest, or null if this edge isn't existent.
+ */
 @Override
 public edge_data getEdge(int src, int dest) {
-	// TODO Auto-generated method stub
+	if(src!=dest && map.containsKey(src)&&map.containsKey(dest)){
+		if(nodes_edges.get(src).hasNi(dest)){
+			return nodes_edges.get(src).getE(dest);
+		}
+		return null;
+	}
 	return null;
 }
-
+/**
+ * This function adds,in O(1),a new node to the graph with the given node_data- 
+ * in case there is already a node with such a key.
+ * @param key- this is the id of the new vertex to add.
+ */
 @Override
 public void addNode(node_data n) {
-	// TODO Auto-generated method stub
+	if(!map.containsKey(n.getKey())){
+		map.put(n.getKey(),n);
+		edges_direction e = new edges_direction();
+		nodes_edges.put(n.getKey(),e);
+		MC++;
+	}
 	
 }
-
 @Override
 public void connect(int src, int dest, double w) {
 	// TODO Auto-generated method stub
@@ -272,23 +329,28 @@ public edge_data removeEdge(int src, int dest) {
 	// TODO Auto-generated method stub
 	return null;
 }
-
+/**
+ * This function finds in O(1), the numbers of the nodes in the graph.
+ */
 @Override
 public int nodeSize() {
-	// TODO Auto-generated method stub
-	return 0;
+	return this.map.size();
 }
-
+/**
+ * This function returns in O(1), the number of the edges in the graph.
+ * @return return the number of the edges.
+ */
 @Override
 public int edgeSize() {
-	// TODO Auto-generated method stub
-	return 0;
+	return this.e_size;
 }
-
+/**
+ * This function returns in O(1), the number of the changes that has been made if the graph.
+ * @return return MC- the number of the changes.
+ */
 @Override
 public int getMC() {
-	// TODO Auto-generated method stub
-	return 0;
+	return this.MC;
 }
 }
 
