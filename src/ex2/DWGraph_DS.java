@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 public class DWGraph_DS implements directed_weighted_graph {
 	
-private static class NodeData implements node_data{
+public static class NodeData implements node_data{
 	private int key;
 	private double weight;
 	private String info;
@@ -288,7 +288,7 @@ public edge_data getEdge(int src, int dest) {
 /**
  * This function adds,in O(1),a new node to the graph with the given node_data- 
  * in case there is already a node with such a key.
- * @param key- this is the id of the new vertex to add.
+ * @param n- this is the id of the new vertex to add.
  */
 @Override
 public void addNode(node_data n) {
