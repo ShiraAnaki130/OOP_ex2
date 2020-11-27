@@ -1,116 +1,138 @@
 package ex2;
-
 import java.util.Collection;
 import java.util.HashMap;
-public class DWGraph_DS implements directed_weighted_graph {
+public class DWGraph_DS implements directed_weighted_graph{
+	/**
+	 * This class represents a node (vertex) in an directional weighted graph.
+	 * Every node consist of a unique key,weight, location, and tag and info for marking.
+	 * @author Lea&shira.
+	 */
+	public static class NodeData implements node_data{
+		private int key;
+		private double weight;
+		private String info;
+		private int tag;
+		private static int key1=1;
+		private geo_location location;
+		public NodeData() {
+			this.key=key1++;
+			this.info="f";
+			this.tag=Integer.MAX_VALUE;
+			this.weight = 0;
+			this.location=new Geo_Location();
+		}
+		
+		public NodeData(int key) {
+			this.key=key;
+			this.info="f";
+			this.tag=Integer.MAX_VALUE;
+			this.weight = 0;
+			this.location=new Geo_Location();
+		}
+		public NodeData(int key, String info,int tag, double weight,double x, double y, double z) {
+			this.key=key;
+			this.info=info;
+			this.tag=tag;
+			this.weight = weight;
+			this.location=new Geo_Location(x,y,z);
+		}
+		@Override
+		public int getKey() {
+			return key;
+		}
+
+		@Override
+		public geo_location getLocation() {
+			return location;
+		}
+
+		@Override
+		public void setLocation(geo_location p) {
+			location=new Geo_Location(p);
+		}
+
+		@Override
+		public double getWeight() {
+			return this.weight;
+		}
+
+		@Override
+		public void setWeight(double w) {
+			this.weight=w;
+			
+		}
+
+		@Override
+		public String getInfo() {
+			return this.info;
+		}
+
+		@Override
+		public void setInfo(String s) {
+			this.info=""+s;
+			
+		}
+
+		@Override
+		public int getTag() {
+			return this.tag;
+		}
+
+		@Override
+		public void setTag(int t) {
+			tag=t;
+			
+		}
 	
-private static class NodeData implements node_data{
-	private int key;
-	private double weight;
-	private String info;
-	private int tag;
-	private static int key1=0;
-	private geo_location location;
-	
-	public NodeData() {
-		this.key=key1++;
-		this.info="f";
-		this.tag=Integer.MAX_VALUE;
-		this.weight = 0;
-		this.location=new Geo_Location();
-		
-	}
-	@Override
-	public int getKey() {
-		return key;
-	}
 
-	@Override
-	public geo_location getLocation() {
-		return location;
-	}
+		public class Geo_Location implements geo_location{
+			private double _x;
+			private double _y;
+			private double _z;
+			
+			public Geo_Location() {
+				this._x=0.0;
+				this._y=0.0;
+				this._z=0.0;
+			}
+			public Geo_Location(geo_location p) {
+				this._x=p.x();
+				this._y=p.y();
+				this._z=p.z();
+			}
+			public Geo_Location(double x,double y,double z) {
+				this._x=x;
+				this._y=y;
+				this._z=z;
+			}
 
-	@Override
-	public void setLocation(geo_location p) {
-		location=new Geo_Location(p);
-	}
 
-	@Override
-	public double getWeight() {
-		return this.weight;
-	}
 
-	@Override
-	public void setWeight(double w) {
-		this.weight=w;
-		
-	}
+			@Override
+			public double x() {
+				return this._x;
+			}
 
-	@Override
-	public String getInfo() {
-		return this.info;
-	}
+			@Override
+			public double y() {
+				return this._y;
+			}
 
-	@Override
-	public void setInfo(String s) {
-		this.info=""+s;
-		
-	}
+			@Override
+			public double z() {
+				return this._z;
+			}
 
-	@Override
-	public int getTag() {
-		return this.tag;
-	}
-
-	@Override
-	public void setTag(int t) {
-		tag=t;
-		
-	}
-
-	private class Geo_Location implements geo_location{
-		private double _x;
-		private double _y;
-		private double _z;
-		
-		public Geo_Location() {
-			this._x=0.0;
-			this._y=0.0;
-			this._z=0.0;
+			@Override
+			public double distance(geo_location g) {
+				double dis_x=Math.pow(this._x-g.x(), 2);
+				double dis_y=Math.pow(this._y-g.y(), 2);
+				double dis_z=Math.pow(this._z-g.z(), 2);
+				return Math.sqrt(dis_x+dis_y+dis_z);
+			}
+			
 		}
-		public Geo_Location(geo_location p) {
-			this._x=p.x();
-			this._y=p.y();
-			this._z=p.z();
-		}
-
-
-		@Override
-		public double x() {
-			return this._x;
-		}
-
-		@Override
-		public double y() {
-			return this._y;
-		}
-
-		@Override
-		public double z() {
-			return this._z;
-		}
-
-		@Override
-		public double distance(geo_location g) {
-			double dis_x=Math.pow(this._x-g.x(), 2);
-			double dis_y=Math.pow(this._y-g.y(), 2);
-			double dis_z=Math.pow(this._z-g.z(), 2);
-			return Math.sqrt(dis_x+dis_y+dis_z);
-		}
-		
 	}
-	
-}
 /*private class EdgeLocation implements edge_location{
 	private edge_data edge;
 	private double ratio;
@@ -133,13 +155,27 @@ private static class NodeData implements node_data{
 	}
 	
 }*/
+/**
+ * This public class represents an edge in an directional weighted graph.
+ * Every edge consist of src(edge's start node_id), dest(edge's end node_id), edge's weight,
+ * tag and info(for marking).
+ * @author Lea&Shira.
+ *
+ */
 
-private class EdgeData implements edge_data{
+public static class EdgeData implements edge_data{
 	private int src;
 	private int dest;
 	private double weight;
 	private String info;
 	private int tag;
+	public EdgeData(int src,int dest,double weight,String info,int tag) {
+		this.src=src;
+		this.dest=dest;
+		this.weight=weight;
+		this.info=info;
+		this.tag=tag;
+	}
 	
 	public EdgeData(int src,int dest,double weight) {
 		this.src=src;
@@ -148,58 +184,82 @@ private class EdgeData implements edge_data{
 		this.info="f";
 		this.tag=Integer.MAX_VALUE;
 	}
+	/**
+	 * The function returns the id of the source node of this edge.
+	 * @return
+	 */
 	@Override
 	public int getSrc() {
 		return this.src;
 	}
-
+	/**
+	 * This function returns the id of the destination node of this edge.
+	 * @return 
+	 */
 	@Override
 	public int getDest() {
 		return this.dest;
 	}
-
+	/**
+	 *This function returns the weight of this edge (only positive value).
+	 *  @return
+	 */
 	@Override
 	public double getWeight() {
 		return this.weight;
 	}
-
+	/**
+	 * Returns the remark (meta data) associated with this edge.
+	 * @return
+	 */
 	@Override
 	public String getInfo() {
 		return this.info;
 	}
-
+	/**
+	 * Allows changing the remark (meta data) associated with this edge.
+	 * @param s
+	 */
 	@Override
 	public void setInfo(String s) {
 		this.info = s;
 		
 	}
-
+	/**
+	 * This function returns the Temporal data of this edge.
+	 */
 	@Override
 	public int getTag() {
 		return this.tag;
 	}
-
+	/**
+	 * This function allows to change the value of the tag.
+	 * @param t- this is the new value of the tag. 
+	 */
 	@Override
 	public void setTag(int t) {
 		this.tag = t;
 	}
-	
 }
 /**
  * This private class represents all the edges getting out of a given node.
  * uses a data structure from the type of HahMap.
  */
-private class edges_direction{
+public static class edges_direction{
 	HashMap<Integer,edge_data> edgesNi;
 	public edges_direction() {
-		edgesNi=new HashMap<Integer,edge_data>();
+		this.edgesNi=new HashMap<Integer,edge_data>();
 	}
+	public edges_direction(HashMap<Integer,edge_data> edges) {
+		this.edgesNi=edges;
+	}
+
 	/**
 	 * This function returns the collection with all the edges which getting out of this given node.  
 	 * @return HashMap-a data structure which representing the edges collection of this given node.
 	 */
 	public HashMap<Integer,edge_data> getNi() {
-		return edgesNi;
+		return this.edgesNi;
 	}
 	/**
 	 * This function checks if there is an edge from this to other
@@ -259,6 +319,52 @@ public DWGraph_DS(){
 	this.nodes_edges = new HashMap<>();
 	this.MC = 0;
 	this.e_size= 0;
+}
+public DWGraph_DS(HashMap<Integer,node_data>map,HashMap<Integer,edges_direction>nodes_edges, int MC,int e_size){
+	this.map = map;
+	this.nodes_edges =nodes_edges;
+	this.MC = MC;
+	this.e_size= e_size;
+}
+/**
+ * This function is a copy constructor of DWGraph_DS.
+ * The function is getting a graph from the type of directed_weighted_graph and 
+ * builds a new one by copying all of the values of the excepted graph to the new graph.  
+ * Note: needed for DWGraph_Algo.
+ * @param graph- this is the graph which the function makes an identical copy of.
+ */
+public DWGraph_DS(directed_weighted_graph graph) {
+	this.map = new HashMap<Integer,node_data>();
+	this.nodes_edges = new HashMap<Integer,edges_direction>();
+	node_data nodeToAddSrc;
+	node_data nodeToAddDest;
+	edges_direction ni=new edges_direction();
+	int src;int dest;double w;
+	for(node_data node:graph.getV()){
+		src=node.getKey();
+		if(!map.containsKey(src)) {
+			nodeToAddSrc=new NodeData(src);
+			map.put(src, nodeToAddSrc);
+			nodes_edges.put(src, ni);
+		}
+		else nodeToAddSrc=getNode(src);
+		for(edge_data edge:graph.getE(src)) {
+			dest=edge.getDest();
+			w=edge.getWeight();
+			if(!map.containsKey(dest)) {
+				nodeToAddDest=new NodeData(dest);
+				map.put(dest, nodeToAddDest);
+				nodes_edges.put(dest, ni);
+			}
+			else nodeToAddDest=getNode(dest);
+			connect(src,dest,w);
+			nodes_edges.get(src).getE(dest).setInfo(edge.getInfo());
+			nodes_edges.get(src).getE(dest).setTag(edge.getTag());
+		}
+	}
+	this.MC=graph.getMC();
+	this.e_size=graph.edgeSize();
+	
 }
 /**
  * This function returns the node_data by the node_id.
@@ -377,4 +483,5 @@ public int getMC() {
 	return this.MC;
 }
 }
+
 

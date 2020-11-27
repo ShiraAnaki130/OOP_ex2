@@ -1,5 +1,5 @@
 package ex2;
-
+import com.google.gson.annotations.*;
 /**
  * This interface represents the set of operations applicable on a 
  * node (vertex) in a (directional) weighted graph.
