@@ -1,3 +1,5 @@
+package ex2;
+
 import org.junit.jupiter.api.Assertions;
 import ex2.*;
 import org.junit.jupiter.api.Test;

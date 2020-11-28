@@ -1,7 +1,6 @@
 package ex2;
 import java.util.Collection;
 import java.util.HashMap;
-<<<<<<< HEAD
 public class DWGraph_DS implements directed_weighted_graph{
 	/**
 	 * This class represents a node (vertex) in an directional weighted graph.
@@ -22,60 +21,6 @@ public class DWGraph_DS implements directed_weighted_graph{
 			this.weight = 0;
 			this.location=new Geo_Location();
 		}
-=======
-public class DWGraph_DS implements directed_weighted_graph {
-	
-public static class NodeData implements node_data{
-	private int key;
-	private double weight;
-	private String info;
-	private int tag;
-	private static int key1=0;
-	private geo_location location;
-	
-	public NodeData() {
-		this.key=key1++;
-		this.info="f";
-		this.tag=Integer.MAX_VALUE;
-		this.weight = 0;
-		this.location=new Geo_Location();
-		
-	}
-	@Override
-	public int getKey() {
-		return key;
-	}
-
-	@Override
-	public geo_location getLocation() {
-		return location;
-	}
-
-	@Override
-	public void setLocation(geo_location p) {
-		location=new Geo_Location(p);
-	}
-
-	@Override
-	public double getWeight() {
-		return this.weight;
-	}
-
-	@Override
-	public void setWeight(double w) {
-		this.weight=w;
-		
-	}
-
-	@Override
-	public String getInfo() {
-		return this.info;
-	}
-
-	@Override
-	public void setInfo(String s) {
-		this.info=""+s;
->>>>>>> 6fb3f2d7f6ad0e559306db809e061680047086c5
 		
 		public NodeData(int key) {
 			this.key=key;
@@ -449,7 +394,7 @@ public edge_data getEdge(int src, int dest) {
 /**
  * This function adds,in O(1),a new node to the graph with the given node_data- 
  * in case there is already a node with such a key.
- * @param n- this is the id of the new vertex to add.
+ * @param key- this is the id of the new vertex to add.
  */
 @Override
 public void addNode(node_data n) {
