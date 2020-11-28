@@ -303,7 +303,7 @@ public static class edges_direction{
 	 * @param key- this is the id of the node which the edge from this node ends at.
 	 * @return the edge_data of this edge, or null if the edge isn't existent.
 	 */
-	public edge_data getE(int key){
+	public edge_data getEdge_(int key){
 		return edgesNi.get(key);
 	}
 }
@@ -333,37 +333,37 @@ public DWGraph_DS(HashMap<Integer,node_data>map,HashMap<Integer,edges_direction>
  * Note: needed for DWGraph_Algo.
  * @param graph- this is the graph which the function makes an identical copy of.
  */
-public DWGraph_DS(directed_weighted_graph graph) {
+public DWGraph_DS(directed_weighted_graph other) {
 	this.map = new HashMap<Integer,node_data>();
 	this.nodes_edges = new HashMap<Integer,edges_direction>();
 	node_data nodeToAddSrc;
 	node_data nodeToAddDest;
-	edges_direction ni=new edges_direction();
+	edges_direction ni;
 	int src;int dest;double w;
-	for(node_data node:graph.getV()){
+	for(node_data node:other.getV()){
 		src=node.getKey();
-		if(!map.containsKey(src)) {
+		if(!this.map.containsKey(src)) {
 			nodeToAddSrc=new NodeData(src);
-			map.put(src, nodeToAddSrc);
-			nodes_edges.put(src, ni);
+			this.map.put(src, nodeToAddSrc);
+			ni=new edges_direction();
+			this.nodes_edges.put(src, ni);
 		}
-		else nodeToAddSrc=getNode(src);
-		for(edge_data edge:graph.getE(src)) {
+		for(edge_data edge:other.getE(src)) {
 			dest=edge.getDest();
 			w=edge.getWeight();
-			if(!map.containsKey(dest)) {
+			if(!this.map.containsKey(dest)) {
 				nodeToAddDest=new NodeData(dest);
-				map.put(dest, nodeToAddDest);
-				nodes_edges.put(dest, ni);
+				this.map.put(dest, nodeToAddDest);
+				ni=new edges_direction();
+				this.nodes_edges.put(dest, ni);
 			}
-			else nodeToAddDest=getNode(dest);
 			connect(src,dest,w);
-			nodes_edges.get(src).getE(dest).setInfo(edge.getInfo());
-			nodes_edges.get(src).getE(dest).setTag(edge.getTag());
-		}
+			nodes_edges.get(src).getEdge_(dest).setInfo(edge.getInfo());
+			nodes_edges.get(src).getEdge_(dest).setTag(edge.getTag());
 	}
-	this.MC=graph.getMC();
-	this.e_size=graph.edgeSize();
+	}
+	this.MC=other.getMC();
+	this.e_size=other.edgeSize();
 	
 }
 /**
@@ -385,7 +385,7 @@ public node_data getNode(int key) {
 public edge_data getEdge(int src, int dest) {
 	if(src!=dest && map.containsKey(src)&&map.containsKey(dest)){
 		if(nodes_edges.get(src).hasNi(dest)){
-			return nodes_edges.get(src).getE(dest);
+			return nodes_edges.get(src).getEdge_(dest);
 		}
 		return null;
 	}
@@ -406,9 +406,15 @@ public void addNode(node_data n) {
 	}
 	
 }
+/**
+ *This function connects,in O(1),an edge between src to dest with weight w. 
+ * @param src - the source of the edge.
+ * @param dest - the destination of the edge.
+ * @param w - positive weight representing the cost.
+ */
 @Override
 public void connect(int src, int dest, double w) {
-	if(map.containsKey(src)&&map.containsKey(dest)&&(src!=dest)){
+	if(this.map.containsKey(src)&&this.map.containsKey(dest)&&(src!=dest)){
 		if(!nodes_edges.get(src).hasNi(dest)) {
 	       edge_data toAdd=new EdgeData(src,dest,w);
 	       nodes_edges.get(src).addNi(dest, toAdd);
@@ -418,12 +424,20 @@ public void connect(int src, int dest, double w) {
 	}
 	return;
 }
-
+/**
+ * This function creates in O(1), another pointer for the collection which
+ * representing all the nodes in the graph.
+ * @return return Collection<node_data>- the another pointer. 
+ */
 @Override
 public Collection<node_data> getV() {
 	return map.values();
 }
-
+/**
+ *This method returns a collection containing all the 
+ *edges which getting out of the given node_id.
+ * @return Collection<node_data>.
+ */
 @Override
 public Collection<edge_data> getE(int node_id) {
 	if(map.containsKey(node_id)) {
@@ -431,7 +445,13 @@ public Collection<edge_data> getE(int node_id) {
 	}
 	return null;
 }
-
+/**
+ * This function removes the node from the graph by it's node_id.
+ * In addition, the function removes all the edges which starts or ends at this node.
+ * the function run in 0(|v|) times. v -number of the nodes in the graph.
+ * @param key- this is the node_id which need to be removed.
+ * @return returns the node which removed, or null if the node does'nt exist in the graph.
+ */
 @Override
 public node_data removeNode(int key) {
 	node_data toRemove=getNode(key);
@@ -447,8 +467,12 @@ public node_data removeNode(int key) {
 	MC++;
 	return map.remove(key);
 }
-	
-
+/**
+ * This function deletes,in O(1), the edge src-->dest from the graph,
+* @param src - the source of the edge.
+ * @param dest - the destination of the edge.
+ * @return the data of the removed edge or null if the edge does'nt exist in the graph.
+ */
 @Override
 public edge_data removeEdge(int src, int dest) {
 	edge_data toRemove=getEdge(src,dest);
