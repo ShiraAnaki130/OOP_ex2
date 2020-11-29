@@ -22,7 +22,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 	 */
 	@Override
 	public void init(directed_weighted_graph g) {
-		graph=g;
+		this.graph=g;
 	}
 	/**
 	 * This function return the underlying graph of which this class works.
@@ -119,13 +119,12 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 	@Override
 	public boolean load(String file) {
 		try {
-			 directed_weighted_graph graph_New=new DWGraph_DS();
+
 			 GsonBuilder builder = new GsonBuilder();
 			 builder.registerTypeAdapter(DWGraph_DS.class, new DWGraph_DSJsonDeserializer());
 			 Gson gson = builder.create();
 			 FileReader reader=new FileReader(file);
-			 graph_New=gson.fromJson(reader,DWGraph_DS.class);
-			 graph=graph_New;
+			 graph=gson.fromJson(reader,DWGraph_DS.class);
 			 return true;
 		}
 		catch(FileNotFoundException e) {

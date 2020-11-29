@@ -331,7 +331,7 @@ public DWGraph_DS(HashMap<Integer,node_data>map,HashMap<Integer,edges_direction>
  * The function is getting a graph from the type of directed_weighted_graph and 
  * builds a new one by copying all of the values of the excepted graph to the new graph.  
  * Note: needed for DWGraph_Algo.
- * @param graph- this is the graph which the function makes an identical copy of.
+ * @param other- this is the graph which the function makes an identical copy of.
  */
 public DWGraph_DS(directed_weighted_graph other) {
 	this.map = new HashMap<Integer,node_data>();
@@ -394,7 +394,7 @@ public edge_data getEdge(int src, int dest) {
 /**
  * This function adds,in O(1),a new node to the graph with the given node_data- 
  * in case there is already a node with such a key.
- * @param key- this is the id of the new vertex to add.
+ * @param n- this is the id of the new vertex to add.
  */
 @Override
 public void addNode(node_data n) {
@@ -506,6 +506,27 @@ public int edgeSize() {
 public int getMC() {
 	return this.MC;
 }
+
+@Override
+	public boolean equals(Object g){
+	boolean answer = true;
+	directed_weighted_graph other = (directed_weighted_graph)g;
+	for(node_data node :this.getV()){
+		if(other.getNode(node.getKey()) != null){
+			for(edge_data edge: this.getE(node.getKey())){
+				if(other.getEdge(edge.getSrc(),edge.getDest())==null){
+					answer = false;
+					break;
+				}
+			}
+			}
+		else {
+			answer = false;
+			break;
+		}
+	}
+	return answer;
+	}
 }
 
 
