@@ -44,7 +44,8 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 	}
 	/**
 	 *This function check if the grath is connected with BFS algorithm for directed graphs
-	 * return true if their direction to each vertex
+	 * if the algorithm finished with answer ture the algorithm swap the directions of the edges and
+	 * do the BFS algorithm again to ensure the connection
 	 */
 	@Override
 	public boolean isConnected() {
@@ -63,6 +64,12 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		return connected;
 	}
 
+	/**
+	 * check the shortest weight directed distance from source node to the destination node with dijkstra's algorithm
+	 * @param src - start node
+	 * @param dest - end (target) node
+	 * @return
+	 */
 	@Override
 	public double shortestPathDist(int src, int dest) {
 		info = new HashMap<>();
@@ -151,6 +158,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		}
 		return false;
 	}
+	//BFS algorithm using given graph and starting node (nxt)
 	private boolean BFS(directed_weighted_graph graph,node_data nxt) {
 		Queue<node_data> frontier = new LinkedList<>();
 		HashSet<node_data> node_out = new HashSet<>();
@@ -173,6 +181,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 			answer = false;
 		return answer;
 	}
+	//The function is swapping the edges in new graph with the same vertex
 	private directed_weighted_graph swapDirections(){
 		directed_weighted_graph new_graph = this.copy();
 		for(node_data n : graph.getV()){
@@ -183,6 +192,8 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		}
 		return new_graph;
 	}
+
+
 	private class AlgoNodeInfo{
 		private int _key;
 		private double weight;
