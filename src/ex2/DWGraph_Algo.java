@@ -13,6 +13,7 @@ import com.google.gson.GsonBuilder;
 public class DWGraph_Algo implements dw_graph_algorithms{
 	
 	private directed_weighted_graph graph;
+	private HashMap<Integer,AlgoNodeInfo> info;
 	
 	public DWGraph_Algo() {
 		graph=new DWGraph_DS();
@@ -54,31 +55,49 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		}
 		Iterator<node_data> next = graph.getV().iterator();
 		node_data nxt = next.next();
-		Queue<node_data> frontier = new LinkedList<>();
-		HashSet<node_data> node_out = new HashSet<>();
-		frontier.add(nxt);
-		while(!frontier.isEmpty()){
-			nxt = frontier.poll();
-			for(edge_data ni: graph.getE(nxt.getKey())){
-				node_data n = graph.getNode(ni.getDest());
-				if(n.getTag() == 0) {
-					n.setTag(1);
-					frontier.add(n);
-				}
-			}
-			nxt.setTag(2);
-			node_out.add(nxt);
+		boolean connected = BFS(graph,nxt);
+		if(connected){
+			directed_weighted_graph copy_graph = this.swapDirections();
+			BFS(copy_graph,nxt);
 		}
-		boolean answer = true;
-		if(node_out.size()!=graph.getV().size())
-			answer = false;
-		return answer;
+		return connected;
 	}
 
 	@Override
 	public double shortestPathDist(int src, int dest) {
-		// TODO Auto-generated method stub
-		return 0;
+		info = new HashMap<>();
+		if(graph.getV().size()<2)
+			return 0;
+		for(node_data node : graph.getV()){
+			info.put(node.getKey(),new AlgoNodeInfo(node));
+		}
+		PriorityQueue<AlgoNodeInfo> frontier = new PriorityQueue<>();
+		AlgoNodeInfo nxt = info.get(src);
+		nxt.setWeight(0.0);
+		frontier.add(nxt);
+		HashSet<AlgoNodeInfo> out_nodes = new HashSet<>();
+		while (!frontier.isEmpty()) {
+			nxt = frontier.poll();
+			if (nxt.getKey() != dest) {
+				for (edge_data edge : graph.getE(nxt.getKey())) {
+					if (!out_nodes.contains(edge.getDest())) {
+						double t = nxt.getWeight() + edge.getWeight();
+						if (t < info.get(edge.getDest()).getWeight()) {
+							info.get(edge.getDest()).setWeight(t);
+							frontier.add(info.get(edge.getDest()));
+						}
+					}
+				}
+			}
+			else {
+				out_nodes.add(nxt);
+				break;
+			}
+			out_nodes.add(nxt);
+		}
+		if (!out_nodes.contains(info.get(dest)))
+			return -1;
+		return info.get(dest).getWeight();
 	}
 
 	@Override
@@ -132,5 +151,59 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		}
 		return false;
 	}
-	
+	private boolean BFS(directed_weighted_graph graph,node_data nxt) {
+		Queue<node_data> frontier = new LinkedList<>();
+		HashSet<node_data> node_out = new HashSet<>();
+		nxt.setTag(1);
+		frontier.add(nxt);
+		while (!frontier.isEmpty()) {
+			nxt = frontier.poll();
+			for (edge_data ni : graph.getE(nxt.getKey())) {
+				node_data n = graph.getNode(ni.getDest());
+				if (n.getTag() == 0) {
+					n.setTag(1);
+					frontier.add(n);
+				}
+			}
+			nxt.setTag(2);
+			node_out.add(nxt);
+		}
+		boolean answer = true;
+		if(node_out.size()!=graph.getV().size())
+			answer = false;
+		return answer;
+	}
+	private directed_weighted_graph swapDirections(){
+		directed_weighted_graph new_graph = this.copy();
+		for(node_data n : graph.getV()){
+			for(edge_data edge: graph.getE(n.getKey())){
+				new_graph.removeEdge(edge.getSrc(),edge.getDest());
+				new_graph.connect(edge.getDest(),edge.getSrc(),edge.getWeight());
+			}
+		}
+		return new_graph;
+	}
+	private class AlgoNodeInfo{
+		private int _key;
+		private double weight;
+		private node_data parent;
+
+		public AlgoNodeInfo(node_data n){
+			this._key = n.getKey();
+			this.weight = Double.POSITIVE_INFINITY;
+			node_data parent = null;
+		}
+		public int getKey(){
+			return this._key;
+		}
+		public double getWeight() {
+			return this.weight;
+		}
+		public void setWeight(double weight) {
+			this.weight = weight;
+		}
+		public void setParent(node_data parent){
+			this.parent = parent;
+		}
+	}
 }
