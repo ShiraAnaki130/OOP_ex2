@@ -58,7 +58,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		boolean connected = BFS(graph,nxt);
 		if(connected){
 			directed_weighted_graph copy_graph = this.swapDirections();
-			BFS(copy_graph,nxt);
+			connected = BFS(copy_graph,nxt);
 		}
 		return connected;
 	}
