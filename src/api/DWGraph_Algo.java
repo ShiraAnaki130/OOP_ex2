@@ -1,12 +1,12 @@
 package api;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.*;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 
 
@@ -109,8 +109,58 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
-		// TODO Auto-generated method stub
-		return null;
+		List<node_data> path = new LinkedList<>();
+		info = new HashMap<>();
+		if(graph.getNode(src) == null || graph.getNode(src)==null)
+			return null;
+		for(node_data node : graph.getV()){
+			info.put(node.getKey(),new AlgoNodeInfo(node));
+		}
+		PriorityQueue<AlgoNodeInfo> frontier = new PriorityQueue<>();
+		AlgoNodeInfo nxt = info.get(src);
+		nxt.setWeight(0.0);
+		frontier.add(nxt);
+		HashSet<node_data> out_nodes = new HashSet<>();
+		while (!frontier.isEmpty()) {
+			nxt = frontier.poll();
+			if (nxt.getKey() != dest) {
+				for (edge_data edge : graph.getE(nxt.getKey())) {
+					if (!out_nodes.contains(edge.getDest())) {
+						double t = nxt.getWeight() + edge.getWeight();
+						if (t < info.get(edge.getDest()).getWeight()) {
+							info.get(edge.getDest()).setWeight(t);
+							frontier.add(info.get(edge.getDest()));
+							info.get(edge.getDest()).setParent(graph.getNode(nxt.getKey()));
+						}
+					}
+				}
+			}
+			else {
+				out_nodes.add(graph.getNode(nxt.getKey()));
+				break;
+			}
+			out_nodes.add(graph.getNode(nxt.getKey()));
+
+		}
+		node_data start = graph.getNode(dest);
+		node_data stop = graph.getNode(src);
+		path.add(start);
+		if(out_nodes.contains(start)) {
+			while (start != null && start != stop) {
+				node_data p = info.get(start.getKey()).getParent();
+				path.add(p);
+				start = p;
+			}
+		}
+		Stack<node_data> temp = new Stack<>();
+		for(node_data node: path){
+			temp.push(node);
+		}
+		path.clear();
+		while(!temp.isEmpty()){
+			path.add(temp.pop());
+		}
+		return path;
 	}
 	/**
      * This function saves this weighted directed graph to the given
@@ -192,9 +242,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		}
 		return new_graph;
 	}
-
-
-	private class AlgoNodeInfo{
+	private class AlgoNodeInfo implements Comparable<Object>{
 		private int _key;
 		private double weight;
 		private node_data parent;
@@ -216,5 +264,19 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		public void setParent(node_data parent){
 			this.parent = parent;
 		}
+		public node_data getParent(){
+			return this.parent;
+		}
+		@Override
+		public int compareTo(Object o) {
+			int ans = 0;
+			if(o instanceof AlgoNodeInfo) {
+				AlgoNodeInfo n =(AlgoNodeInfo) o;
+				if(this.getWeight() - n.getWeight()>0)ans = 1;
+				if(this.getWeight() - n.getWeight()<0)ans = -1;
+			}
+			return ans;
+		}
+
 	}
 }

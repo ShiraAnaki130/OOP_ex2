@@ -83,7 +83,6 @@ public class DWGraph_DS implements directed_weighted_graph{
 			tag=t;
 			
 		}
-	
 
 		public class Geo_Location implements geo_location{
 			private double _x;
@@ -105,9 +104,6 @@ public class DWGraph_DS implements directed_weighted_graph{
 				this._y=y;
 				this._z=z;
 			}
-
-
-
 			@Override
 			public double x() {
 				return this._x;
@@ -527,6 +523,7 @@ public int getMC() {
 	}
 	return answer;
 	}
+
 }
 
 
