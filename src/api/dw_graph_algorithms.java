@@ -1,5 +1,4 @@
-package ex2;
-import com.google.gson.annotations.*;
+package api;
 import java.util.List;
 /**
  * This interface represents a Directed (positive) Weighted Graph Theory Algorithms including:

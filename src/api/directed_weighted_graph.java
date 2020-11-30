@@ -1,5 +1,4 @@
-package ex2;
-import com.google.gson.annotations.*;
+package api;
 import java.util.Collection;
 /**
  * This interface represents a directional weighted graph.

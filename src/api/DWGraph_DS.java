@@ -1,4 +1,4 @@
-package ex2;
+package api;
 import java.util.Collection;
 import java.util.HashMap;
 public class DWGraph_DS implements directed_weighted_graph{

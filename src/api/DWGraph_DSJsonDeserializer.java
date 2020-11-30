@@ -1,4 +1,4 @@
-package ex2;
+package api;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import ex2.DWGraph_DS.edges_direction;
+import api.DWGraph_DS.edges_direction;
 public class DWGraph_DSJsonDeserializer implements JsonDeserializer<DWGraph_DS>{
 	@Override
 	public DWGraph_DS deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2)throws JsonParseException {

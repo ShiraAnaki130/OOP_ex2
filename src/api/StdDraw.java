@@ -1,4 +1,4 @@
-package ex2;
+package api;
 
 // https://introcs.cs.princeton.edu/java/stdlib/StdDraw.java.html
 /******************************************************************************

@@ -1,7 +1,6 @@
-package ex2;
+package api;
 
 import org.junit.jupiter.api.Assertions;
-import ex2.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
