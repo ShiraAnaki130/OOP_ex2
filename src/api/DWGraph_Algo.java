@@ -58,7 +58,10 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		node_data nxt = next.next();
 		boolean connected = BFS(graph,nxt);
 		if(connected){
-			directed_weighted_graph copy_graph = this.swapDirections();
+			for(node_data node : graph.getV()){
+				node.setTag(0);
+			}
+			directed_weighted_graph copy_graph = swapDirections();
 			connected = BFS(copy_graph,nxt);
 		}
 		return connected;
@@ -73,8 +76,8 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 	@Override
 	public double shortestPathDist(int src, int dest) {
 		info = new HashMap<>();
-		if(graph.getV().size()<2)
-			return 0;
+		if(graph.getNode(src) == null || graph.getNode(dest)==null)
+			return -1;
 		for(node_data node : graph.getV()){
 			info.put(node.getKey(),new AlgoNodeInfo(node));
 		}
@@ -111,7 +114,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 	public List<node_data> shortestPath(int src, int dest) {
 		List<node_data> path = new LinkedList<>();
 		info = new HashMap<>();
-		if(graph.getNode(src) == null || graph.getNode(src)==null)
+		if(graph.getNode(src) == null || graph.getNode(dest)==null)
 			return null;
 		for(node_data node : graph.getV()){
 			info.put(node.getKey(),new AlgoNodeInfo(node));
@@ -140,7 +143,6 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 				break;
 			}
 			out_nodes.add(graph.getNode(nxt.getKey()));
-
 		}
 		node_data start = graph.getNode(dest);
 		node_data stop = graph.getNode(src);
@@ -233,10 +235,12 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 	}
 	//The function is swapping the edges in new graph with the same vertex
 	private directed_weighted_graph swapDirections(){
-		directed_weighted_graph new_graph = this.copy();
+		directed_weighted_graph new_graph = new DWGraph_DS();
 		for(node_data n : graph.getV()){
+			new_graph.addNode(n);
 			for(edge_data edge: graph.getE(n.getKey())){
-				new_graph.removeEdge(edge.getSrc(),edge.getDest());
+				if(new_graph.getNode(edge.getDest())==null)
+						new_graph.addNode(graph.getNode(edge.getDest()));
 				new_graph.connect(edge.getDest(),edge.getSrc(),edge.getWeight());
 			}
 		}
@@ -250,7 +254,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		public AlgoNodeInfo(node_data n){
 			this._key = n.getKey();
 			this.weight = Double.POSITIVE_INFINITY;
-			node_data parent = null;
+			this.parent = null;
 		}
 		public int getKey(){
 			return this._key;
@@ -277,6 +281,5 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 			}
 			return ans;
 		}
-
 	}
 }
