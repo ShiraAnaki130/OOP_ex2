@@ -178,7 +178,7 @@ public static class EdgeData implements edge_data{
 		this.dest=dest;
 		this.weight=weight;
 		this.info="f";
-		this.tag=Integer.MAX_VALUE;
+		this.tag=0;
 	}
 	/**
 	 * The function returns the id of the source node of this edge.

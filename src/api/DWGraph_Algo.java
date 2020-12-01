@@ -83,7 +83,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		}
 		PriorityQueue<AlgoNodeInfo> frontier = new PriorityQueue<>();
 		AlgoNodeInfo nxt = info.get(src);
-		nxt.setWeight(0.0);
+		nxt.setWeight(0);
 		frontier.add(nxt);
 		HashSet<AlgoNodeInfo> out_nodes = new HashSet<>();
 		while (!frontier.isEmpty()) {
@@ -121,7 +121,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		}
 		PriorityQueue<AlgoNodeInfo> frontier = new PriorityQueue<>();
 		AlgoNodeInfo nxt = info.get(src);
-		nxt.setWeight(0.0);
+		nxt.setWeight(0);
 		frontier.add(nxt);
 		HashSet<node_data> out_nodes = new HashSet<>();
 		while (!frontier.isEmpty()) {
@@ -253,7 +253,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 
 		public AlgoNodeInfo(node_data n){
 			this._key = n.getKey();
-			this.weight = Double.POSITIVE_INFINITY;
+			this.weight = Double.MAX_EXPONENT;
 			this.parent = null;
 		}
 		public int getKey(){
