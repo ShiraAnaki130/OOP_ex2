@@ -1,4 +1,5 @@
 package api;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -6,8 +7,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.*;
-
 
 
 public class DWGraph_Algo implements dw_graph_algorithms{
@@ -91,7 +92,11 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 			if (nxt.getKey() != dest) {
 				for (edge_data edge : graph.getE(nxt.getKey())) {
 					if (!out_nodes.contains(edge.getDest())) {
-						double t = nxt.getWeight() + edge.getWeight();
+						double ew = edge.getWeight();
+						double nw = nxt.getWeight();
+						DecimalFormat df = new DecimalFormat("###0.00000000000000");
+						String temp = df.format(ew+nw);
+						double t = Double.parseDouble(temp);
 						if (t < info.get(edge.getDest()).getWeight()) {
 							info.get(edge.getDest()).setWeight(t);
 							frontier.add(info.get(edge.getDest()));
@@ -109,7 +114,13 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 			return -1;
 		return info.get(dest).getWeight();
 	}
-
+	/**
+	 * check the shortest weight directed path from source node to the destination node with dijkstra's algorithm
+	 * return list of nodes data
+	 * @param src - start node
+	 * @param dest - end (target) node
+	 * @return
+	 */
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
 		List<node_data> path = new LinkedList<>();

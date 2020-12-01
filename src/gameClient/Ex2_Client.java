@@ -33,7 +33,7 @@ public class Ex2_Client implements Runnable{
 		
 		game.startGame();
 		_win.setTitle("Ex2 - OOP: (NONE trivial Solution) "+game.toString());
-		int ind=0;
+		double ind=0;
 		long dt=100;
 		
 		while(game.isRunning()) {

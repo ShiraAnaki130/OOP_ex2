@@ -2,6 +2,8 @@ package api;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DWGraph_AlgoTest {
@@ -69,27 +71,62 @@ void copy(){
 		}
 		toInit.connect(nodes[0].getKey(),nodes[1].getKey(),1.2);
 		toInit.connect(nodes[0].getKey(),nodes[4].getKey(),1.6);
-		toInit.connect(nodes[1].getKey(),nodes[2].getKey(),1.8);
+		toInit.connect(nodes[1].getKey(),nodes[2].getKey(),1.9);
 		toInit.connect(nodes[1].getKey(),nodes[5].getKey(),3.2);
 		toInit.connect(nodes[2].getKey(),nodes[5].getKey(),6.4);
 		toInit.connect(nodes[2].getKey(),nodes[7].getKey(),3.3);
-		toInit.connect(nodes[2].getKey(),nodes[3].getKey(),3.8);
-		toInit.connect(nodes[3].getKey(),nodes[2].getKey(),6.8);
+		toInit.connect(nodes[2].getKey(),nodes[3].getKey(),3.9);
+		toInit.connect(nodes[3].getKey(),nodes[2].getKey(),6.9);
 		toInit.connect(nodes[4].getKey(),nodes[5].getKey(),4.1);
 		toInit.connect(nodes[5].getKey(),nodes[4].getKey(),4.6);
-		toInit.connect(nodes[5].getKey(),nodes[6].getKey(),1);
-		toInit.connect(nodes[6].getKey(),nodes[5].getKey(),1.2);
-		toInit.connect(nodes[3].getKey(),nodes[7].getKey(),3.8);
+		toInit.connect(nodes[5].getKey(),nodes[6].getKey(),1.3);
+		toInit.connect(nodes[6].getKey(),nodes[5].getKey(),1);
+		toInit.connect(nodes[3].getKey(),nodes[7].getKey(),3.9);
 		toInit.connect(nodes[7].getKey(),nodes[4].getKey(),1.3);
 		toInit.connect(nodes[7].getKey(),nodes[6].getKey(),5.6);
 		toInit.connect(nodes[6].getKey(),nodes[3].getKey(),1.4);
 		toInit.connect(nodes[5].getKey(),nodes[0].getKey(),2.6);
 		graph_algo.init(toInit);
-		double ans = graph_algo.shortestPathDist(nodes[0].getKey(),nodes[6].getKey());
-		assertEquals(5.4,ans);
+		double ans1 = graph_algo.shortestPathDist(nodes[0].getKey(),nodes[6].getKey());
+		assertEquals(5.7,ans1);
 		toInit.removeEdge(nodes[1].getKey(),nodes[5].getKey());
-		ans = graph_algo.shortestPathDist(nodes[0].getKey(),nodes[6].getKey());
-		assertEquals(6.7,ans);
+		double ans2 = graph_algo.shortestPathDist(nodes[0].getKey(),nodes[6].getKey());
+		assertEquals(7,ans2);
+	}
+	@Test
+	void shortpath(){
+		graph_algo = new DWGraph_Algo();
+		directed_weighted_graph toInit = new DWGraph_DS();
+		node_data[] nodes = new node_data[8];
+		for(int i =0;i<nodes.length;i++){
+			node_data node = new DWGraph_DS.NodeData();
+			nodes[i] = node;
+			toInit.addNode(node);
+		}
+		toInit.connect(nodes[0].getKey(),nodes[1].getKey(),1.2);
+		toInit.connect(nodes[0].getKey(),nodes[4].getKey(),1.6);
+		toInit.connect(nodes[1].getKey(),nodes[2].getKey(),1.8);
+		toInit.connect(nodes[1].getKey(),nodes[5].getKey(),3.2);
+		toInit.connect(nodes[2].getKey(),nodes[5].getKey(),6.4);
+		toInit.connect(nodes[2].getKey(),nodes[7].getKey(),3.3);
+		toInit.connect(nodes[2].getKey(),nodes[3].getKey(),3.9);
+		toInit.connect(nodes[3].getKey(),nodes[2].getKey(),6.9);
+		toInit.connect(nodes[4].getKey(),nodes[5].getKey(),4.1);
+		toInit.connect(nodes[5].getKey(),nodes[4].getKey(),4.6);
+		toInit.connect(nodes[5].getKey(),nodes[6].getKey(),1.3);
+		toInit.connect(nodes[6].getKey(),nodes[5].getKey(),1);
+		toInit.connect(nodes[3].getKey(),nodes[7].getKey(),3.9);
+		toInit.connect(nodes[7].getKey(),nodes[4].getKey(),1.3);
+		toInit.connect(nodes[7].getKey(),nodes[6].getKey(),5.6);
+		toInit.connect(nodes[6].getKey(),nodes[3].getKey(),1.4);
+		toInit.connect(nodes[5].getKey(),nodes[0].getKey(),2.6);
+		graph_algo.init(toInit);
+		int[] keys ={0,1,5,6};
+		List<node_data> ans = graph_algo.shortestPath(nodes[0].getKey(),nodes[6].getKey());
+		assertEquals(keys.length,ans.size());
+		for(int i = 0;i< keys.length; i++)
+			assertEquals(nodes[keys[i]],ans.get(i));
+
 	}
 	@Test
 	void saveLoad(){
