@@ -34,12 +34,12 @@ public class Ex2_Client implements Runnable{
 		game.startGame();
 		_win.setTitle("Ex2 - OOP: (NONE trivial Solution) "+game.toString());
 		double ind=0;
-		long dt=100;
+		long dt=135;
 		
 		while(game.isRunning()) {
 			moveAgants(game, gg);
 			try {
-				if(ind%1==0) {_win.repaint();}
+				if(ind%2.5==0) {_win.repaint();}
 				Thread.sleep(dt);
 				ind++;
 			}
