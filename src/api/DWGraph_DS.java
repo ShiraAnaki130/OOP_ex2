@@ -8,47 +8,54 @@ public class DWGraph_DS implements directed_weighted_graph{
 	 * @author Lea&shira.
 	 */
 	public static class NodeData implements node_data{
-		private int key;
+		private int id;
 		private double weight;
 		private String info;
 		private int tag;
 		private static int key1=1;
-		private geo_location location;
+		private geo_location pos;
 		public NodeData() {
-			this.key=key1++;
+			this.id=key1++;
 			this.info="f";
 			this.tag=Integer.MAX_VALUE;
 			this.weight = 0;
-			this.location=new Geo_Location();
+			this.pos=new Geo_Location();
 		}
 		
 		public NodeData(int key) {
-			this.key=key;
+			this.id=key;
 			this.info="f";
 			this.tag=Integer.MAX_VALUE;
 			this.weight = 0;
-			this.location=new Geo_Location();
+			this.pos=new Geo_Location();
 		}
 		public NodeData(int key, String info,int tag, double weight,double x, double y, double z) {
-			this.key=key;
+			this.id=key;
 			this.info=info;
 			this.tag=tag;
 			this.weight = weight;
-			this.location=new Geo_Location(x,y,z);
+			this.pos=new Geo_Location(x,y,z);
+		}
+		public NodeData(int key,double x, double y, double z) {
+			this.id=key;
+			this.info="f";
+			this.tag=Integer.MAX_VALUE;
+			this.weight = 0;
+			this.pos=new Geo_Location(x,y,z);
 		}
 		@Override
 		public int getKey() {
-			return key;
+			return id;
 		}
 
 		@Override
 		public geo_location getLocation() {
-			return location;
+			return pos;
 		}
 
 		@Override
 		public void setLocation(geo_location p) {
-			location=new Geo_Location(p);
+			pos=new Geo_Location(p);
 		}
 
 		@Override
@@ -162,13 +169,13 @@ public class DWGraph_DS implements directed_weighted_graph{
 public static class EdgeData implements edge_data{
 	private int src;
 	private int dest;
-	private double weight;
+	private double w;
 	private String info;
 	private int tag;
 	public EdgeData(int src,int dest,double weight,String info,int tag) {
 		this.src=src;
 		this.dest=dest;
-		this.weight=weight;
+		this.w=weight;
 		this.info=info;
 		this.tag=tag;
 	}
@@ -176,7 +183,7 @@ public static class EdgeData implements edge_data{
 	public EdgeData(int src,int dest,double weight) {
 		this.src=src;
 		this.dest=dest;
-		this.weight=weight;
+		this.w=weight;
 		this.info="f";
 		this.tag=0;
 	}
@@ -202,7 +209,7 @@ public static class EdgeData implements edge_data{
 	 */
 	@Override
 	public double getWeight() {
-		return this.weight;
+		return this.w;
 	}
 	/**
 	 * Returns the remark (meta data) associated with this edge.
@@ -305,20 +312,20 @@ public static class edges_direction{
 }
 //DWGraph_DS:
 
-private HashMap<Integer,node_data> map;
-private HashMap<Integer,edges_direction> nodes_edges;
+private HashMap<Integer,node_data> Nodes;
+private HashMap<Integer,edges_direction> Edges;
 private int MC;
 private int e_size;
 
 public DWGraph_DS(){
-	this.map = new HashMap<>();
-	this.nodes_edges = new HashMap<>();
+	this.Nodes = new HashMap<>();
+	this.Edges = new HashMap<>();
 	this.MC = 0;
 	this.e_size= 0;
 }
 public DWGraph_DS(HashMap<Integer,node_data>map,HashMap<Integer,edges_direction>nodes_edges, int MC,int e_size){
-	this.map = map;
-	this.nodes_edges =nodes_edges;
+	this.Nodes = map;
+	this.Edges =nodes_edges;
 	this.MC = MC;
 	this.e_size= e_size;
 }
@@ -330,32 +337,32 @@ public DWGraph_DS(HashMap<Integer,node_data>map,HashMap<Integer,edges_direction>
  * @param other- this is the graph which the function makes an identical copy of.
  */
 public DWGraph_DS(directed_weighted_graph other) {
-	this.map = new HashMap<Integer,node_data>();
-	this.nodes_edges = new HashMap<Integer,edges_direction>();
+	this.Nodes = new HashMap<Integer,node_data>();
+	this.Edges = new HashMap<Integer,edges_direction>();
 	node_data nodeToAddSrc;
 	node_data nodeToAddDest;
 	edges_direction ni;
 	int src;int dest;double w;
 	for(node_data node:other.getV()){
 		src=node.getKey();
-		if(!this.map.containsKey(src)) {
+		if(!this.Nodes.containsKey(src)) {
 			nodeToAddSrc=new NodeData(src);
-			this.map.put(src, nodeToAddSrc);
+			this.Nodes.put(src, nodeToAddSrc);
 			ni=new edges_direction();
-			this.nodes_edges.put(src, ni);
+			this.Edges.put(src, ni);
 		}
 		for(edge_data edge:other.getE(src)) {
 			dest=edge.getDest();
 			w=edge.getWeight();
-			if(!this.map.containsKey(dest)) {
+			if(!this.Nodes.containsKey(dest)) {
 				nodeToAddDest=new NodeData(dest);
-				this.map.put(dest, nodeToAddDest);
+				this.Nodes.put(dest, nodeToAddDest);
 				ni=new edges_direction();
-				this.nodes_edges.put(dest, ni);
+				this.Edges.put(dest, ni);
 			}
 			connect(src,dest,w);
-			nodes_edges.get(src).getEdge_(dest).setInfo(edge.getInfo());
-			nodes_edges.get(src).getEdge_(dest).setTag(edge.getTag());
+			Edges.get(src).getEdge_(dest).setInfo(edge.getInfo());
+			Edges.get(src).getEdge_(dest).setTag(edge.getTag());
 	}
 	}
 	this.MC=other.getMC();
@@ -369,7 +376,7 @@ public DWGraph_DS(directed_weighted_graph other) {
  */
 @Override
 public node_data getNode(int key) {
-	return map.get(key);
+	return Nodes.get(key);
 }
 /**
  * This function returns,in O(1),the data of the edge (src-->dest), null if none.
@@ -379,9 +386,9 @@ public node_data getNode(int key) {
  */
 @Override
 public edge_data getEdge(int src, int dest) {
-	if(src!=dest && map.containsKey(src)&&map.containsKey(dest)){
-		if(nodes_edges.get(src).hasNi(dest)){
-			return nodes_edges.get(src).getEdge_(dest);
+	if(src!=dest && Nodes.containsKey(src)&&Nodes.containsKey(dest)){
+		if(Edges.get(src).hasNi(dest)){
+			return Edges.get(src).getEdge_(dest);
 		}
 		return null;
 	}
@@ -394,10 +401,10 @@ public edge_data getEdge(int src, int dest) {
  */
 @Override
 public void addNode(node_data n) {
-	if(!map.containsKey(n.getKey())){
-		map.put(n.getKey(),n);
+	if(!Nodes.containsKey(n.getKey())){
+		Nodes.put(n.getKey(),n);
 		edges_direction e = new edges_direction();
-		nodes_edges.put(n.getKey(),e);
+		Edges.put(n.getKey(),e);
 		MC++;
 	}
 	
@@ -410,10 +417,10 @@ public void addNode(node_data n) {
  */
 @Override
 public void connect(int src, int dest, double w) {
-	if(this.map.containsKey(src)&&this.map.containsKey(dest)&&(src!=dest)){
-		if(!nodes_edges.get(src).hasNi(dest)) {
+	if(this.Nodes.containsKey(src)&&this.Nodes.containsKey(dest)&&(src!=dest)){
+		if(!Edges.get(src).hasNi(dest)) {
 	       edge_data toAdd=new EdgeData(src,dest,w);
-	       nodes_edges.get(src).addNi(dest, toAdd);
+	       Edges.get(src).addNi(dest, toAdd);
 	       MC++;
 	       e_size++;
 		}	
@@ -427,7 +434,7 @@ public void connect(int src, int dest, double w) {
  */
 @Override
 public Collection<node_data> getV() {
-	return map.values();
+	return Nodes.values();
 }
 /**
  *This method returns a collection containing all the 
@@ -436,8 +443,8 @@ public Collection<node_data> getV() {
  */
 @Override
 public Collection<edge_data> getE(int node_id) {
-	if(map.containsKey(node_id)) {
-		return nodes_edges.get(node_id).getNi().values();
+	if(Nodes.containsKey(node_id)) {
+		return Edges.get(node_id).getNi().values();
 	}
 	return null;
 }
@@ -453,15 +460,15 @@ public node_data removeNode(int key) {
 	node_data toRemove=getNode(key);
 	if(toRemove==null) return toRemove;
 	for(node_data node:getV()) {
-		 if(nodes_edges.get(node.getKey()).hasNi(key)) {
-			  nodes_edges.get(node.getKey()).removeNode(key);
+		 if(Edges.get(node.getKey()).hasNi(key)) {
+			 Edges.get(node.getKey()).removeNode(key);
 			  e_size--;
 		   }
 	   }
 	e_size-=getE(key).size();
-	nodes_edges.remove(key);
+	Edges.remove(key);
 	MC++;
-	return map.remove(key);
+	return Nodes.remove(key);
 }
 /**
  * This function deletes,in O(1), the edge src-->dest from the graph,
@@ -473,7 +480,7 @@ public node_data removeNode(int key) {
 public edge_data removeEdge(int src, int dest) {
 	edge_data toRemove=getEdge(src,dest);
 	if(toRemove!=null) {
-		nodes_edges.get(src).removeNode(dest);
+		Edges.get(src).removeNode(dest);
 		MC++;
 		e_size--;
 	}
@@ -484,7 +491,7 @@ public edge_data removeEdge(int src, int dest) {
  */
 @Override
 public int nodeSize() {
-	return this.map.size();
+	return this.Nodes.size();
 }
 /**
  * This function returns in O(1), the number of the edges in the graph.

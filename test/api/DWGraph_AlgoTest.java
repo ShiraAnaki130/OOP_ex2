@@ -1,5 +1,6 @@
 package api;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -129,7 +130,7 @@ void copy(){
 
 	}
 	@Test
-	void saveLoad(){
+	void saveLoad() throws JSONException{
 		graph_algo = new DWGraph_Algo();
 		directed_weighted_graph toInit = new DWGraph_DS();
 		node_data[] nodes = new node_data[10];
@@ -143,11 +144,11 @@ void copy(){
 			toInit.connect(nodes[i].getKey(),nodes[i+2].getKey(),Math.random()*10);
 		}
 		graph_algo.init(toInit);
-		graph_algo.save("graph.obj");
+		graph_algo.save("check.json");
 		dw_graph_algorithms Load = new DWGraph_Algo();
 		directed_weighted_graph new_graph  = new DWGraph_DS();
 		Load.init(new_graph);
-		Load.load("graph.obj");
+		Load.load("check.json");
 		assertEquals(toInit,Load.getGraph());
 	}
 }

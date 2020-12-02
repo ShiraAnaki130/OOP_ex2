@@ -6,9 +6,15 @@ import com.google.gson.GsonBuilder;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.*;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class DWGraph_Algo implements dw_graph_algorithms{
@@ -180,21 +186,43 @@ public class DWGraph_Algo implements dw_graph_algorithms{
      * file name - in JSON format.
      * @param file - the file name (may include a relative path).
      * @return return true, if the file was successfully saved, or false in case it wasn't.
+	 * @throws JSONException 
      */
 	@Override
-	public boolean save(String file) {
+	public boolean save(String file) throws JSONException {
 		boolean ans=false;
-		Gson gson=new GsonBuilder().setPrettyPrinting().create();
-		String toSave=gson.toJson(graph);
-		try {
-			 PrintWriter writer=new PrintWriter(new File(file));
-			 writer.write(toSave);
-			 writer.close();
-			 ans=true; 
-		}
-		catch(FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		JSONObject allArray=new JSONObject();
+	    JSONArray Edges=new JSONArray();
+	    JSONObject edge=new JSONObject();
+	    JSONArray Nodes =new JSONArray();
+	    JSONObject node=new JSONObject();
+
+	    for(node_data node_:getGraph().getV()) {
+	    	node=new JSONObject();
+	    	String pos=""+node_.getLocation().x()+","+node_.getLocation().y()+","+node_.getLocation().z();
+	    	node.put("pos", pos);
+	    	node.put("id", node_.getKey());
+	    	Nodes.put(node);
+	    	for(edge_data edge_:getGraph().getE(node_.getKey())) {
+	    		edge=new JSONObject();
+	    		edge.put("src", edge_.getSrc());
+	    		edge.put("w", edge_.getWeight());
+	    		edge.put("dest", edge_.getDest());
+	    		Edges.put(edge);	
+	    	}
+	    }
+	    allArray.put("Edges", Edges);
+	    allArray.put("Nodes", Nodes);
+	try {
+	    FileWriter file_ = new FileWriter(file);
+	    file_.write(allArray.toString());
+	    file_.flush();
+	    file_.close();
+	    ans=true;
+	    }
+	    catch (IOException e) {
+	        e.printStackTrace();
+	    }
 		return ans;
 	}
 	 /**
@@ -204,21 +232,47 @@ public class DWGraph_Algo implements dw_graph_algorithms{
      * graph was not loaded the original graph should remain "as is".
      * @param file - file name of JSON file.
      * @return return true, if the file was successfully saved, or false in case it wasn't.
+	 * @throws JSONException 
      */
 	@Override
-	public boolean load(String file) {
+	public boolean load(String file) throws JSONException {
 		try {
-
-			 GsonBuilder builder = new GsonBuilder();
-			 builder.registerTypeAdapter(DWGraph_DS.class, new DWGraph_DSJsonDeserializer());
-			 Gson gson = builder.create();
-			 FileReader reader=new FileReader(file);
-			 graph=gson.fromJson(reader,DWGraph_DS.class);
-			 return true;
-		}
-		catch(FileNotFoundException e) {
-			e.printStackTrace();
-		}
+			directed_weighted_graph new_graph=new DWGraph_DS();
+	        Scanner scanner = new Scanner( new File(file) );
+	        String jsonString = scanner.useDelimiter("\\A").next();
+	        scanner.close();
+	        JSONObject node = new JSONObject();
+	        JSONObject edge = new JSONObject();
+	        JSONObject jsonObject = new JSONObject(jsonString);
+	 
+	        JSONArray jsonArrayEdges= jsonObject.getJSONArray("Edges");
+	        JSONArray jsonArrayNodes= jsonObject.getJSONArray("Nodes");
+	        for(int i=0;i<jsonArrayNodes.length();i++) {
+	        	node=jsonArrayNodes.getJSONObject(i);
+	        	int id=node.getInt("id");
+	        	String pos_string=node.getString("pos");
+	        	String[] arr=new String[3];
+	        	arr=pos_string.split(",");
+	        	double[] arrForPos=new double[3];
+	        	for(int k=0;k<3;k++) {
+	        		arrForPos[k]=Double.parseDouble(arr[k]);
+	        	}
+	        	node_data toAdd=new DWGraph_DS.NodeData(id,arrForPos[0],arrForPos[1],arrForPos[2]);
+	        	new_graph.addNode(toAdd);
+	        }
+	        for (int j=0; j<jsonArrayEdges.length();j++) {
+	            	edge =jsonArrayEdges.getJSONObject(j);
+	            	int src=edge.getInt("src");
+	            	int dest=edge.getInt("dest");
+	            	double w=edge.getDouble("w");
+	            	new_graph.connect(src, dest, w);
+	        }
+	        this.graph=new_graph;
+	        return true;
+	    }
+	    catch (FileNotFoundException e) {
+	        e.printStackTrace();
+	    }
 		return false;
 	}
 	//BFS algorithm using given graph and starting node (nxt)

@@ -1,5 +1,7 @@
 package api;
 import java.util.List;
+
+import org.json.JSONException;
 /**
  * This interface represents a Directed (positive) Weighted Graph Theory Algorithms including:
  * 0. clone(); (copy)
@@ -60,8 +62,9 @@ public interface dw_graph_algorithms {
      * file name - in JSON format
      * @param file - the file name (may include a relative path).
      * @return true - iff the file was successfully saved
+     * @throws JSONException 
      */
-    public boolean save(String file);
+    public boolean save(String file) throws JSONException;
 
     /**
      * This method load a graph to this graph algorithm.
@@ -70,7 +73,8 @@ public interface dw_graph_algorithms {
      * graph was not loaded the original graph should remain "as is".
      * @param file - file name of JSON file
      * @return true - iff the graph was successfully loaded.
+     * @throws JSONException 
      */
-    public boolean load(String file);
+    public boolean load(String file) throws JSONException;
 }
 
