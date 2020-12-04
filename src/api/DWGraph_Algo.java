@@ -193,9 +193,9 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		boolean ans=false;
 		JSONObject allArray=new JSONObject();
 	    JSONArray Edges=new JSONArray();
-	    JSONObject edge=new JSONObject();
+	    JSONObject edge;
 	    JSONArray Nodes =new JSONArray();
-	    JSONObject node=new JSONObject();
+	    JSONObject node;
 
 	    for(node_data node_:getGraph().getV()) {
 	    	node=new JSONObject();

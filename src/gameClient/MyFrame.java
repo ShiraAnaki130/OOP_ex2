@@ -24,13 +24,20 @@ public class MyFrame extends JFrame{
 	private int _ind;
 	private Arena _ar;
 	private gameClient.util.Range2Range _w2f;
+	private MyPanel graph;
 	MyFrame(String a) {
-		super(a);
+		initFrame();
 		int _ind = 0;
+		graph= new MyPanel();
 	}
 	public void update(Arena ar) {
 		this._ar = ar;
 		updateFrame();
+	}
+	private void initFrame() 
+	{
+		this.setSize(500, 500);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	private void updateFrame() {
@@ -39,6 +46,7 @@ public class MyFrame extends JFrame{
 		Range2D frame = new Range2D(rx,ry);
 		directed_weighted_graph g = _ar.getGraph();
 		_w2f = Arena.w2f(g,frame);
+	
 	}
 	public void paint(Graphics g) {
 		int w = this.getWidth();
@@ -46,7 +54,9 @@ public class MyFrame extends JFrame{
 		g.clearRect(0, 0, w, h);
 	//	updateFrame();
 		drawPokemons(g);
-		drawGraph(g);
+		graph.paintComponent(g);
+		
+		//drawGraph(g);
 		drawAgants(g);
 		drawInfo(g);
 		
@@ -59,21 +69,21 @@ public class MyFrame extends JFrame{
 		}
 		
 	}
-	private void drawGraph(Graphics g) {
-		directed_weighted_graph gg = _ar.getGraph();
-		Iterator<node_data> iter = gg.getV().iterator();
-		while(iter.hasNext()) {
-			node_data n = iter.next();
-			g.setColor(Color.blue);
-			drawNode(n,5,g);
-			Iterator<edge_data> itr = gg.getE(n.getKey()).iterator();
-			while(itr.hasNext()) {
-				edge_data e = itr.next();
-				g.setColor(Color.gray);
-				drawEdge(e, g);
-			}
-		}
-	}
+//	private void drawGraph(Graphics g) {
+//		directed_weighted_graph gg = _ar.getGraph();
+//		Iterator<node_data> iter = gg.getV().iterator();
+//		while(iter.hasNext()) {
+//			node_data n = iter.next();
+//			g.setColor(Color.blue);
+//			drawNode(n,5,g);
+//			Iterator<edge_data> itr = gg.getE(n.getKey()).iterator();
+//			while(itr.hasNext()) {
+//				edge_data e = itr.next();
+//				g.setColor(Color.gray);
+//				drawEdge(e, g);
+//			}
+//		}
+//	}
 	private void drawPokemons(Graphics g) {
 		List<CL_Pokemon> fs = _ar.getPokemons();
 		if(fs!=null) {

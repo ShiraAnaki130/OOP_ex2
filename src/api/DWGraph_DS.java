@@ -323,12 +323,6 @@ public DWGraph_DS(){
 	this.MC = 0;
 	this.e_size= 0;
 }
-public DWGraph_DS(HashMap<Integer,node_data>map,HashMap<Integer,edges_direction>nodes_edges, int MC,int e_size){
-	this.Nodes = map;
-	this.Edges =nodes_edges;
-	this.MC = MC;
-	this.e_size= e_size;
-}
 /**
  * This function is a copy constructor of DWGraph_DS.
  * The function is getting a graph from the type of directed_weighted_graph and 
@@ -449,11 +443,12 @@ public Collection<edge_data> getE(int node_id) {
 	return null;
 }
 /**
- * This function removes the node from the graph by it's node_id.
- * In addition, the function removes all the edges which starts or ends at this node.
- * the function run in 0(|v|) times. v -number of the nodes in the graph.
- * @param key- this is the node_id which need to be removed.
- * @return returns the node which removed, or null if the node does'nt exist in the graph.
+* This function removes the node from the graph by it's node_id.
+* Deletes the node (with the given ID) from the graph -
+* and removes all edges which starts or ends at this node.
+* This method should run in O(k), V.degree=k, as all the edges should be removed.
+* @return the data of the removed node (null if none). 
+* @param key
  */
 @Override
 public node_data removeNode(int key) {
