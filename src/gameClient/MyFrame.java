@@ -49,11 +49,12 @@ public class MyFrame extends JFrame{
 		int w = this.getWidth();
 		int h = this.getHeight();
 		g.clearRect(0, 0, w, h);
+		updateFrame();
 		drawPokemons(g);
 		//drawGraph(g);
 		drawAgants(g);
 		drawInfo(g);
-		updateFrame();
+
 	}
 	private void drawInfo(Graphics g) {
 		List<String> str = _ar.get_info();

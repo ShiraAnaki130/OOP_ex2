@@ -40,7 +40,6 @@ public class MyPanel extends JPanel {
         g.clearRect(0, 0, w, h);
         setSize(w,h);
         paintComponent(g);
-
     }
 
     @Override
@@ -57,8 +56,6 @@ public class MyPanel extends JPanel {
                 drawEdge(edge, g);
             }
         }
-
-
     }
 
     private void drawNode(node_data n, int r, Graphics g) {
