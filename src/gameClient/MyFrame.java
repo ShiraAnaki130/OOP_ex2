@@ -24,12 +24,15 @@ public class MyFrame extends JFrame{
 	private int _ind;
 	private Arena _ar;
 	private gameClient.util.Range2Range _w2f;
+	private MyPanel panel;
 	MyFrame(String a) {
 		super(a);
 		int _ind = 0;
 	}
 	public void update(Arena ar) {
 		this._ar = ar;
+		panel = new MyPanel(ar);
+		this.add(panel);
 		updateFrame();
 	}
 
@@ -39,17 +42,18 @@ public class MyFrame extends JFrame{
 		Range2D frame = new Range2D(rx,ry);
 		directed_weighted_graph g = _ar.getGraph();
 		_w2f = Arena.w2f(g,frame);
+		panel.update(_ar);
+		panel.repaint();
 	}
 	public void paint(Graphics g) {
 		int w = this.getWidth();
 		int h = this.getHeight();
 		g.clearRect(0, 0, w, h);
-	    updateFrame();
 		drawPokemons(g);
-		drawGraph(g);
+		//drawGraph(g);
 		drawAgants(g);
 		drawInfo(g);
-		
+		updateFrame();
 	}
 	private void drawInfo(Graphics g) {
 		List<String> str = _ar.get_info();
