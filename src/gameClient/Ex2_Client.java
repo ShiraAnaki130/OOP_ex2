@@ -28,6 +28,8 @@ public class Ex2_Client implements Runnable{
 	//	game.login(id);
 		String g = game.getGraph();
 		String pks = game.getPokemons();
+		//System.out.println("pks "+pks);
+		String allagent=game.getAgents();
 		directed_weighted_graph gg = game.getJava_Graph_Not_to_be_used();
 		init(game);
 		
@@ -52,6 +54,7 @@ public class Ex2_Client implements Runnable{
 		System.out.println(res);
 		System.exit(0);
 	}
+	
 	/** 
 	 * Moves each of the agents along the edge,
 	 * in case the agent is on a node the next destination (next edge) is chosen (randomly).
@@ -67,6 +70,11 @@ public class Ex2_Client implements Runnable{
 		String fs =  game.getPokemons();
 		List<CL_Pokemon> ffs = Arena.json2Pokemons(fs);
 		_ar.setPokemons(ffs);
+//		int j=0;
+//		for(CL_Agent a:log) {
+//			a.setCurrNode(ffs.get(j).get_edge().getSrc());
+//			j++;
+//		}
 		for(int i=0;i<log.size();i++) {
 			CL_Agent ag = log.get(i);
 			int id = ag.getID();
@@ -76,7 +84,7 @@ public class Ex2_Client implements Runnable{
 			if(dest==-1) {
 				dest = nextNode(gg, src);
 				game.chooseNextEdge(ag.getID(), dest);
-				System.out.println("Agent: "+id+", val: "+v+"   turned to node: "+dest);
+				System.out.println("Agent: "+id+", val: "+v+" start point"+ag.getSrcNode()+"   turned to node: "+dest);
 			}
 		}
 	}

@@ -1,6 +1,8 @@
 package api;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+
 public class DWGraph_DS implements directed_weighted_graph{
 	/**
 	 * This class represents a node (vertex) in an directional weighted graph.
@@ -314,12 +316,14 @@ public static class edges_direction{
 
 private HashMap<Integer,node_data> Nodes;
 private HashMap<Integer,edges_direction> Edges;
+private HashMap<Integer,Collection<Integer>> meAsDest;
 private int MC;
 private int e_size;
 
 public DWGraph_DS(){
 	this.Nodes = new HashMap<>();
 	this.Edges = new HashMap<>();
+	this.meAsDest = new HashMap<>();
 	this.MC = 0;
 	this.e_size= 0;
 }
@@ -333,9 +337,11 @@ public DWGraph_DS(){
 public DWGraph_DS(directed_weighted_graph other) {
 	this.Nodes = new HashMap<Integer,node_data>();
 	this.Edges = new HashMap<Integer,edges_direction>();
+	this.meAsDest = new HashMap<Integer, Collection<Integer>>();
 	node_data nodeToAddSrc;
 	node_data nodeToAddDest;
 	edges_direction ni;
+	Collection<Integer> as_dest;
 	int src;int dest;double w;
 	for(node_data node:other.getV()){
 		src=node.getKey();
@@ -344,6 +350,8 @@ public DWGraph_DS(directed_weighted_graph other) {
 			this.Nodes.put(src, nodeToAddSrc);
 			ni=new edges_direction();
 			this.Edges.put(src, ni);
+			as_dest = new HashSet<>();
+			this.meAsDest.put(src,as_dest);
 		}
 		for(edge_data edge:other.getE(src)) {
 			dest=edge.getDest();
@@ -353,10 +361,13 @@ public DWGraph_DS(directed_weighted_graph other) {
 				this.Nodes.put(dest, nodeToAddDest);
 				ni=new edges_direction();
 				this.Edges.put(dest, ni);
+				as_dest = new HashSet<>();
+				this.meAsDest.put(dest,as_dest);
 			}
 			connect(src,dest,w);
-			Edges.get(src).getEdge_(dest).setInfo(edge.getInfo());
-			Edges.get(src).getEdge_(dest).setTag(edge.getTag());
+			this.Edges.get(src).getEdge_(dest).setInfo(edge.getInfo());
+			this.Edges.get(src).getEdge_(dest).setTag(edge.getTag());
+			this.meAsDest.get(dest).add(src);
 	}
 	}
 	this.MC=other.getMC();
@@ -398,6 +409,8 @@ public void addNode(node_data n) {
 	if(!Nodes.containsKey(n.getKey())){
 		Nodes.put(n.getKey(),n);
 		edges_direction e = new edges_direction();
+		Collection<Integer> me_as_dest = new HashSet<>() ;
+		meAsDest.put(n.getKey(),me_as_dest);
 		Edges.put(n.getKey(),e);
 		MC++;
 	}
@@ -414,6 +427,7 @@ public void connect(int src, int dest, double w) {
 	if(this.Nodes.containsKey(src)&&this.Nodes.containsKey(dest)&&(src!=dest)){
 		if(!Edges.get(src).hasNi(dest)) {
 	       edge_data toAdd=new EdgeData(src,dest,w);
+	       meAsDest.get(dest).add(src);
 	       Edges.get(src).addNi(dest, toAdd);
 	       MC++;
 	       e_size++;
@@ -454,14 +468,13 @@ public Collection<edge_data> getE(int node_id) {
 public node_data removeNode(int key) {
 	node_data toRemove=getNode(key);
 	if(toRemove==null) return toRemove;
-	for(node_data node:getV()) {
-		 if(Edges.get(node.getKey()).hasNi(key)) {
-			 Edges.get(node.getKey()).removeNode(key);
+	for(Integer k :meAsDest.get(key)) {
+			 Edges.get(k).removeNode(key);
 			  e_size--;
 		   }
-	   }
 	e_size-=getE(key).size();
 	Edges.remove(key);
+	meAsDest.remove(key);
 	MC++;
 	return Nodes.remove(key);
 }
@@ -476,6 +489,7 @@ public edge_data removeEdge(int src, int dest) {
 	edge_data toRemove=getEdge(src,dest);
 	if(toRemove!=null) {
 		Edges.get(src).removeNode(dest);
+		meAsDest.get(dest).remove(src);
 		MC++;
 		e_size--;
 	}
