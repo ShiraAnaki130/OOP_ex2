@@ -50,7 +50,6 @@ public class Ex2_Client implements Runnable{
 			}
 		}
 		String res = game.toString();
-
 		System.out.println(res);
 		System.exit(0);
 	}
@@ -117,7 +116,6 @@ public class Ex2_Client implements Runnable{
 		_win.setSize(1000, 700);
 		_win.update(_ar);
 
-	
 		_win.show();
 		String info = game.toString();
 		JSONObject line;
