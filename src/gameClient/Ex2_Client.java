@@ -209,10 +209,7 @@ public class Ex2_Client implements Runnable{
 		_win = new MyFrame("test Ex2");
 		_win.setSize(1000, 700);
 		_win.update(_ar);
-<<<<<<< HEAD
-=======
 
->>>>>>> a76b7cc6f8760befbc4d46f8109612de6b2a668e
 		_win.show();
 		String info = game.toString();
 		JSONObject line;
