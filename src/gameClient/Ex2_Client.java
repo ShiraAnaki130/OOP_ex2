@@ -87,7 +87,7 @@ public class Ex2_Client implements Runnable{
 		String fs =  game.getPokemons();
 		List<CL_Pokemon> listP = Arena.json2Pokemons(fs);
 		_ar.setPokemons(listP);
-		pokemonSetEdge(gg,game,listP);	
+		pokemonSetEdge(gg,listP);	
 		for(int i=0;i<listAgents.size();i++) {
 			CL_Agent ag = listAgents.get(i);
 			int id = ag.getID();
@@ -132,9 +132,7 @@ public class Ex2_Client implements Runnable{
 	 * @param allPo
 	 * @throws JSONException
 	 */
-	private static void pokemonSetEdge(directed_weighted_graph g,game_service game,List<CL_Pokemon>allPo) throws JSONException {
-		dw_graph_algorithms ga= new DWGraph_Algo();
-		ga.init(g);
+	private static void pokemonSetEdge(directed_weighted_graph g,List<CL_Pokemon>allPo)  {
 		for(CL_Pokemon p: allPo) {
 			Arena.updateEdge(p,g);
 		}
