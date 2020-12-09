@@ -1,16 +1,11 @@
 package gameClient;
 
 import api.directed_weighted_graph;
-import api.edge_data;
-import api.geo_location;
-import api.node_data;
-import gameClient.util.Point3D;
 import gameClient.util.Range;
 import gameClient.util.Range2D;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -20,7 +15,7 @@ import java.util.List;
  * code and not to take it "as is".
  *
  */
-public class MyFrame extends JFrame{
+public class MyFrame extends JFrame {
 	private int _ind;
 	private Arena _ar;
 	private gameClient.util.Range2Range _w2f;
@@ -28,9 +23,10 @@ public class MyFrame extends JFrame{
 
 	MyFrame(String a) {
 		super(a);
-		int _ind = 0;
+		_ind = 0;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+
 	public void update(Arena ar) {
 		this._ar = ar;
 		panel = new MyPanel();
@@ -38,19 +34,20 @@ public class MyFrame extends JFrame{
 		updateFrame();
 	}
 	private void updateFrame() {
-		Range rx = new Range(20,this.getWidth()-20);
-		Range ry = new Range(this.getHeight()-10,150);
-		Range2D frame = new Range2D(rx,ry);
+		Range rx = new Range(20, this.getWidth() - 20);
+		Range ry = new Range(this.getHeight() - 10, 150);
+		Range2D frame = new Range2D(rx, ry);
 		directed_weighted_graph g = _ar.getGraph();
-		_w2f = Arena.w2f(g,frame);
+		_w2f = Arena.w2f(g, frame);
 		panel.update(_ar);
 		panel.repaint();
 	}
+
 	public void paint(Graphics g) {
 		updateFrame();
 		drawInfo(g);
-
 	}
+
 	private void drawInfo(Graphics g) {
 		List<String> str = _ar.get_info();
 		String dt = "none";

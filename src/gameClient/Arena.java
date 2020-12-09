@@ -60,7 +60,6 @@ public class Arena {
 		double dx = x1-x0, dy = y1-y0;
 		MIN = new Point3D(x0-dx/10,y0-dy/10);
 		MAX = new Point3D(x1+dx/10,y1+dy/10);
-		
 	}
 	public List<CL_Agent> getAgents() {return _agents;}
 	public List<CL_Pokemon> getPokemons() {return _pokemons;}
@@ -107,6 +106,7 @@ public class Arena {
 				//double s = 0;//pk.getDouble("speed");
 				CL_Pokemon f = new CL_Pokemon(new Point3D(p), type, value);
 				ans.add(f);
+
 			}
 		}
 		catch (JSONException e) {e.printStackTrace();}
