@@ -138,28 +138,29 @@ public class DWGraph_DS implements directed_weighted_graph{
 			
 		}
 	}
-/*private class EdgeLocation implements edge_location{
-	private edge_data edge;
-	private double ratio;
-	
-	public EdgeLocation(edge_data edge) {
-		this.edge = edge;
-		this
-	}
-
-	@Override
-	public edge_data getEdge() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public double getRatio() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	
-}*/
+//public static class EdgeLocation implements edge_location{
+//	private edge_data edge;
+//	private double ratio;
+//	private geo_location p;
+//	public EdgeLocation(geo_location e){
+//		this.edge = null;
+//		this.p = e;
+//		this.ratio = 0;
+//
+//	}
+//
+//	@Override
+//	public edge_data getEdge() {
+//		
+//	}
+//
+//	@Override
+//	public double getRatio() {
+//		// TODO Auto-generated method stub
+//		return 0;
+//	}
+//	
+//}
 /**
  * This public class represents an edge in an directional weighted graph.
  * Every edge consist of src(edge's start node_id), dest(edge's end node_id), edge's weight,

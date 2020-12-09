@@ -14,9 +14,8 @@ public class MyPanel extends JPanel {
     private Arena _ar;
     private gameClient.util.Range2Range _w2f;
 
-    public MyPanel(Arena a) {
-        this.setBackground(Color.white);
-        update(a);
+    public MyPanel() {
+    	super();  
     }
     public void update(Arena ar) {
         this._ar = ar;
@@ -34,11 +33,11 @@ public class MyPanel extends JPanel {
         int h = this.getHeight();
         g.clearRect(0, 0, w, h);
         setSize(w,h);
+        this.setBackground(Color.white);
         paintComponent(g);
     }
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
         directed_weighted_graph gg = _ar.getGraph();
         for (node_data node : gg.getV()) {
             g.setColor(Color.black);

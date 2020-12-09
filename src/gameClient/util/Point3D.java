@@ -68,7 +68,7 @@ public class Point3D implements geo_location, Serializable{
 
      public String toString(boolean all) {
         if(all) return "[" + _x + "," +_y+","+_z+"]";
-        else return "[" + (int)_x + "," + (int)_y+","+(int)_z+"]";
+        else return ""+_x+","+_y+","+_z;
     }
 }
 

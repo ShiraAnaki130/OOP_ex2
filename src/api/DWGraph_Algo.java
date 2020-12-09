@@ -236,44 +236,39 @@ public class DWGraph_Algo implements dw_graph_algorithms{
      */
 	@Override
 	public boolean load(String file) throws JSONException {
-		try {
-			directed_weighted_graph new_graph=new DWGraph_DS();
-	        Scanner scanner = new Scanner( new File(file) );
-	        String jsonString = scanner.useDelimiter("\\A").next();
-	        scanner.close();
-	        JSONObject node = new JSONObject();
-	        JSONObject edge = new JSONObject();
-	        JSONObject jsonObject = new JSONObject(jsonString);
-	 
-	        JSONArray jsonArrayEdges= jsonObject.getJSONArray("Edges");
-	        JSONArray jsonArrayNodes= jsonObject.getJSONArray("Nodes");
-	        for(int i=0;i<jsonArrayNodes.length();i++) {
-	        	node=jsonArrayNodes.getJSONObject(i);
-	        	int id=node.getInt("id");
-	        	String pos_string=node.getString("pos");
-	        	String[] arr=new String[3];
-	        	arr=pos_string.split(",");
-	        	double[] arrForPos=new double[3];
-	        	for(int k=0;k<3;k++) {
-	        		arrForPos[k]=Double.parseDouble(arr[k]);
-	        	}
-	        	node_data toAdd=new DWGraph_DS.NodeData(id,arrForPos[0],arrForPos[1],arrForPos[2]);
-	        	new_graph.addNode(toAdd);
-	        }
-	        for (int j=0; j<jsonArrayEdges.length();j++) {
-	            	edge =jsonArrayEdges.getJSONObject(j);
-	            	int src=edge.getInt("src");
-	            	int dest=edge.getInt("dest");
-	            	double w=edge.getDouble("w");
-	            	new_graph.connect(src, dest, w);
-	        }
-	        this.graph=new_graph;
-	        return true;
-	    }
-	    catch (FileNotFoundException e) {
-	        e.printStackTrace();
-	    }
-		return false;
+		directed_weighted_graph new_graph=new DWGraph_DS();
+//	        Scanner scanner = new Scanner( new File(file) );
+//	        String jsonString = scanner.useDelimiter("\\A").next();
+//	        scanner.close();
+		JSONObject node = new JSONObject();
+		JSONObject edge = new JSONObject();
+		JSONObject jsonObject = new JSONObject(file);
+ 
+		JSONArray jsonArrayEdges= jsonObject.getJSONArray("Edges");
+		JSONArray jsonArrayNodes= jsonObject.getJSONArray("Nodes");
+		for(int i=0;i<jsonArrayNodes.length();i++) {
+			node=jsonArrayNodes.getJSONObject(i);
+			int id=node.getInt("id");
+			String pos_string=node.getString("pos");
+			String[] arr=new String[3];
+			arr=pos_string.split(",");
+			double[] arrForPos=new double[3];
+			for(int k=0;k<3;k++) {
+				arrForPos[k]=Double.parseDouble(arr[k]);
+			}
+			node_data toAdd=new DWGraph_DS.NodeData(id,arrForPos[0],arrForPos[1],arrForPos[2]);
+			new_graph.addNode(toAdd);
+		}
+		for (int j=0; j<jsonArrayEdges.length();j++) {
+		    	edge =jsonArrayEdges.getJSONObject(j);
+		    	int src=edge.getInt("src");
+		    	int dest=edge.getInt("dest");
+		    	double w=edge.getDouble("w");
+		    	new_graph.connect(src, dest, w);
+		}
+		this.graph=new_graph;
+		return true;
+		
 	}
 	//BFS algorithm using given graph and starting node (nxt)
 	private boolean BFS(directed_weighted_graph graph,node_data nxt) {

@@ -93,19 +93,19 @@ public class Arena {
 		}
 		return ans;
 	}
-	public static ArrayList<CL_Pokemon> json2Pokemons(String fs) {
+	public static ArrayList<CL_Pokemon> json2Pokemons(String json) {
 		ArrayList<CL_Pokemon> ans = new  ArrayList<CL_Pokemon>();
 		try {
-			JSONObject ttt = new JSONObject(fs);
-			JSONArray ags = ttt.getJSONArray("Pokemons");
-			for(int i=0;i<ags.length();i++) {
-				JSONObject pp = ags.getJSONObject(i);
-				JSONObject pk = pp.getJSONObject("Pokemon");
-				int t = pk.getInt("type");
-				double v = pk.getDouble("value");
+			JSONObject jsonObject = new JSONObject(json);
+			JSONArray Pokemons = jsonObject.getJSONArray("Pokemons");
+			for(int i=0;i<Pokemons.length();i++) {
+				JSONObject current = Pokemons.getJSONObject(i);
+				JSONObject pokemon = current.getJSONObject("Pokemon");
+				int type = pokemon.getInt("type");
+				double value = pokemon.getDouble("value");
+				String p = pokemon.getString("pos");
 				//double s = 0;//pk.getDouble("speed");
-				String p = pk.getString("pos");
-				CL_Pokemon f = new CL_Pokemon(new Point3D(p), t, v, 0, null);
+				CL_Pokemon f = new CL_Pokemon(new Point3D(p), type, value);
 				ans.add(f);
 			}
 		}

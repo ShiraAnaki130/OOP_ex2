@@ -33,7 +33,7 @@ public class MyFrame extends JFrame{
 	}
 	public void update(Arena ar) {
 		this._ar = ar;
-		panel = new MyPanel(ar);
+		panel = new MyPanel();
 		this.add(panel);
 		updateFrame();
 	}
@@ -47,9 +47,6 @@ public class MyFrame extends JFrame{
 		panel.repaint();
 	}
 	public void paint(Graphics g) {
-		int w = this.getWidth();
-		int h = this.getHeight();
-		g.clearRect(0, 0, w, h);
 		updateFrame();
 		drawInfo(g);
 

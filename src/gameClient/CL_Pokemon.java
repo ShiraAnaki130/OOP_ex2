@@ -1,31 +1,41 @@
 package gameClient;
-import api.edge_data;
 import gameClient.util.Point3D;
+
 import org.json.JSONObject;
 
+import api.edge_data;
+
 public class CL_Pokemon {
-	private edge_data _edge;
 	private double _value;
 	private int _type;
 	private Point3D _pos;
-	private double min_dist;
-	private int min_ro;
+	private edge_data _edge;
+//	private double min_dist;
+//	private int min_ro;
 	
-	public CL_Pokemon(Point3D p, int t, double v, double s, edge_data e) {
+	public CL_Pokemon(Point3D p, int t, double v) {
 		_type = t;
-	//	_speed = s;
 		_value = v;
-		set_edge(e);
 		_pos = p;
-		min_dist = -1;
-		min_ro = -1;
+		//	_speed = s;
+		_edge=null;
 	}
-	public static CL_Pokemon init_from_json(String json) {
+	public CL_Pokemon init_from_json(String json) {
 		CL_Pokemon ans = null;
 		try {
-			JSONObject p = new JSONObject(json);
-			int id = p.getInt("id");
-
+				JSONObject pokemon = new JSONObject(json);
+				double value=pokemon.getDouble("value");
+				int type=pokemon.getInt("type");
+				String pos=pokemon.getString("pos");
+				String[] arr=new String[3];
+	        	arr=pos.split(",");
+	        	double[] arrForPos=new double[3];
+	        	for(int k=0;k<3;k++) {
+	        		arrForPos[k]=Double.parseDouble(arr[k]);
+	        	}
+	        	Point3D pos_=new Point3D(arrForPos[0],arrForPos[1],arrForPos[2]);
+	        	ans=new CL_Pokemon(pos_,type,value);
+	        	return ans;
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -48,19 +58,19 @@ public class CL_Pokemon {
 //	public double getSpeed() {return _speed;}
 	public double getValue() {return _value;}
 
-	public double getMin_dist() {
-		return min_dist;
-	}
-
-	public void setMin_dist(double mid_dist) {
-		this.min_dist = mid_dist;
-	}
-
-	public int getMin_ro() {
-		return min_ro;
-	}
-
-	public void setMin_ro(int min_ro) {
-		this.min_ro = min_ro;
-	}
+//	public double getMin_dist() {
+//		return min_dist;
+//	}
+//
+//	public void setMin_dist(double mid_dist) {
+//		this.min_dist = mid_dist;
+//	}
+//
+//	public int getMin_ro() {
+//		return min_ro;
+//	}
+//
+//	public void setMin_ro(int min_ro) {
+//		this.min_ro = min_ro;
+//	}
 }

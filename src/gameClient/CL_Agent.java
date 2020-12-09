@@ -5,11 +5,15 @@ import api.edge_data;
 import api.geo_location;
 import api.node_data;
 import gameClient.util.Point3D;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.json.JSONObject;
 
 public class CL_Agent {
 		public static final double EPS = 0.0001;
-		private static int _count = 0;
+		public static int _count = 0;
 		private static int _seed = 3331;
 		private int _id;
 	//	private long _key;
@@ -20,10 +24,13 @@ public class CL_Agent {
 		private directed_weighted_graph _gg;
 		private CL_Pokemon _curr_fruit;
 		private long _sg_dt;
-		
+		private List<node_data> list=null;
 		private double _value;
+		public void setList(List<node_data> list) { this.list=list;}
+		public List<node_data> getList(){ return this.list;}
 		
-		
+		public int getCount() { return _count;}
+		public void setCount(int count) { this._count=count;}
 		public CL_Agent(directed_weighted_graph g, int start_node) {
 			_gg = g;
 			setMoney(0);
