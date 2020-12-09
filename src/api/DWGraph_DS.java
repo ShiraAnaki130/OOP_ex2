@@ -3,6 +3,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
+
 public class DWGraph_DS implements directed_weighted_graph{
 	/**
 	 * This class represents a node (vertex) in an directional weighted graph.
@@ -169,7 +170,7 @@ public class DWGraph_DS implements directed_weighted_graph{
  *
  */
 
-public static class EdgeData implements edge_data{
+public static class EdgeData implements edge_data,Comparable<edge_data>{
 	private int src;
 	private int dest;
 	private double w;
@@ -245,6 +246,20 @@ public static class EdgeData implements edge_data{
 	@Override
 	public void setTag(int t) {
 		this.tag = t;
+	}
+	@Override
+	public boolean equals(Object other) {
+		if(!(other instanceof edge_data)) return false;
+		edge_data edge=(edge_data)other;
+		if(getSrc()==edge.getSrc()&&getDest()==edge.getDest()&&getWeight()==edge.getWeight()) return true;
+		return false;
+	}
+	@Override
+	public int compareTo(edge_data o) {
+		int ans=0;
+		if(this.tag-o.getTag()>0) ans=-1;
+		else if(this.tag-o.getTag()<0) ans=1;
+		return ans;
 	}
 }
 /**

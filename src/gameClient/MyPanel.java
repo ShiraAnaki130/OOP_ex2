@@ -15,11 +15,8 @@ public class MyPanel extends JPanel {
     private gameClient.util.Range2Range _w2f;
 
     public MyPanel() {
-<<<<<<< HEAD
+
     	super();  
-=======
-        super();
->>>>>>> a76b7cc6f8760befbc4d46f8109612de6b2a668e
     }
 
     public void update(Arena ar) {
@@ -39,26 +36,19 @@ public class MyPanel extends JPanel {
         int w = this.getWidth();
         int h = this.getHeight();
         g.clearRect(0, 0, w, h);
-<<<<<<< HEAD
         setSize(w,h);
-=======
-        setSize(w, h);
->>>>>>> a76b7cc6f8760befbc4d46f8109612de6b2a668e
         this.setBackground(Color.white);
         paintComponent(g);
     }
 
     @Override
     public void paintComponent(Graphics g) {
-<<<<<<< HEAD
-=======
         drowgraph(g);
         drawPokimon(g);
         drawAgants(g);
     }
 
     private void drowgraph(Graphics g) {
->>>>>>> a76b7cc6f8760befbc4d46f8109612de6b2a668e
         directed_weighted_graph gg = _ar.getGraph();
         for (node_data node : gg.getV()) {
             g.setColor(Color.black);

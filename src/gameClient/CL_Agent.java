@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 public class CL_Agent {
 		public static final double EPS = 0.0001;
-		public static int _count = 0;
+		private  int _count = 1;
 		private static int _seed = 3331;
 		private int _id;
 	//	private long _key;

@@ -45,7 +45,7 @@ public class Arena {
 		this._agents = f;
 	}
 	public void setGraph(directed_weighted_graph g) {this._gg =g;}//init();}
-	private void init( ) {
+	private void init() {
 		MIN=null; MAX=null;
 		double x0=0,x1=0,y0=0,y1=0;
 		Iterator<node_data> iter = _gg.getV().iterator();
@@ -127,7 +127,6 @@ public class Arena {
 	}
 
 	private static boolean isOnEdge(geo_location p, geo_location src, geo_location dest ) {
-
 		boolean ans = false;
 		double dist = src.distance(dest);
 		double d1 = src.distance(p) + p.distance(dest);
