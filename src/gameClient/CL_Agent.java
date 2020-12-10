@@ -5,13 +5,11 @@ import api.edge_data;
 import api.geo_location;
 import api.node_data;
 import gameClient.util.Point3D;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import org.json.JSONObject;
 
-public class CL_Agent {
+import java.util.List;
+
+public class CL_Agent extends Thread {
 		public static final double EPS = 0.0001;
 		private  int _count = 1;
 		private static int _seed = 3331;
@@ -26,6 +24,13 @@ public class CL_Agent {
 		private long _sg_dt;
 		private List<node_data> list=null;
 		private double _value;
+		private boolean bool=false;
+		public void setBoll(boolean b) {
+			this.bool=b;
+		}
+		public boolean getBool() {
+			return bool;
+		}
 		public void setList(List<node_data> list) { this.list=list;}
 		public List<node_data> getList(){ return this.list;}
 		
