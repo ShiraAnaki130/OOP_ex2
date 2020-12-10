@@ -136,7 +136,14 @@ public class DWGraph_DS implements directed_weighted_graph{
 				double dis_z=Math.pow(this._z-g.z(), 2);
 				return Math.sqrt(dis_x+dis_y+dis_z);
 			}
-			
+			@Override
+			public boolean equals(Object g){
+				if(g instanceof geo_location){
+					geo_location G = (geo_location)g;
+					if(this._x == G.x()&&this._y == G.y()&&this._z== G.z())return true;
+				}
+					return false;
+			}
 		}
 	}
 //public static class EdgeLocation implements edge_location{

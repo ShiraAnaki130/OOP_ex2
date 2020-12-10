@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class CL_Agent extends Thread {
+public class CL_Agent {
 		public static final double EPS = 0.0001;
 		private  int _count = 1;
 		private static int _seed = 3331;
@@ -25,6 +25,8 @@ public class CL_Agent extends Thread {
 		private List<node_data> list=null;
 		private double _value;
 		private boolean bool=false;
+
+
 		public void setBoll(boolean b) {
 			this.bool=b;
 		}
@@ -33,7 +35,7 @@ public class CL_Agent extends Thread {
 		}
 		public void setList(List<node_data> list) { this.list=list;}
 		public List<node_data> getList(){ return this.list;}
-		
+
 		public int getCount() { return _count;}
 		public void setCount(int count) { this._count=count;}
 		public CL_Agent(directed_weighted_graph g, int start_node) {
@@ -178,4 +180,6 @@ public class CL_Agent extends Thread {
 		public void set_sg_dt(long _sg_dt) {
 			this._sg_dt = _sg_dt;
 		}
+
 	}
+

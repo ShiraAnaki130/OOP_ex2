@@ -1,20 +1,13 @@
 package api;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.DecimalFormat;
-import java.util.*;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.*;
 
 
 public class DWGraph_Algo implements dw_graph_algorithms{
@@ -85,6 +78,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		info = new HashMap<>();
 		if(graph.getNode(src) == null || graph.getNode(dest)==null)
 			return -1;
+		if(src == dest)return -1;
 		for(node_data node : graph.getV()){
 			info.put(node.getKey(),new AlgoNodeInfo(node));
 		}
@@ -133,6 +127,8 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		info = new HashMap<>();
 		if(graph.getNode(src) == null || graph.getNode(dest)==null)
 			return null;
+		if(src== dest)
+			return null;
 		for(node_data node : graph.getV()){
 			info.put(node.getKey(),new AlgoNodeInfo(node));
 		}
@@ -170,14 +166,15 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 				path.add(p);
 				start = p;
 			}
-		}
-		Stack<node_data> temp = new Stack<>();
-		for(node_data node: path){
-			temp.push(node);
-		}
-		path.clear();
-		while(!temp.isEmpty()){
-			path.add(temp.pop());
+
+			Stack<node_data> temp = new Stack<>();
+			for (node_data node : path) {
+				temp.push(node);
+			}
+			path.clear();
+			while (!temp.isEmpty()) {
+				path.add(temp.pop());
+			}
 		}
 		return path;
 	}
