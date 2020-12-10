@@ -11,7 +11,7 @@ import java.util.List;
 
 public class CL_Agent extends Thread {
 		public static final double EPS = 0.0001;
-		private  int _count = 1;
+		private  int _count;
 		private static int _seed = 3331;
 		private int _id;
 	//	private long _key;
@@ -24,15 +24,30 @@ public class CL_Agent extends Thread {
 		private long _sg_dt;
 		private List<node_data> list=null;
 		private double _value;
-		private boolean bool=false;
-		public void setBoll(boolean b) {
+		private boolean bool;
+		public void setBool(boolean b) {
 			this.bool=b;
 		}
 		public boolean getBool() {
 			return bool;
 		}
-		public void setList(List<node_data> list) { this.list=list;}
+		public void setList(List<node_data> list) {
+			this.list=list;
+		}
 		public List<node_data> getList(){ return this.list;}
+		
+		public node_data getNext(int count) {
+			if(this.list!=null) {
+				this.bool=true;
+				count+=1;
+				if(count<=(list.size()-1)) {
+					if(count==(list.size()-1)) 
+						this.bool=false;
+					return list.get(count);	
+				}	
+			}
+			return null;	
+		}
 		
 		public int getCount() { return _count;}
 		public void setCount(int count) { this._count=count;}

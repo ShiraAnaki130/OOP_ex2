@@ -14,6 +14,8 @@ import java.util.PriorityQueue;
 public class Ex2_Client implements Runnable{
 	private static MyFrame _win;
 	private static Arena _ar;
+	private static int count=0;
+	private static int countForPath=0;
 	public static void main(String[] args) {
 		Thread client = new Thread(new Ex2_Client());
 		client.start();
@@ -21,7 +23,7 @@ public class Ex2_Client implements Runnable{
 	
 	@Override
 	public void run() {
-		int scenario_num = 3;
+		int scenario_num = 0;
 		game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
 	//	int id = 999;
 	//	game.login(id);
@@ -73,6 +75,7 @@ public class Ex2_Client implements Runnable{
 	private void moveAgants(game_service game, directed_weighted_graph gg) throws JSONException {
 		dw_graph_algorithms ga= new DWGraph_Algo();
 		ga.init(gg);
+		count++;
 		String lg = game.move();
 		List<CL_Agent> listAgents = Arena.getAgents(lg, gg);
 		_ar.setAgents(listAgents);
@@ -89,26 +92,37 @@ public class Ex2_Client implements Runnable{
 				int dest = agent.getNextNode();
 				int src = agent.getSrcNode();
 				double v = agent.getValue();
-				List<node_data> path =null;
-				if(dest == -1&&agent.getBool()==false) {
-					dest = nextNode(gg, src, listP);
-					System.out.println("des "+dest);
-					path= ga.shortestPath(src, dest);
-					if(path!=null) {
-						for (int i=0;i<path.size();i++) {
-							 node_data node=path.get(i);
-							 System.out.println(node.getKey());
-							 game.chooseNextEdge(agent.getID(), node.getKey());
-							 if(i==(path.size()-1)) agent.setBoll(false);
-							 else agent.setBoll(true);
-						}
+				if(count==1) agent.setBool(false);
+				if(dest == -1) {
+					if(agent.getBool()==false) {
+						System.out.println("hiiii");
+						dest = nextNode(gg, src, listP);
+						System.out.println("des "+dest);
+						List<node_data> path= ga.shortestPath(src, dest);
+						agent.setList(path);
+						countForPath=0;
+						node_data node=agent.getNext(countForPath);
+						countForPath++;
+						if(node==null) dest=-1;
+						else dest=node.getKey();
+						game.chooseNextEdge(agent.getID(), dest);
 					}
-					
-					System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
+					else if(agent.getBool()==true) {
+								System.out.println("hi");
+								node_data node=agent.getNext(countForPath);
+								countForPath++;
+								if(node==null) dest=-1;
+								else dest=node.getKey();
+								game.chooseNextEdge(agent.getID(), dest);
+						}
 				}
+				
+				System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
+				
 			}
 			}
-		}
+	}
+		
 	
 	private static int nextNode(directed_weighted_graph g,int src,List<CL_Pokemon> allPo) {
 		dw_graph_algorithms ga= new DWGraph_Algo();
