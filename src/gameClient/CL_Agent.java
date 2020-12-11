@@ -189,6 +189,9 @@ public class CL_Agent {
 		public edge_data get_curr_edge() {
 			return this._curr_edge;
 		}
+		public void set_curr_edge(edge_data edge) {
+			this._curr_edge=edge;
+		}
 		public long get_sg_dt() {
 			return _sg_dt;
 		}

@@ -5,13 +5,20 @@ import org.json.JSONObject;
 
 import api.edge_data;
 
-public class CL_Pokemon {
+public class CL_Pokemon implements Comparable<CL_Pokemon> {
 	private double _value;
 	private int _type;
 	private Point3D _pos;
 	private edge_data _edge;
 //	private double min_dist;
 //	private int min_ro;
+	@Override
+	public int compareTo(CL_Pokemon o) {
+		int ans=0;
+		if(this._value-o.getValue()>0) ans=-1;
+		else if(this._value-o.getValue()<0) ans=1;
+		return ans;
+	}
 	
 	public CL_Pokemon(Point3D p, int t, double v) {
 		_type = t;
