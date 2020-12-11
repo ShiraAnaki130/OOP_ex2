@@ -92,8 +92,6 @@ public class Ex2_Client implements Runnable {
 					if (dest == -1) {
 						dest = randomDest(src,listP);
 						path = ga.shortestPath(src, dest);
-						//game.chooseNextEdge(agent.getID(), dest);
-						//path = randomPath(gg,src);
 					} else
 						path = ga.shortestPath(src, dest);
 					if (path != null) {
@@ -143,26 +141,6 @@ private int randomDest(int src,List<CL_Pokemon> allPo) {
 	return -1;
 	
 }
-private List<node_data> randomPath(directed_weighted_graph gg,int src) {
-	List<node_data> path = new LinkedList<>();
-	int r = (int) (Math.random() * gg.nodeSize());
-	while (path.size() < r) {
-		Collection<edge_data> edges = gg.getE(src);
-		Iterator<edge_data> iter = edges.iterator();
-		edge_data edge = iter.next();
-		node_data node = gg.getNode(edge.getDest());
-		path.add(node);
-		src = edge.getDest();
-	}
-	return path;
-}
-
-//	  private boolean checkLocation(directed_weighted_graph gg,int dest,geo_location AgentLocation){
-//		node_data current =gg.getNode(dest);
-//		if(AgentLocation.equals(current.getLocation()))
-//			return true;
-//		return false;
-//	  }
 	/**
 	 * A private function witch set to each pokemon the edge the pokemon is on it.
 	 * @param g
@@ -193,8 +171,6 @@ private List<node_data> randomPath(directed_weighted_graph gg,int src) {
 		_win.update(_ar);
 		_win.show();
 		String info = game.toString();
-		//PriorityQueue<edge_data> priQ= new PriorityQueue<edge_data>();
-		HashMap< Integer,edge_data> hash= new HashMap<Integer,edge_data>();
 		JSONObject line;
 		int des;
 		int type=0;
