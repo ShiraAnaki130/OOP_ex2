@@ -1,5 +1,6 @@
 package gameClient;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -29,7 +30,12 @@ public class test {
 		a.setTag(9);
 		priQ.add(b);
 		edge_data p=priQ.poll();
-		System.out.println("src "+p.getSrc()+"dest "+p.getDest());
+//		System.out.println("src "+p.getSrc()+"dest "+p.getDest());
+		HashMap<edge_data,Double> hash= new HashMap<edge_data,Double>();
+		hash.put(a, 5.5);
+		hash.put(b, 770.0);
+		System.out.println(hash.get(a));
+		
 		
 		
 		

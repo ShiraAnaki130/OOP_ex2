@@ -2,6 +2,7 @@ package gameClient;
 
 import Server.Game_Server_Ex2;
 import api.*;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,8 +12,6 @@ import java.util.*;
 public class Ex2_Client implements Runnable {
 	private static MyFrame _win;
 	private static Arena _ar;
-	private static edge_data edge_=null;
-
 	public static void main(String[] args) {
 		Thread client = new Thread(new Ex2_Client());
 		client.start();
@@ -20,7 +19,7 @@ public class Ex2_Client implements Runnable {
 
 	@Override
 	public void run() {
-		int scenario_num = 7;
+		int scenario_num = 3;
 		game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
 		//	int id = 999;
 		//	game.login(id);
@@ -40,16 +39,13 @@ public class Ex2_Client implements Runnable {
 
 		game.startGame();
 		_win.setTitle("Ex2 - OOP: (NONE trivial Solution) " + game.toString());
-		int ind = 0;
-		int dt = 100;
+		int dt = 115;
 		while (game.isRunning()) {
 
 			try {
 				moveAgants(game, graph);
 				_win.repaint();
-				 if(ind%2.5==0)
 				Thread.sleep(dt);
-				ind++;
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -172,8 +168,11 @@ private int randomDest(int src,List<CL_Pokemon> allPo) {
 		_win.show();
 		String info = game.toString();
 		JSONObject line;
-		int des;
-		int type=0;
+		PriorityQueue<CL_Pokemon> priQ= new PriorityQueue<CL_Pokemon>();
+		PriorityQueue<edge_data> priQForEdge= new PriorityQueue<edge_data>();
+		HashMap<edge_data,Double> hash= new HashMap<edge_data,Double>();
+		int des=0;
+		double val;
 		try {
 			line = new JSONObject(info);
 			JSONObject gameserver = line.getJSONObject("GameServer");
@@ -182,14 +181,66 @@ private int randomDest(int src,List<CL_Pokemon> allPo) {
 			System.out.println(game.getPokemons());
 			ArrayList<CL_Pokemon> allPo = Arena.json2Pokemons(game.getPokemons());
 			pokemonSetEdge(graph,allPo);
-			for(int a = 0;a<numOfAgents;a++) {
-					int ind = a%allPo.size();
-					CL_Pokemon c = allPo.get(ind);
-					type =c.getType();
-					if(type<0 ) {des = c.get_edge().getSrc();}
-					else {des = c.get_edge().getDest();}
-					game.addAgent(des);
+			for(CL_Pokemon p: allPo) { 
+				edge_data edge=p.get_edge();
+				int tag=edge.getTag();
+				if(tag==0) {
+					edge.setTag(1); 
+					hash.put(edge, p.getValue());
 				}
+				else {
+					  edge.setTag(tag+1); 
+					  val= hash.get(edge);
+					  hash.put(edge, val+p.getValue());
+				}	
+			}
+			if(allPo!=null) {
+				for(CL_Pokemon p: allPo) {
+					priQ.add(p);
+					priQForEdge.add(p.get_edge());
+				}
+			}
+			for(int a = 0;a<numOfAgents;a++) {
+				if(priQForEdge!=null&&priQ!=null) {
+					edge_data e= priQForEdge.poll();
+					CL_Pokemon p=priQ.poll();
+					if(e.getTag()!=1&&e.getTag()!=0) {
+						val=hash.get(e);
+						if(val>=p.getValue()) {
+							 if(e.getSrc()> e.getDest()) {des = e.getSrc();}
+							 else {des = e.getDest();}
+							 priQ.add(p);
+						}
+						else {
+								if(p.getType()<0 ) {des = p.get_edge().getSrc();}
+								else {des = p.get_edge().getDest();}
+								priQForEdge.add(e);
+						}
+					}
+					else {
+							if(e.getTag()==0) {
+								if(p.getType()<0 ) {des = p.get_edge().getSrc();}
+								else {des = p.get_edge().getDest();}
+								priQForEdge.add(e);
+							}
+							else if(e.getTag()==1){
+									val=hash.get(e);
+									if(val>=p.getValue()) {
+										if(e.getSrc()> e.getDest()) {des = e.getSrc();}
+										else {des = e.getDest();}
+										priQ.add(p);
+									}
+									else {
+										if(p.getType()<0 ) {des = p.get_edge().getSrc();}
+										else {des = p.get_edge().getDest();}
+										priQForEdge.add(e);
+									}	
+							}
+					}
+					
+				}
+				game.addAgent(des);
+			}
 
 		}
 		catch (JSONException e) {e.printStackTrace();}
