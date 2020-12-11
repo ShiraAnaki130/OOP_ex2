@@ -1,4 +1,5 @@
 package api;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.json.JSONException;
@@ -75,6 +76,6 @@ public interface dw_graph_algorithms {
      * @return true - iff the graph was successfully loaded.
      * @throws JSONException 
      */
-    public boolean load(String file) throws JSONException;
+    public boolean load(String file) throws JSONException, FileNotFoundException;
 }
 

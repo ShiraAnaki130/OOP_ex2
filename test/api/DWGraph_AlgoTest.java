@@ -3,6 +3,7 @@ package api;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -130,7 +131,7 @@ void copy(){
 
 	}
 	@Test
-	void saveLoad() throws JSONException{
+	void saveLoad() throws JSONException, FileNotFoundException {
 		graph_algo = new DWGraph_Algo();
 		directed_weighted_graph toInit = new DWGraph_DS();
 		node_data[] nodes = new node_data[10];
@@ -144,11 +145,11 @@ void copy(){
 			toInit.connect(nodes[i].getKey(),nodes[i+2].getKey(),Math.random()*10);
 		}
 		graph_algo.init(toInit);
-		graph_algo.save("check.json");
+		graph_algo.save("check.obj");
 		dw_graph_algorithms Load = new DWGraph_Algo();
 		directed_weighted_graph new_graph  = new DWGraph_DS();
 		Load.init(new_graph);
-		Load.load("check.json");
+		Load.load("check.obj");
 		assertEquals(toInit,Load.getGraph());
 	}
 }

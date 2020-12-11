@@ -5,6 +5,7 @@ import api.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Ex2_Client implements Runnable {
@@ -27,13 +28,13 @@ public class Ex2_Client implements Runnable {
 		dw_graph_algorithms algo = new DWGraph_Algo();
 		try {
 			algo.load(g);
-		} catch (JSONException e2) {
+		} catch (JSONException | FileNotFoundException e2) {
 			e2.printStackTrace();
 		}
 		directed_weighted_graph graph = algo.getGraph();
 		try {
 			init(game);
-		} catch (JSONException e1) {
+		} catch (JSONException | FileNotFoundException e1) {
 			e1.printStackTrace();
 		}
 
@@ -70,6 +71,7 @@ public class Ex2_Client implements Runnable {
 	 * @throws JSONException
 	 */
 	private void moveAgants(game_service game, directed_weighted_graph gg) {
+		synchronized (game) {
 		dw_graph_algorithms ga = new DWGraph_Algo();
 		ga.init(gg);
 		String lg = game.move();
@@ -80,7 +82,6 @@ public class Ex2_Client implements Runnable {
 		_ar.setPokemons(listP);
 		pokemonSetEdge(gg, listP);
 		List<node_data> path=null;
-		synchronized (game) {
 			for (CL_Agent agent : listAgents) {
 				int id = agent.getID();
 				int dest = agent.getNextNode();
@@ -92,6 +93,7 @@ public class Ex2_Client implements Runnable {
 						dest = randomDest(src,listP);
 						path = ga.shortestPath(src, dest);
 						//game.chooseNextEdge(agent.getID(), dest);
+						//path = randomPath(gg,src);
 					} else
 						path = ga.shortestPath(src, dest);
 					if (path != null) {
@@ -177,7 +179,7 @@ private List<node_data> randomPath(directed_weighted_graph gg,int src) {
 	 * @return
 	 * @throws JSONException 
 	 */
-	private void init(game_service game) throws JSONException {
+	private void init(game_service game) throws JSONException, FileNotFoundException {
 		String g = game.getGraph();
 		String pokemons = game.getPokemons();
 		dw_graph_algorithms algo= new DWGraph_Algo();
