@@ -4,8 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -232,11 +230,9 @@ public class DWGraph_Algo implements dw_graph_algorithms{
      * @param file - file name of JSON file.
      * @return return true, if the file was successfully saved, or false in case it wasn't.
 	 * @throws JSONException 
-	 * @throws FileNotFoundException 
      */
 	@Override
 	public boolean load(String file) throws JSONException {
-	
 		directed_weighted_graph new_graph=new DWGraph_DS();
 //	        Scanner scanner = new Scanner( new File(file) );
 //	        String jsonString = scanner.useDelimiter("\\A").next();
@@ -269,7 +265,6 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		}
 		this.graph=new_graph;
 		return true;
-		
 		
 	}
 	//BFS algorithm using given graph and starting node (nxt)
