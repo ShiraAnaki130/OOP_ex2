@@ -12,16 +12,19 @@ import java.util.*;
 public class Ex2_Client implements Runnable {
 	private static MyFrame _win;
 	private static Arena _ar;
-	public static void main(String[] args) {
-		Thread client = new Thread(new Ex2_Client());
-		client.start();
+	private int scenario_num ;
+	private	int id;
+//	public static void main(String[] args) {
+//		Thread client = new Thread(new Ex2_Client());
+//		client.start();
+//	}
+	public Ex2_Client(int id,int scenario_num){
+		this.scenario_num = scenario_num;
+		this.id = id;
 	}
-
 	@Override
 	public void run() {
-		int scenario_num = 3;
 		game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
-		//	int id = 999;
 		//	game.login(id);
 		String g = game.getGraph();
 		dw_graph_algorithms algo = new DWGraph_Algo();
@@ -39,18 +42,18 @@ public class Ex2_Client implements Runnable {
 
 		game.startGame();
 		_win.setTitle("Ex2 - OOP: (NONE trivial Solution) " + game.toString());
-		int dt = 115;
+		int dt = 100;
 		while (game.isRunning()) {
+			synchronized (game_service.class) {
+				try {
+					moveAgants(game, graph);
+					_win.repaint();
+					Thread.sleep(dt);
 
-			try {
-				moveAgants(game, graph);
-				_win.repaint();
-				Thread.sleep(dt);
-
-			} catch (Exception e) {
-				e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-
 		}
 		String res = game.toString();
 		System.out.println(res);
@@ -67,17 +70,16 @@ public class Ex2_Client implements Runnable {
 	 * @throws JSONException
 	 */
 	private void moveAgants(game_service game, directed_weighted_graph gg) {
-		synchronized (game) {
-		dw_graph_algorithms ga = new DWGraph_Algo();
-		ga.init(gg);
-		String lg = game.move();
-		List<CL_Agent> listAgents = Arena.getAgents(lg, gg);
-		_ar.setAgents(listAgents);
-		String fs = game.getPokemons();
-		List<CL_Pokemon> listP = Arena.json2Pokemons(fs);
-		_ar.setPokemons(listP);
-		pokemonSetEdge(gg, listP);
-		List<node_data> path=null;
+			dw_graph_algorithms ga = new DWGraph_Algo();
+			ga.init(gg);
+			String lg = game.move();
+			List<CL_Agent> listAgents = Arena.getAgents(lg, gg);
+			_ar.setAgents(listAgents);
+			String fs = game.getPokemons();
+			List<CL_Pokemon> listP = Arena.json2Pokemons(fs);
+			_ar.setPokemons(listP);
+			pokemonSetEdge(gg, listP);
+			List<node_data> path = null;
 			for (CL_Agent agent : listAgents) {
 				int id = agent.getID();
 				int dest = agent.getNextNode();
@@ -86,20 +88,21 @@ public class Ex2_Client implements Runnable {
 				if (dest == -1) {
 					dest = nextNode(gg, src, listP);
 					if (dest == -1) {
-						dest = randomDest(src,listP);
+						dest = randomDest(src, listP);
 						path = ga.shortestPath(src, dest);
 					} else
 						path = ga.shortestPath(src, dest);
 					if (path != null) {
-						for (node_data node:path) {
-							game.chooseNextEdge(agent.getID(), node.getKey());	
+						for (node_data node : path) {
+							game.chooseNextEdge(agent.getID(), node.getKey());
 						}
 					}
 				}
 				System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
 			}
 		}
-	}
+
+
 
 
 	private static int nextNode(directed_weighted_graph g, int src, List<CL_Pokemon> allPo) {
@@ -117,7 +120,6 @@ public class Ex2_Client implements Runnable {
 				ans = pokemon.get_edge().getDest();
 				if(ans==src) ans = pokemon.get_edge().getSrc();
 				index=i;
-				
 			}
 		}
 		allPo.get(index).get_edge().setInfo("t");
