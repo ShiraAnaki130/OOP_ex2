@@ -42,7 +42,7 @@ public class Ex2_Client implements Runnable {
 
 		game.startGame();
 		_win.setTitle("Ex2 - OOP: (NONE trivial Solution) " + game.toString());
-		int dt = 100;
+		int dt = 115;
 		while (game.isRunning()) {
 			synchronized (game_service.class) {
 				try {
@@ -128,11 +128,17 @@ public class Ex2_Client implements Runnable {
 
 private int randomDest(int src,List<CL_Pokemon> allPo) {
 	PriorityQueue<CL_Pokemon> priQ= new PriorityQueue<CL_Pokemon>();
+	int index = 0;
 	if(allPo!=null) {
 		for(CL_Pokemon p: allPo) {
 			priQ.add(p);
 		}
 		CL_Pokemon p=priQ.poll();
+		while (p.get_edge().getInfo().equals("f")&&!priQ.isEmpty()) {
+			p = priQ.poll();
+			index = allPo.indexOf(p);
+		}
+		allPo.get(index).get_edge().setInfo("t");
 		if(p.get_edge().getDest()==src) return p.get_edge().getSrc();
 		return p.get_edge().getDest();
 		}

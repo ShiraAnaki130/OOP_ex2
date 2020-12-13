@@ -45,15 +45,6 @@ public class MyFrame extends JFrame {
 
 	public void paint(Graphics g) {
 		updateFrame();
-		drawInfo(g);
 	}
 
-	private void drawInfo(Graphics g) {
-		List<String> str = _ar.get_info();
-		String dt = "none";
-		for(int i=0;i<str.size();i++) {
-			g.drawString(str.get(i)+" dt: "+dt,100,60+i*20);
-		}
-		
-	}
 }
