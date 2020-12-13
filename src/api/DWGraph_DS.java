@@ -17,6 +17,11 @@ public class DWGraph_DS implements directed_weighted_graph{
 		private int tag;
 		private static int key1=1;
 		private geo_location pos;
+
+		/**
+		 *
+		 * Default constructor of node data create a new node data with a unique key and default location
+		 */
 		public NodeData() {
 			this.id=key1++;
 			this.info="f";
@@ -24,7 +29,11 @@ public class DWGraph_DS implements directed_weighted_graph{
 			this.weight = 0;
 			this.pos=new Geo_Location();
 		}
-		
+
+		/**
+		 * constructor by key, create new node data with a given key and a default location
+		 * @param key
+		 */
 		public NodeData(int key) {
 			this.id=key;
 			this.info="f";
@@ -32,6 +41,17 @@ public class DWGraph_DS implements directed_weighted_graph{
 			this.weight = 0;
 			this.pos=new Geo_Location();
 		}
+
+		/**
+		 * constructor that make a new node with given prams
+		 * @param key
+		 * @param info
+		 * @param tag
+		 * @param weight
+		 * @param x
+		 * @param y
+		 * @param z
+		 */
 		public NodeData(int key, String info,int tag, double weight,double x, double y, double z) {
 			this.id=key;
 			this.info=info;
@@ -39,6 +59,10 @@ public class DWGraph_DS implements directed_weighted_graph{
 			this.weight = weight;
 			this.pos=new Geo_Location(x,y,z);
 		}
+		/**
+		 * constructor by key, create new node data with a given key and set 3D point location by given values (x,y,z)
+		 * @param key
+		 */
 		public NodeData(int key,double x, double y, double z) {
 			this.id=key;
 			this.info="f";
@@ -46,89 +70,162 @@ public class DWGraph_DS implements directed_weighted_graph{
 			this.weight = 0;
 			this.pos=new Geo_Location(x,y,z);
 		}
+
+		/**
+		 * return the node's key
+		 * @return
+		 */
 		@Override
 		public int getKey() {
 			return id;
 		}
 
+		/**
+		 * return the 3D point location of the node.
+		 * @return
+		 */
 		@Override
 		public geo_location getLocation() {
 			return pos;
 		}
 
+		/**
+		 * set the 3D point location of the node by given location
+		 * @param p -new location  (position) of this node.
+		 */
 		@Override
 		public void setLocation(geo_location p) {
 			pos=new Geo_Location(p);
 		}
 
+		/**
+		 * return the wight of the node.
+		 * @return
+		 */
 		@Override
 		public double getWeight() {
 			return this.weight;
 		}
 
+		/**
+		 * set the weight of the node by given weight
+		 * @param w - the new weight
+		 */
 		@Override
 		public void setWeight(double w) {
 			this.weight=w;
 			
 		}
 
+		/**
+		 *return the info of the node
+		 * @return
+		 */
 		@Override
 		public String getInfo() {
 			return this.info;
 		}
 
+		/**
+		 * set the info of the node by given string
+		 * @param s
+		 */
 		@Override
 		public void setInfo(String s) {
 			this.info=""+s;
 			
 		}
 
+		/**
+		 * return a tag mark of the node (used for algorithms)
+		 * @return
+		 */
 		@Override
 		public int getTag() {
 			return this.tag;
 		}
 
+		/**
+		 * set a tag mark of the node (used for algorithms)
+		 * @param t - the new value of the tag
+		 */
 		@Override
 		public void setTag(int t) {
 			tag=t;
 			
 		}
 
+		/**
+		 * this class represent a geographic 3D point location of a node data
+		 */
 		public class Geo_Location implements geo_location{
 			private double _x;
 			private double _y;
 			private double _z;
-			
+
+			/**
+			 * Default geographic location constructor(0.0,0.0,0.0)
+			 */
 			public Geo_Location() {
 				this._x=0.0;
 				this._y=0.0;
 				this._z=0.0;
 			}
+
+			/**
+			 * copy constructor of the graph set the this location to a given location
+			 * @param p
+			 */
 			public Geo_Location(geo_location p) {
 				this._x=p.x();
 				this._y=p.y();
 				this._z=p.z();
 			}
+
+			/**
+			 * this constructor create a new geographic location by given (x,y,z) values
+			 * @param x
+			 * @param y
+			 * @param z
+			 */
 			public Geo_Location(double x,double y,double z) {
 				this._x=x;
 				this._y=y;
 				this._z=z;
 			}
+
+			/**
+			 * return the x position of the node.
+			 * @return
+			 */
 			@Override
 			public double x() {
 				return this._x;
 			}
 
+			/**
+			 * return the y position of the node.
+			 * @return
+			 */
 			@Override
 			public double y() {
 				return this._y;
 			}
 
+			/**
+			 * return the z position of the node.
+			 * @return
+			 */
 			@Override
 			public double z() {
 				return this._z;
 			}
 
+			/**
+			 * calculate the distance between this node geographic location to a given geographic location.
+			 * @param g
+			 * @return
+			 */
 			@Override
 			public double distance(geo_location g) {
 				double dis_x=Math.pow(this._x-g.x(), 2);
@@ -136,39 +233,10 @@ public class DWGraph_DS implements directed_weighted_graph{
 				double dis_z=Math.pow(this._z-g.z(), 2);
 				return Math.sqrt(dis_x+dis_y+dis_z);
 			}
-			@Override
-			public boolean equals(Object g){
-				if(g instanceof geo_location){
-					geo_location G = (geo_location)g;
-					if(this._x == G.x()&&this._y == G.y()&&this._z== G.z())return true;
-				}
-					return false;
-			}
+
 		}
 	}
-//public static class EdgeLocation implements edge_location{
-//	private edge_data edge;
-//	private double ratio;
-//	private geo_location p;
-//	public EdgeLocation(geo_location e){
-//		this.edge = null;
-//		this.p = e;
-//		this.ratio = 0;
-//
-//	}
-//
-//	@Override
-//	public edge_data getEdge() {
-//		
-//	}
-//
-//	@Override
-//	public double getRatio() {
-//		// TODO Auto-generated method stub
-//		return 0;
-//	}
-//	
-//}
+
 /**
  * This public class represents an edge in an directional weighted graph.
  * Every edge consist of src(edge's start node_id), dest(edge's end node_id), edge's weight,
@@ -183,6 +251,15 @@ public static class EdgeData implements edge_data,Comparable<edge_data>{
 	private double w;
 	private String info;
 	private int tag;
+
+	/**
+	 * constructor that create a new edge with a given params.
+	 * @param src
+	 * @param dest
+	 * @param weight
+	 * @param info
+	 * @param tag
+	 */
 	public EdgeData(int src,int dest,double weight,String info,int tag) {
 		this.src=src;
 		this.dest=dest;
@@ -190,7 +267,14 @@ public static class EdgeData implements edge_data,Comparable<edge_data>{
 		this.info=info;
 		this.tag=tag;
 	}
-	
+
+	/**
+	 * default constructor create a new edge
+	 * need sources and destination keys ,and the weight of the edge.
+	 * @param src
+	 * @param dest
+	 * @param weight
+	 */
 	public EdgeData(int src,int dest,double weight) {
 		this.src=src;
 		this.dest=dest;
@@ -254,6 +338,12 @@ public static class EdgeData implements edge_data,Comparable<edge_data>{
 	public void setTag(int t) {
 		this.tag = t;
 	}
+
+	/**
+	 * check if this edge equals to a given edge by source and destination keys and the edge weight.
+	 * @param other
+	 * @return
+	 */
 	@Override
 	public boolean equals(Object other) {
 		if(!(other instanceof edge_data)) return false;
@@ -261,6 +351,12 @@ public static class EdgeData implements edge_data,Comparable<edge_data>{
 		if(getSrc()==edge.getSrc()&&getDest()==edge.getDest()&&getWeight()==edge.getWeight()) return true;
 		return false;
 	}
+
+	/**
+	 * compering this edge with other edge by the associated tag mark
+	 * @param o
+	 * @return
+	 */
 	@Override
 	public int compareTo(edge_data o) {
 		int ans=0;
@@ -275,9 +371,18 @@ public static class EdgeData implements edge_data,Comparable<edge_data>{
  */
 public static class edges_direction{
 	HashMap<Integer,edge_data> edgesNi;
+
+	/**
+	 * default constructor create new set of edges by destination for one course node.
+	 */
 	public edges_direction() {
 		this.edgesNi=new HashMap<Integer,edge_data>();
 	}
+
+	/**
+	 * copy constructor that set a given set of set of edges.
+	 * @param edges - HashMap that represent the edges with the same source node.
+	 */
 	public edges_direction(HashMap<Integer,edge_data> edges) {
 		this.edgesNi=edges;
 	}
@@ -343,7 +448,10 @@ private HashMap<Integer,Collection<Integer>> meAsDest;
 private int MC;
 private int e_size;
 
-public DWGraph_DS(){
+	/**
+	 * default constructor create a empty graph.
+	 */
+	public DWGraph_DS(){
 	this.Nodes = new HashMap<>();
 	this.Edges = new HashMap<>();
 	this.meAsDest = new HashMap<>();
@@ -505,7 +613,7 @@ public node_data removeNode(int key) {
  * This function deletes,in O(1), the edge src-->dest from the graph,
 * @param src - the source of the edge.
  * @param dest - the destination of the edge.
- * @return the data of the removed edge or null if the edge does'nt exist in the graph.
+ * @return the data of the removed edge or null if the edge doesn't exist in the graph.
  */
 @Override
 public edge_data removeEdge(int src, int dest) {
@@ -542,7 +650,13 @@ public int getMC() {
 	return this.MC;
 }
 
-@Override
+	/**
+	 * this function check each node in the graph ,for each node the function checks if the graphs as the same edges
+	 * Associated, and the weight of the edges is the same.
+	 * @param g
+	 * @return
+	 */
+	@Override
 	public boolean equals(Object g){
 	boolean answer = true;
 	directed_weighted_graph other = (directed_weighted_graph)g;
@@ -562,7 +676,6 @@ public int getMC() {
 	}
 	return answer;
 	}
-
 }
 
 

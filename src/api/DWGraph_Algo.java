@@ -14,9 +14,12 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 	
 	private directed_weighted_graph graph;
 	private HashMap<Integer,AlgoNodeInfo> info;
-	
+
+	/**
+	 * default constructor crate new directed weighted graph algorithms.
+	 */
 	public DWGraph_Algo() {
-		graph=new DWGraph_DS();
+		this.graph=new DWGraph_DS();
 	}
 	/**
 	 * This function init the graph on which this set of algorithms operates on.
@@ -267,7 +270,14 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		return true;
 		
 	}
-	//BFS algorithm using given graph and starting node (nxt)
+
+	/**
+	 * this function gets a directed weighted graph and a starting node and check
+	 * by the BFS algorithm if the graph his connected
+	 * @param graph
+	 * @param nxt
+	 * @return
+	 */
 	private boolean BFS(directed_weighted_graph graph,node_data nxt) {
 		Queue<node_data> frontier = new LinkedList<>();
 		HashSet<node_data> node_out = new HashSet<>();
@@ -290,7 +300,11 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 			answer = false;
 		return answer;
 	}
-	//The function is swapping the edges in new graph with the same vertex
+
+	/**
+	 *create new graph with a swap direction of the edges of this graph
+	 * @return
+	 */
 	private directed_weighted_graph swapDirections(){
 		directed_weighted_graph new_graph = new DWGraph_DS();
 		for(node_data n : graph.getV()){
@@ -303,31 +317,70 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		}
 		return new_graph;
 	}
+
+	/**
+	 * this class represent the info that the algorithms collectd for each function in DWGraph_Algo
+	 */
 	private class AlgoNodeInfo implements Comparable<Object>{
 		private int _key;
 		private double weight;
 		private node_data parent;
 
+		/**
+		 * default constructor create new algorithm node's info by given node.
+		 * @param n
+		 */
 		public AlgoNodeInfo(node_data n){
 			this._key = n.getKey();
 			this.weight = Double.MAX_EXPONENT;
 			this.parent = null;
 		}
+
+		/**
+		 * return the key of the node associated to the algorithm info.
+		 * @return
+		 */
 		public int getKey(){
 			return this._key;
 		}
+
+		/**
+		 * return the weight distance of the node used by algorithms
+		 * @return
+		 */
 		public double getWeight() {
 			return this.weight;
 		}
+		/**
+		 * set the weight distance of the node used by algorithms
+		 * @return
+		 */
 		public void setWeight(double weight) {
 			this.weight = weight;
 		}
+
+		/**
+		 * set the parent node that the algorithm of shortest path need
+		 * to remember for creating a path list of the nodes.
+		 * @param parent
+		 */
 		public void setParent(node_data parent){
 			this.parent = parent;
 		}
+
+		/**
+		 * return the parent of the node associated.
+		 * @return
+		 */
 		public node_data getParent(){
 			return this.parent;
 		}
+		/**
+		 * comparing the algorithm info by the weight.
+		 * return 1 if the weight of this algorithm info is bigger then the other
+		 * return -1 if the weight of the other algorithm info is bigger then this weight
+		 * return 0 if they are equals
+		 */
 		@Override
 		public int compareTo(Object o) {
 			int ans = 0;
