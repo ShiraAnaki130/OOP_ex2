@@ -7,24 +7,54 @@ import api.game_service;
 import gameClient.util.Point3D;
 import gameClient.util.Range;
 import gameClient.util.Range2D;
+
+import javax.sound.sampled.Clip;
 import javax.swing.*;
-import javax.swing.text.StyledEditorKit;
 import java.awt.*;
-import java.sql.Time;
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 
 public class MyPanel extends JPanel {
     private Arena _ar;
     private gameClient.util.Range2Range _w2f;
-    private static long start_time;
+    private ImageIcon _board;
+    private List<ImageIcon> Title;
+    private List<ImageIcon> _pokemon;
+    private List<ImageIcon> _pokeboll;
 
     public MyPanel() {
     	super();
-        start_time = new Date().getTime();
+    	this.Title = new LinkedList<>();
+    	this._pokemon = new LinkedList<>();
+    	this._pokeboll = new LinkedList<>();
+    	try {
+            this._board = new ImageIcon("pokemon_20.png");
+            ImageIcon pokeboll1 = new ImageIcon("pokeboll1.png");//title
+            ImageIcon pokeboll2 = new ImageIcon("pokeboll2.png");//ID 0
+            ImageIcon pokeboll3 = new ImageIcon("pokeboll3.png");//ID 1
+            ImageIcon pokeboll4 = new ImageIcon("pokeboll4.png");//ID 2
+            ImageIcon pokeboll5 = new ImageIcon("pokeboll5.png");//ID 3
+            Title.add(pokeboll1);
+            _pokeboll.add(pokeboll2);
+            _pokeboll.add(pokeboll3);
+            _pokeboll.add(pokeboll4);
+            _pokeboll.add(pokeboll5);
+            ImageIcon pokemon1 = new ImageIcon("pokemon1.png");//title
+            ImageIcon pokemon2 = new ImageIcon("pokemon2.png");// -1 v<10
+            ImageIcon pokemon3 = new ImageIcon("pokemon3.png");// 1 v<10
+            ImageIcon pokemon4 = new ImageIcon("pokemon4.png");// -1 v>10
+            ImageIcon pokemon5 = new ImageIcon("pokemon5.png");// 1<10
+            Title.add(pokemon1);
+            _pokemon.add(pokemon2);
+            _pokemon.add(pokemon3);
+            _pokemon.add(pokemon4);
+            _pokemon.add(pokemon5);
+        }
+    	catch (Exception e){
+    	    e.printStackTrace();
+        }
+
     }
 
     public void update(Arena ar) {
@@ -44,8 +74,8 @@ public class MyPanel extends JPanel {
         int w = this.getWidth();
         int h = this.getHeight();
         g.clearRect(0, 0, w, h);
-        setSize(w,h);
-        this.setBackground(Color.white);
+        setSize(w, h);
+        g.drawImage(_board.getImage(),0,0,this);
         paintComponent(g);
     }
 
@@ -71,21 +101,22 @@ public class MyPanel extends JPanel {
 
     private void drawAgants(Graphics g) {
         List<CL_Agent> agent = _ar.getAgents();
-        g.setColor(Color.pink);
-        g.fillRect(this.getWidth()-260,10,200,agent.size()*50);
-        int r = 8;
+       // g.setColor(Color.pink);
+        //g.fillRect(this.getWidth()-260,10,200,agent.size()*50);
+        int r = 15;
         for (CL_Agent ag : agent) {
             Font font = g.getFont().deriveFont(20.0f);
             g.setFont(font);
             g.setColor(Color.red);
             String agent_info = "ID: "+ag.getID()+"    grade: "+ag.getValue();
             g.drawString(agent_info, this.getWidth()-250,40+agent.indexOf(ag)*50);
+            g.drawImage(_pokeboll.get(ag.getID()).getImage(),this.getWidth()-300,20+agent.indexOf(ag)*50,this);
             geo_location c = ag.getLocation();
             if (c != null) {
                 font = g.getFont().deriveFont(10.0f);
                 g.setFont(font);
                 geo_location fp = this._w2f.world2frame(c);
-                g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
+                g.drawImage(_pokeboll.get(ag.getID()).getImage(),(int) fp.x() -r,(int) fp.y()-r,this);
                 String agents_s = "ID: "+ag.getID();
                 g.drawString(agents_s, (int)fp.x()+r,(int) fp.y()-r);
             }
@@ -128,9 +159,8 @@ public class MyPanel extends JPanel {
         }
     }
     private void drawTime(Graphics g){
-        long current_time = new Date().getTime();
-        int show_time = (int)(current_time - start_time)/1000 ;
-        String time = "Time to end: "+(60-show_time)+" seconds";
+        long current_time = this._ar.getGame().timeToEnd();
+        String time = "Time to end: "+(current_time/1000);
         g.setColor(Color.BLUE);
         Font font = g.getFont().deriveFont(40.0f);
         g.setFont(font);

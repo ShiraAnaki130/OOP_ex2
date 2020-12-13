@@ -169,6 +169,7 @@ private int randomDest(int src,List<CL_Pokemon> allPo) {
 		directed_weighted_graph graph = algo.getGraph();
 		_ar = new Arena();
 		_ar.setGraph(graph);
+		_ar.setGame(game);
 		_ar.setPokemons(Arena.json2Pokemons(pokemons));
 		_win = new MyFrame("test Ex2");
 		_win.setSize(1000, 700);
