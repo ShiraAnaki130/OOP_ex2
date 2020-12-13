@@ -3,20 +3,28 @@ import api.directed_weighted_graph;
 import api.edge_data;
 import api.geo_location;
 import api.node_data;
+import api.game_service;
 import gameClient.util.Point3D;
 import gameClient.util.Range;
 import gameClient.util.Range2D;
 import javax.swing.*;
+import javax.swing.text.StyledEditorKit;
 import java.awt.*;
+import java.sql.Time;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+
 
 public class MyPanel extends JPanel {
     private Arena _ar;
     private gameClient.util.Range2Range _w2f;
+    private static long start_time;
 
     public MyPanel() {
-
-    	super();  
+    	super();
+        start_time = new Date().getTime();
     }
 
     public void update(Arena ar) {
@@ -26,7 +34,7 @@ public class MyPanel extends JPanel {
 
     private void updatePanel() {
         Range rx = new Range(20, this.getWidth() - 20);
-        Range ry = new Range(this.getHeight() - 10, 150);
+        Range ry = new Range(this.getHeight() - 30, 150);
         Range2D frame = new Range2D(rx, ry);
         directed_weighted_graph g = _ar.getGraph();
         _w2f = Arena.w2f(g, frame);
@@ -44,8 +52,9 @@ public class MyPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         drowgraph(g);
-        drawPokimon(g);
+        drawPokemon(g);
         drawAgants(g);
+        drawTime(g);
     }
 
     private void drowgraph(Graphics g) {
@@ -57,39 +66,28 @@ public class MyPanel extends JPanel {
                 g.setColor(Color.gray);
                 drawEdge(edge, g);
             }
-        }
-        drawPokemons(g);
-        drawAgants(g);
+        };
     }
-
 
     private void drawAgants(Graphics g) {
         List<CL_Agent> agent = _ar.getAgents();
-        g.setColor(Color.red);
+        g.setColor(Color.pink);
+        g.fillRect(this.getWidth()-260,10,200,agent.size()*50);
         int r = 8;
         for (CL_Agent ag : agent) {
+            Font font = g.getFont().deriveFont(20.0f);
+            g.setFont(font);
+            g.setColor(Color.red);
+            String agent_info = "ID: "+ag.getID()+"    grade: "+ag.getValue();
+            g.drawString(agent_info, this.getWidth()-250,40+agent.indexOf(ag)*50);
             geo_location c = ag.getLocation();
             if (c != null) {
+                font = g.getFont().deriveFont(10.0f);
+                g.setFont(font);
                 geo_location fp = this._w2f.world2frame(c);
                 g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
-            }
-        }
-    }
-
-    private void drawPokemons(Graphics g) {
-        List<CL_Pokemon> pokemons = _ar.getPokemons();
-        if (pokemons != null) {
-            for (CL_Pokemon p : pokemons) {
-                Point3D c = p.getLocation();
-                int r = 10;
-                g.setColor(Color.green);
-                if (p.getType() < 0) {
-                    g.setColor(Color.orange);
-                }
-                if (c != null) {
-                    geo_location fp = this._w2f.world2frame(c);
-                    g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
-                }
+                String agents_s = "ID: "+ag.getID();
+                g.drawString(agents_s, (int)fp.x()+r,(int) fp.y()-r);
             }
         }
     }
@@ -110,7 +108,7 @@ public class MyPanel extends JPanel {
         g.drawLine((int) s0.x(), (int) s0.y(), (int) d0.x(), (int) d0.y());
     }
 
-    private void drawPokimon(Graphics g) {
+    private void drawPokemon(Graphics g) {
         List<CL_Pokemon> fs = _ar.getPokemons();
         for (CL_Pokemon f : fs) {
             Point3D c = f.getLocation();
@@ -122,10 +120,21 @@ public class MyPanel extends JPanel {
             if (c != null) {
                 geo_location fp = this._w2f.world2frame(c);
                 g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
-                //	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
+                String pokemon_s = "V:"+f.getValue();
+                Font font = g.getFont().deriveFont(10.0f);
+                g.setFont(font);
+                g.drawString(pokemon_s, (int)fp.x()+r,(int) fp.y()-r);
             }
         }
-
+    }
+    private void drawTime(Graphics g){
+        long current_time = new Date().getTime();
+        int show_time = (int)(current_time - start_time)/1000 ;
+        String time = "Time to end: "+(60-show_time)+" seconds";
+        g.setColor(Color.BLUE);
+        Font font = g.getFont().deriveFont(40.0f);
+        g.setFont(font);
+        g.drawString(time,10,60);
     }
 }
 
