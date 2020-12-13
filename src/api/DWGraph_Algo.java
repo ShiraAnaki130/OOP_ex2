@@ -4,6 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -208,8 +211,8 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 	    		Edges.put(edge);	
 	    	}
 	    }
-	    allArray.put("Edges", Edges);
-	    allArray.put("Nodes", Nodes);
+	    allArray.put("Edges",Edges);
+	    allArray.put("Nodes",Nodes);
 	try {
 	    FileWriter file_ = new FileWriter(file);
 	    file_.write(allArray.toString());
@@ -230,16 +233,17 @@ public class DWGraph_Algo implements dw_graph_algorithms{
      * @param file - file name of JSON file.
      * @return return true, if the file was successfully saved, or false in case it wasn't.
 	 * @throws JSONException 
+	 * @throws FileNotFoundException 
      */
 	@Override
-	public boolean load(String file) throws JSONException {
+	public boolean load(String file) throws JSONException, FileNotFoundException {
 		directed_weighted_graph new_graph=new DWGraph_DS();
-//	        Scanner scanner = new Scanner( new File(file) );
-//	        String jsonString = scanner.useDelimiter("\\A").next();
-//	        scanner.close();
+	    Scanner scanner = new Scanner(new File(file));
+	    String jsonString = scanner.useDelimiter("\\A").next();
+	    scanner.close();
 		JSONObject node = new JSONObject();
 		JSONObject edge = new JSONObject();
-		JSONObject jsonObject = new JSONObject(file);
+		JSONObject jsonObject = new JSONObject(jsonString);
  
 		JSONArray jsonArrayEdges= jsonObject.getJSONArray("Edges");
 		JSONArray jsonArrayNodes= jsonObject.getJSONArray("Nodes");

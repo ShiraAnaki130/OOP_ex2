@@ -19,7 +19,7 @@ public class Ex2_Client implements Runnable {
 
 	@Override
 	public void run() {
-		int scenario_num = 3;
+		int scenario_num = 0;
 		game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
 		//	int id = 999;
 		//	game.login(id);
@@ -38,7 +38,7 @@ public class Ex2_Client implements Runnable {
 		}
 
 		game.startGame();
-		_win.setTitle("Ex2 - OOP: (NONE trivial Solution) " + game.toString());
+		_win.setTitle("Game's level number " + scenario_num);
 		int dt = 115;
 		while (game.isRunning()) {
 
@@ -241,10 +241,8 @@ private int randomDest(int src,List<CL_Pokemon> allPo) {
 				}
 				game.addAgent(des);
 			}
-
 		}
 		catch (JSONException e) {e.printStackTrace();}
 
 	}
-
 }
