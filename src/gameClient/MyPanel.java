@@ -29,7 +29,7 @@ public class MyPanel extends JPanel {
     	this._pokemon = new LinkedList<>();
     	this._pokeboll = new LinkedList<>();
     	try {
-            this._board = new ImageIcon("pokemon_20.png");
+            this._board = new ImageIcon("pikachuP.png");
             ImageIcon pokeboll1 = new ImageIcon("pokeboll1.png");//title
             ImageIcon pokeboll2 = new ImageIcon("pokeboll2.png");//ID 0
             ImageIcon pokeboll3 = new ImageIcon("pokeboll3.png");//ID 1
@@ -75,7 +75,10 @@ public class MyPanel extends JPanel {
         int h = this.getHeight();
         g.clearRect(0, 0, w, h);
         setSize(w, h);
-        g.drawImage(_board.getImage(),0,0,this);
+        g.setColor(Color.ORANGE);
+        g.fillRect(0,0,w,h);
+        g.drawImage(Title.get(0).getImage(),450,120,this);
+        g.drawImage(_board.getImage(),300,-30,this);
         paintComponent(g);
     }
 
@@ -84,7 +87,7 @@ public class MyPanel extends JPanel {
         drowgraph(g);
         drawPokemon(g);
         drawAgants(g);
-        drawTime(g);
+        drawInfo(g);
     }
 
     private void drowgraph(Graphics g) {
@@ -101,7 +104,7 @@ public class MyPanel extends JPanel {
 
     private void drawAgants(Graphics g) {
         List<CL_Agent> agent = _ar.getAgents();
-       // g.setColor(Color.pink);
+        //g.setColor(Color.pink);
         //g.fillRect(this.getWidth()-260,10,200,agent.size()*50);
         int r = 15;
         for (CL_Agent ag : agent) {
@@ -143,14 +146,21 @@ public class MyPanel extends JPanel {
         List<CL_Pokemon> fs = _ar.getPokemons();
         for (CL_Pokemon f : fs) {
             Point3D c = f.getLocation();
-            int r = 10;
-            g.setColor(Color.green);
-            if (f.getType() < 0) {
-                g.setColor(Color.orange);
-            }
+            int r = 15;
             if (c != null) {
                 geo_location fp = this._w2f.world2frame(c);
-                g.fillOval((int) fp.x() - r, (int) fp.y() - r, 2 * r, 2 * r);
+                if(f.getType()<0&&f.getValue()<10){
+                    g.drawImage(_pokemon.get(0).getImage(),(int)fp.x()-r,(int) fp.y()-r,this);
+                }
+                if(f.getType()>0&&f.getValue()<10){
+                    g.drawImage(_pokemon.get(1).getImage(),(int)fp.x()-r,(int) fp.y()-r,this);
+                }
+                if(f.getType()<0&&f.getValue()>10){
+                    g.drawImage(_pokemon.get(2).getImage(),(int)fp.x()-r,(int) fp.y()-r,this);
+                }
+                if(f.getType()>0&&f.getValue()>10){
+                    g.drawImage(_pokemon.get(3).getImage(),(int)fp.x()-r,(int) fp.y()-r,this);
+                }
                 String pokemon_s = "V:"+f.getValue();
                 Font font = g.getFont().deriveFont(10.0f);
                 g.setFont(font);
@@ -158,13 +168,19 @@ public class MyPanel extends JPanel {
             }
         }
     }
-    private void drawTime(Graphics g){
+    private void drawInfo(Graphics g){
         long current_time = this._ar.getGame().timeToEnd();
         String time = "Time to end: "+(current_time/1000);
-        g.setColor(Color.BLUE);
-        Font font = g.getFont().deriveFont(40.0f);
+        int game_scenario = this._ar.getScenario();
+        String scenario = "game scenario: "+game_scenario;
+        g.setColor(Color.darkGray);
+        Font font = g.getFont().deriveFont(30.0f);
         g.setFont(font);
-        g.drawString(time,10,60);
+        g.drawString(scenario,40,30);
+        font = g.getFont().deriveFont(20.0f);
+        g.setFont(font);
+        g.drawString(time,45,60);
+
     }
 }
 

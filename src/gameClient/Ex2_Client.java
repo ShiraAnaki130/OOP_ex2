@@ -14,10 +14,7 @@ public class Ex2_Client implements Runnable {
 	private static Arena _ar;
 	private int scenario_num ;
 	private	int id;
-//	public static void main(String[] args) {
-//		Thread client = new Thread(new Ex2_Client());
-//		client.start();
-//	}
+
 	public Ex2_Client(int id,int scenario_num){
 		this.scenario_num = scenario_num;
 		this.id = id;
@@ -170,6 +167,7 @@ private int randomDest(int src,List<CL_Pokemon> allPo) {
 		_ar = new Arena();
 		_ar.setGraph(graph);
 		_ar.setGame(game);
+		_ar.setScenario(scenario_num);
 		_ar.setPokemons(Arena.json2Pokemons(pokemons));
 		_win = new MyFrame("test Ex2");
 		_win.setSize(1000, 700);
