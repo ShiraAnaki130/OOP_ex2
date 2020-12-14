@@ -75,23 +75,32 @@ public class Arena {
 		this._info = _info;
 	}
 
-	////////////////////////////////////////////////////
-	public static List<CL_Agent> getAgents(String aa, directed_weighted_graph gg) {
+/**
+ * This function builds the agents list of this current game.
+ * @param game- a String object which describe the current game.
+ * @param graph- the game's graph
+ * @return List<CL_Agent> - the game's agents list.
+ */
+	public static List<CL_Agent> getAgents(String game, directed_weighted_graph graph) {
 		ArrayList<CL_Agent> ans = new ArrayList<CL_Agent>();
 		try {
-			JSONObject ttt = new JSONObject(aa);
-			JSONArray ags = ttt.getJSONArray("Agents");
-			for(int i=0;i<ags.length();i++) {
-				CL_Agent c = new CL_Agent(gg,0);
-				c.update(ags.get(i).toString());
+			JSONObject gamejson = new JSONObject(game);
+			JSONArray agsents = gamejson.getJSONArray("Agents");
+			for(int i=0;i<agsents.length();i++) {
+				CL_Agent c = new CL_Agent(graph,0);
+				c.update(agsents.get(i).toString());
 				ans.add(c);
 			}
-			//= getJSONArray("Agents");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		return ans;
 	}
+	/**
+	 * This function builds the pokemons list of the current game.
+	 * @param json- a String object which describes the pokemons on every level in the game.
+	 * @return ArrayList<CL_Pokemon> - the game's pokemons list. 
+	 */
 	public static ArrayList<CL_Pokemon> json2Pokemons(String json) {
 		ArrayList<CL_Pokemon> ans = new  ArrayList<CL_Pokemon>();
 		try {
@@ -103,7 +112,6 @@ public class Arena {
 				int type = pokemon.getInt("type");
 				double value = pokemon.getDouble("value");
 				String p = pokemon.getString("pos");
-				//double s = 0;//pk.getDouble("speed");
 				CL_Pokemon f = new CL_Pokemon(new Point3D(p), type, value);
 				ans.add(f);
 
@@ -112,15 +120,20 @@ public class Arena {
 		catch (JSONException e) {e.printStackTrace();}
 		return ans;
 	}
-	public static void updateEdge(CL_Pokemon fr, directed_weighted_graph g) {
+	/**
+	 * This function finds the edge which the current pokemon is on and set the pokemon's edge.
+	 * @param fr
+	 * @param g
+	 */
+	public static void updateEdge(CL_Pokemon pokemon, directed_weighted_graph g) {
 		Iterator<node_data> itr = g.getV().iterator();
 		while(itr.hasNext()) {
 			node_data v = itr.next();
 			Iterator<edge_data> iter = g.getE(v.getKey()).iterator();
 			while(iter.hasNext()) {
 				edge_data e = iter.next();
-				boolean f = isOnEdge(fr.getLocation(), e,fr.getType(), g);
-				if(f) {fr.set_edge(e);}
+				boolean bol = isOnEdge(pokemon.getLocation(), e,pokemon.getType(), g);
+				if(bol) {pokemon.set_edge(e);}
 			}
 		}
 	}

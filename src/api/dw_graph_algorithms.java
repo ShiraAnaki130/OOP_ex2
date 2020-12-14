@@ -76,6 +76,6 @@ public interface dw_graph_algorithms {
      * @return true - iff the graph was successfully loaded.
      * @throws JSONException 
      */
-    public boolean load(String file) throws JSONException, FileNotFoundException;
+    public boolean load(String file) throws JSONException;
 }
 

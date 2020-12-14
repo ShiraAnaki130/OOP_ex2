@@ -10,22 +10,35 @@ public class CL_Pokemon implements Comparable<CL_Pokemon> {
 	private int _type;
 	private Point3D _pos;
 	private edge_data _edge;
+	private int ID;
+	private static int id=0;
 //	private double min_dist;
 //	private int min_ro;
-	@Override
+	private String info="f";
+	public String getInfo() {
+		return this.info;
+	}
+	public void setInfo(String info) {
+		this.info=info;
+	}
+	public int getID() {
+		return this.ID;
+	}
 	public int compareTo(CL_Pokemon o) {
 		int ans=0;
 		if(this._value-o.getValue()>0) ans=-1;
 		else if(this._value-o.getValue()<0) ans=1;
 		return ans;
 	}
-	
+
 	public CL_Pokemon(Point3D p, int t, double v) {
 		_type = t;
 		_value = v;
 		_pos = p;
 		//	_speed = s;
 		_edge=null;
+		ID=id;
+		id++;
 	}
 	public CL_Pokemon init_from_json(String json) {
 		CL_Pokemon ans = null;

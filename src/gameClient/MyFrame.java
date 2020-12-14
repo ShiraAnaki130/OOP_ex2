@@ -26,7 +26,6 @@ public class MyFrame extends JFrame {
 		_ind = 0;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-
 	public void update(Arena ar) {
 		this._ar = ar;
 		panel = new MyPanel();

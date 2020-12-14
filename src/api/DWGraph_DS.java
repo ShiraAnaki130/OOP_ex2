@@ -480,8 +480,7 @@ public Collection<edge_data> getE(int node_id) {
 	return null;
 }
 /**
-* This function removes the node from the graph by it's node_id.
-* Deletes the node (with the given ID) from the graph -
+* This function removes the node from the graph by it's node_id,
 * and removes all edges which starts or ends at this node.
 * This method should run in O(k), V.degree=k, as all the edges should be removed.
 * @return the data of the removed node (null if none). 
@@ -534,7 +533,7 @@ public int edgeSize() {
 	return this.e_size;
 }
 /**
- * This function returns in O(1), the number of the changes that has been made if the graph.
+ * This function returns in O(1), the number of the changes that have been made in the graph.
  * @return return MC- the number of the changes.
  */
 @Override

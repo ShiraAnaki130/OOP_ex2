@@ -24,6 +24,7 @@ public class CL_Agent {
 		private long _sg_dt;
 		private List<node_data> list=null;
 		private double _value;
+		private static int id=0;
 
 		private boolean bool;
 		public void setBoll(boolean b) {
@@ -34,23 +35,25 @@ public class CL_Agent {
 			return bool;
 		}
 		public void setList(List<node_data> list) {
+			this._count=1;
 			this.list=list;
 		}
+//		public boolean ifTherePath() {
+//			if(this.list==null) return false;
+//			if(this.list.size()==0||this.list.size()==1||this._count>=this.list.size() ) return false;
+//			if(this._count<= (this.list.size()-1)) return true;
+//			return false;
+//		}
+//		public int getNextDest() {
+//			int key=0;
+//			if(ifTherePath()) {
+//				key=this.list.get(this._count).getKey();
+//				setCount(this._count+1);
+//				return key;
+//			}
+//			return -1;
+//		}
 		public List<node_data> getList(){ return this.list;}
-
-		
-		public node_data getNext(int count) {
-			if(this.list!=null) {
-				this.bool=true;
-				count+=1;
-				if(count<=(list.size()-1)) {
-					if(count==(list.size()-1)) 
-						this.bool=false;
-					return list.get(count);	
-				}	
-			}
-			return null;	
-		}
 		public int getCount() { return _count;}
 		public void setCount(int count) { this._count=count;}
 		public CL_Agent(directed_weighted_graph g, int start_node) {
@@ -58,24 +61,27 @@ public class CL_Agent {
 			setMoney(0);
 			this._curr_node = _gg.getNode(start_node);
 			_pos = _curr_node.getLocation();
-			_id = -1;
+			_id =-1;
 			setSpeed(0);
 		}
+		/**
+		 * This function is getting a String object 
+		 * @param json
+		 */
 		public void update(String json) {
 			JSONObject line;
 			try {
-				// "GameServer":{"graph":"A0","pokemons":3,"agents":1}}
 				line = new JSONObject(json);
-				JSONObject ttt = line.getJSONObject("Agent");
-				int id = ttt.getInt("id");
+				JSONObject Agent = line.getJSONObject("Agent");
+				int id = Agent.getInt("id");
 				if(id==this.getID() || this.getID() == -1) {
 					if(this.getID() == -1) {_id = id;}
-					double speed = ttt.getDouble("speed");
-					String p = ttt.getString("pos");
+					double speed = Agent.getDouble("speed");
+					String p = Agent.getString("pos");
 					Point3D pp = new Point3D(p);
-					int src = ttt.getInt("src");
-					int dest = ttt.getInt("dest");
-					double value = ttt.getDouble("value");
+					int src = Agent.getInt("src");
+					int dest = Agent.getInt("dest");
+					double value = Agent.getDouble("value");
 					this._pos = pp;
 					this.setCurrNode(src);
 					this.setSpeed(speed);

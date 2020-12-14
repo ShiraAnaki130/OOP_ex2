@@ -21,6 +21,7 @@ public class MyPanel extends JPanel {
     private Arena _ar;
     private gameClient.util.Range2Range _w2f;
     private static long start_time;
+    
 
     public MyPanel() {
     	super();
@@ -132,7 +133,7 @@ public class MyPanel extends JPanel {
         int show_time = (int)(current_time - start_time)/1000 ;
         String time = "Time to end: "+(60-show_time)+" seconds";
         g.setColor(Color.BLUE);
-        Font font = g.getFont().deriveFont(40.0f);
+        Font font =new Font("Forte", Font.BOLD, 55);
         g.setFont(font);
         g.drawString(time,10,60);
     }
