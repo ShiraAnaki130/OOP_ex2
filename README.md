@@ -44,7 +44,7 @@ The target of the game is to catch as many pokemons as possible with up to 10 mo
 
 How does the game work?
 The game is played by a server. The communication with the server is conducted by the given API:
-![alt text](https://github.com/ShiraAnaki130/OOP_ex2.git/data/server's metods.jpg?raw=true)
+![alt text](https://github.com/[ShiraAnaki130]/[OOP_ex2.git]/server's metods.jpg?raw=true)
 
 addAgent(int start_node): adding a new agent in the  locate of start_node.
 choodeNextEdge(int id, int next_node): direct the agent(id) to the next edge.
