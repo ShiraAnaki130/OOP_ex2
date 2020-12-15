@@ -41,8 +41,9 @@ edges which getting out of the given node_id.
 
 - getMC(): returns the number of the changes that have been made in the graph.
 
-Must be specified- all the functions above runs in O(1), accept removeNode which run in O(k) {k- the number of the edges which start or end at the node}.
-The classes NodeData and EdgeData, which respectively implement the 'node_data' and the 'edge_data' interfaces, are defined as internal public (static) classes in DWGraph_DS.
+:pushpin: Must be specified- all the functions above runs in O(1), accept removeNode which run in O(k) {k- the number of the edges which start or end at the node}.
+
+:pushpin: The classes NodeData and EdgeData, which respectively implement the 'node_data' and the 'edge_data' interfaces, are defined as internal public (static) classes in DWGraph_DS.
 
 **DWGraph_Algo:**
 
@@ -65,9 +66,9 @@ This class implements the algorithms of the interface called 'dw_graph_algorithm
 ## About the pokemon game:
 ### Description:
 The pokemon game is a game in which there are pokemon, that scattered randomly on the graph, and agents who need to catch the pokemons in a limited time.
-The target of the game is to catch as many pokemons as possible with up to 10 moves(game.move() function) for a second by the agents before the time of the game is over.
+**The target of the game** is to catch as many pokemons as possible with up to 10 moves(game.move() function) for a second by the agents before the time of the game is over.
 
-### How does the game work?
+***How does the game work?***
 The game is played by a server,the communication with the server is conducted by the given API:
 
 ![](data/server's%20metods%20.jpg)
