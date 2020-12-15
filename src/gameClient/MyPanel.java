@@ -11,6 +11,7 @@ import gameClient.util.Range2D;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,22 +33,22 @@ public class MyPanel extends JPanel {
     	this._pokemon = new LinkedList<>();
     	this._pokeboll = new LinkedList<>();
     	try {
-            this._board = new ImageIcon("pikachuP.png");
-            ImageIcon pokeboll1 = new ImageIcon("pokeboll1.png");//title
-            ImageIcon pokeboll2 = new ImageIcon("pokeboll2.png");//ID 0
-            ImageIcon pokeboll3 = new ImageIcon("pokeboll3.png");//ID 1
-            ImageIcon pokeboll4 = new ImageIcon("pokeboll4.png");//ID 2
-            ImageIcon pokeboll5 = new ImageIcon("pokeboll5.png");//ID 3
+            this._board =new ImageIcon("data/pikachuP.png");
+            ImageIcon pokeboll1 = new ImageIcon("data/pokeboll1.png");//title
+            ImageIcon pokeboll2 = new ImageIcon("data/pokeboll2.png");//ID 0
+            ImageIcon pokeboll3 = new ImageIcon("data/pokeboll3.png");//ID 1
+            ImageIcon pokeboll4 = new ImageIcon("data/pokeboll4.png");//ID 2
+            ImageIcon pokeboll5 = new ImageIcon("data/pokeboll5.png");//ID 3
             Title.add(pokeboll1);
             _pokeboll.add(pokeboll2);
             _pokeboll.add(pokeboll3);
             _pokeboll.add(pokeboll4);
             _pokeboll.add(pokeboll5);
-            ImageIcon pokemon1 = new ImageIcon("pokemon1.png");//title
-            ImageIcon pokemon2 = new ImageIcon("pokemon2.png");// -1 v<10
-            ImageIcon pokemon3 = new ImageIcon("pokemon3.png");// 1 v<10
-            ImageIcon pokemon4 = new ImageIcon("pokemon4.png");// -1 v>10
-            ImageIcon pokemon5 = new ImageIcon("pokemon5.png");// 1<10
+            ImageIcon pokemon1 = new ImageIcon("data/pokemon1.png");//title
+            ImageIcon pokemon2 = new ImageIcon("data/pokemon2.png");// -1 v<10
+            ImageIcon pokemon3 = new ImageIcon("data/pokemon3.png");// 1 v<10
+            ImageIcon pokemon4 = new ImageIcon("data/pokemon4.png");// -1 v>10
+            ImageIcon pokemon5 = new ImageIcon("data/pokemon5.png");// 1<10
             Title.add(pokemon1);
             _pokemon.add(pokemon2);
             _pokemon.add(pokemon3);
