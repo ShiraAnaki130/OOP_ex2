@@ -1,3 +1,4 @@
+# The pokemon game
 About the project:
 
 On our project, we program a pokemon game, in which the game's arena is a directional weighted graph. 
@@ -66,6 +67,7 @@ The target of the game is to catch as many pokemons as possible with up to 10 mo
 How does the game work?
 
 The game is played by a server. The communication with the server is conducted by the given API:
+![alt text](C:\Users\User\Pictures)
 
 addAgent(int start_node): adding a new agent in the  locate of start_node.
 choodeNextEdge(int id, int next_node): direct the agent(id) to the next edge.
