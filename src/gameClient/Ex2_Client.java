@@ -55,14 +55,14 @@ public class Ex2_Client implements Runnable {
 		takenPokemons =new HashMap<Integer,CL_Pokemon>();
 		game.startGame();
 		_win.setTitle("Game's level number " + scenario_num);
-		int dt = 115;
 		int count=0;
+		int dt = 100;
 		while (game.isRunning()) {
 			synchronized (game_service.class) {
 				try {	
 					takenPokemons =new HashMap<Integer,CL_Pokemon>();
 					moveAgants(game, graph);
-					System.out.println("count "+count);
+//					System.out.println("count "+count);
 					count++;
 					_win.repaint();
 					Thread.sleep(dt);
@@ -110,42 +110,97 @@ public class Ex2_Client implements Runnable {
 				} else
 					path = ga.shortestPath(src, dest);
 				if (path != null) {
+					boolean upS = path.size()>3;
+						if(upS){
+						double s = agent.getSpeed();
+						agent.setSpeed(s+path.size());
+					}
+					setPkemons(listP,path);
 					for (node_data node : path) {
+						setPokemon(agent,listP,node.getKey(),path);
 						game.chooseNextEdge(agent.getID(), node.getKey());
+						CL_Pokemon desPok = agent.get_curr_fruit();
+						if(desPok!= null) {
+							int s  = desPok.get_edge().getSrc();
+							int d = desPok.get_edge().getDest();
+							geo_location start = gg.getNode(s).getLocation();
+							geo_location stop = gg.getNode(d).getLocation();
+							double len = start.distance(stop);
+							double speed = agent.getSpeed();
+							long dt = (long) (len/speed);
+							if (dt< 1) {
+								try {
+									Thread.sleep(dt);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					}
+					if(upS){
+						double s = agent.getSpeed();
+						agent.setSpeed(s-path.size());
 					}
 				}
 			}
 			System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
 		}
 	}
-
-
-
-
-private static int nextNode(directed_weighted_graph g, int src, List<CL_Pokemon> allPo) {
-	dw_graph_algorithms ga = new DWGraph_Algo();
-	ga.init(g);
-	int ans = -1;
-	double dist;
-	double min = 1000000.0;
-	int index=0;
-	for (int i=0;i<allPo.size();i++) {
-		CL_Pokemon pokemon= allPo.get(i);
-		dist = ga.shortestPathDist(src, pokemon.get_edge().getDest());
-		if (pokemon.get_edge().getInfo().equals("f")&&dist > -1 && dist < min) {
-			min = dist;
-			ans = pokemon.get_edge().getDest();
-			if(ans==src) ans = pokemon.get_edge().getSrc();
-			index=i;
+private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_data> path){
+		if(allPo!=null&&path!=null){
+			for(CL_Pokemon p : allPo){
+				if(path.contains(p.get_edge().getSrc())&&p.get_edge().getDest()==dest){
+					ag.set_curr_fruit(p);
+				}
+			}
 		}
-	}
-	allPo.get(index).get_edge().setInfo("t");
-	return ans;
 }
 
+
+	private static int nextNode(directed_weighted_graph g, int src, List<CL_Pokemon> allPo) {
+		dw_graph_algorithms ga = new DWGraph_Algo();
+		ga.init(g);
+		int ans = -1;
+		PriorityQueue<CL_Pokemon> priQ = new PriorityQueue<CL_Pokemon>();
+		if (allPo != null) {
+			for (CL_Pokemon p : allPo) {
+				priQ.add(p);
+			}
+			CL_Pokemon p = priQ.poll();
+			double dist;
+			double bigpokemon = ga.shortestPathDist(src, p.get_edge().getDest());
+			double min = bigpokemon;
+			for (int i = 0; i < allPo.size(); i++) {
+				CL_Pokemon pokemon = allPo.get(i);
+				dist = ga.shortestPathDist(src, pokemon.get_edge().getDest());
+				if (dist == -1)
+					dist = ga.shortestPathDist(src, pokemon.get_edge().getSrc());
+				if (pokemon.get_edge().getInfo().equals("f") && dist < min) {
+					min = dist;
+					ans = pokemon.get_edge().getDest();
+					if (ans == src) ans = pokemon.get_edge().getSrc();
+				}
+			}
+			if (min == bigpokemon) {
+				ans = p.get_edge().getDest();
+				if (ans == src)
+					ans = p.get_edge().getSrc();
+			}
+		}
+		return ans;
+	}
+	private void setPkemons(List<CL_Pokemon> allPo,List<node_data> path){
+		if(allPo!=null&&path!=null){
+			for(CL_Pokemon p : allPo){
+				int dest = p.get_edge().getDest();
+				int src = p.get_edge().getSrc();
+				if(path.contains(src)&&path.contains(dest))
+					p.setInfo("t");
+			}
+		}
+	}
 private int randomDest(int src,List<CL_Pokemon> allPo) {
 PriorityQueue<CL_Pokemon> priQ= new PriorityQueue<CL_Pokemon>();
-int index = 0;
 if(allPo!=null) {
 	for(CL_Pokemon p: allPo) {
 		priQ.add(p);
@@ -153,9 +208,7 @@ if(allPo!=null) {
 	CL_Pokemon p=priQ.poll();
 	while (p.get_edge().getInfo().equals("f")&&!priQ.isEmpty()) {
 		p = priQ.poll();
-		index = allPo.indexOf(p);
 	}
-	allPo.get(index).get_edge().setInfo("t");
 	if(p.get_edge().getDest()==src) return p.get_edge().getSrc();
 	return p.get_edge().getDest();
 	}

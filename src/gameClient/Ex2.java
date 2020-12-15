@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+<<<<<<< HEAD
 public class Ex2 implements ActionListener {
 	private static JLabel idLabel;
 	private static JTextField idText;
@@ -81,6 +82,12 @@ public class Ex2 implements ActionListener {
           	
           }
     
+=======
+        int _id = 999; //Integer.parseInt(args[0]);
+        int _scenario_num = 22; //Integer.parseInt(args[1]);
+        Thread game1 = new Thread(new Ex2_Client(_id,_scenario_num));
+        game1.start();
+>>>>>>> 67ba3b21ee8e68bb9ee07436f1c1d4e60ea30f2f
     }
 
 	@Override
