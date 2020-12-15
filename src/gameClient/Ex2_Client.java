@@ -13,6 +13,7 @@ public class Ex2_Client implements Runnable {
 	private static Arena _ar;
 	private int scenario_num ;
 	private	int id;
+
 	private static int count=0;
 	private static HashMap<Integer,CL_Pokemon> takenPokemons;
 //	public static void main(String[] args) {
@@ -182,6 +183,8 @@ return -1;
 		String pokemons = game.getPokemons();
 		_ar = new Arena();
 		_ar.setGraph(graph);
+		_ar.setGame(game);
+		_ar.setScenario(scenario_num);
 		_ar.setPokemons(Arena.json2Pokemons(pokemons));
 		_win = new MyFrame("test Ex2");
 		_win.setSize(1000, 700);
