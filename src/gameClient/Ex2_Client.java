@@ -18,39 +18,35 @@ public class Ex2_Client implements Runnable {
 	private static Arena _ar;
 	private int scenario_num ;
 	private	int id;
-	public Ex2_Client(int id,int scenario_num){
+
+	public Ex2_Client(int id, int scenario_num) {
 		this.scenario_num = scenario_num;
 		this.id = id;
 	}
-	/**
-	 * This function runs as long as the game is running.
-	 * The function 
-	 */
 	@Override
 	public void run() {
 		game_service game = Game_Server_Ex2.getServer(scenario_num); 
 		//	game.login(id);
 		String g = game.getGraph();
-		directed_weighted_graph graph=new DWGraph_DS();
+		directed_weighted_graph graph = new DWGraph_DS();
 		try {
 			dw_graph_algorithms algo = new DWGraph_Algo();
-			FileWriter fileForLoad= new FileWriter("graphOfGame");
+			FileWriter fileForLoad = new FileWriter("graphOfGame");
 			fileForLoad.write(g);
 			fileForLoad.flush();
 			fileForLoad.close();
 			algo.load("graphOfGame");
 			graph = algo.getGraph();
-			}
-		catch(FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
-			init(game,graph);
+			init(game, graph);
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -59,16 +55,15 @@ public class Ex2_Client implements Runnable {
 		int dt = 100;
 		while (game.isRunning()) {
 			synchronized (game_service.class) {
-				try {	
-					moveAgants(game, graph);
+				try {
 					_win.repaint();
+					moveAgants(game, graph);
 					Thread.sleep(dt);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		
 		String res = game.toString();
 		System.out.println(res);
 		System.exit(0);
@@ -102,51 +97,44 @@ public class Ex2_Client implements Runnable {
 				dest = nextNode(gg, src, listP);
 				if (dest == -1) {
 					dest = randomDest(src, listP);
-					path = ga.shortestPath(src, dest);
-				} else
-					path = ga.shortestPath(src, dest);
-				if (path != null) {
-					boolean upS = path.size()>3;
-						if(upS){
-						double s = agent.getSpeed();
-						agent.setSpeed(s+path.size());
-					}
-					setPkemons(listP,path);
-					for (node_data node : path) {
-						setPokemon(agent,listP,node.getKey(),path);
-						game.chooseNextEdge(agent.getID(), node.getKey());
-						CL_Pokemon desPok = agent.get_curr_fruit();
-						if(desPok!= null) {
-							int s  = desPok.get_edge().getSrc();
-							int d = desPok.get_edge().getDest();
-							geo_location start = gg.getNode(s).getLocation();
-							geo_location stop = gg.getNode(d).getLocation();
-							double len = start.distance(stop);
-							double speed = agent.getSpeed();
-							long dt = (long) (len/speed);
-							if (dt< 1) {
-								try {
-									Thread.sleep(dt);
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-						}
-					}
-					if(upS){
-						double s = agent.getSpeed();
-						agent.setSpeed(s-path.size());
-					}
+				}
+			 path = ga.shortestPath(src,dest);
+			if (path != null) {
+				boolean upS = path.size() > 3;
+				if (upS) {
+					double s = agent.getSpeed();
+					agent.setSpeed(s + path.size());
+				}
+				setPkemons(listP, path);
+				for (node_data node : path) {
+					setPokemon(agent, listP, node.getKey(), path);
+					game.chooseNextEdge(agent.getID(), node.getKey());
+				}
+				agent.set_SDT(path.size() *3);
+				try {
+					Thread.sleep(agent.get_sg_dt());
+				} catch (Exception e) {
+					e.printStackTrace();
+
+				}
+				if (upS) {
+					double s = agent.getSpeed();
+					agent.setSpeed(s - path.size());
 				}
 			}
-			System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
 		}
+		System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
 	}
+
+}
 private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_data> path){
 		if(allPo!=null&&path!=null){
 			for(CL_Pokemon p : allPo){
-				if(path.contains(p.get_edge().getSrc())&&p.get_edge().getDest()==dest){
+				int src = p.get_edge().getSrc();
+				node_data nodeSrc = _ar.getGraph().getNode(src);
+				if(p.get_edge().getDest()==dest&&path.contains(nodeSrc)){
 					ag.set_curr_fruit(p);
+					return;
 				}
 			}
 		}
@@ -188,7 +176,7 @@ private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_d
 			for(CL_Pokemon p : allPo){
 				int dest = p.get_edge().getDest();
 				int src = p.get_edge().getSrc();
-				if(path.contains(src)&&path.contains(dest))
+				if(path.contains(dest)||path.contains(src))
 					p.setInfo("t");
 			}
 		}

@@ -46,7 +46,7 @@ public class Ex2 implements ActionListener {
         _frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
        
         _panel.setLayout(null); 
-        //_panel.setBackground(Color.YELLOW);
+        _panel.setBackground(Color.YELLOW);
         try {
 			image = ImageIO.read(new File("data/pokemonsStart.jpg"));
 		} catch (IOException e) {
