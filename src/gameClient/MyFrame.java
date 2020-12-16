@@ -9,11 +9,8 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * This class represents a very simple GUI class to present a
- * game on a graph - you are welcome to use this class - yet keep in mind
- * that the code is not well written in order to force you improve the
- * code and not to take it "as is".
- *
+ * This class represents a GUI class for presenting a game on a graph.
+ * This class uses 'MyPanel' class where the game is actually drawning.
  */
 public class MyFrame extends JFrame {
 	private int _ind;
@@ -26,12 +23,19 @@ public class MyFrame extends JFrame {
 		_ind = 0;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+	/** 
+	 * This function updates arena's field.
+	 * @param ar- the arena of the game.
+	 */
 	public void update(Arena ar) {
 		this._ar = ar;
 		panel = new MyPanel();
 		this.add(panel);
 		updateFrame();
 	}
+	/**
+	 * This function updates the frame, and paint the pokemon game(from MyPanel class).
+	 */
 	private void updateFrame() {
 		Range rx = new Range(20, this.getWidth() - 20);
 		Range ry = new Range(this.getHeight() - 10, 150);
@@ -41,7 +45,9 @@ public class MyFrame extends JFrame {
 		panel.update(_ar);
 		panel.repaint();
 	}
-
+	/**
+	 * This function uses the updateFrame function for painting the pokemon game.
+	 */
 	public void paint(Graphics g) {
 		updateFrame();
 	}

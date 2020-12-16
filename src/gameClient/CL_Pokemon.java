@@ -1,10 +1,11 @@
 package gameClient;
 import gameClient.util.Point3D;
-
 import org.json.JSONObject;
-
 import api.edge_data;
-
+/**
+ * This class represents a pokemon for the pokemon game.
+ * @author Lea&Shira.
+ */
 public class CL_Pokemon implements Comparable<CL_Pokemon> {
 	private double _value;
 	private int _type;
@@ -12,34 +13,21 @@ public class CL_Pokemon implements Comparable<CL_Pokemon> {
 	private edge_data _edge;
 	private int ID;
 	private static int id=0;
-//	private double min_dist;
-//	private int min_ro;
 	private String info="f";
-	public String getInfo() {
-		return this.info;
-	}
-	public void setInfo(String info) {
-		this.info=info;
-	}
-	public int getID() {
-		return this.ID;
-	}
-	public int compareTo(CL_Pokemon o) {
-		int ans=0;
-		if(this._value-o.getValue()>0) ans=-1;
-		else if(this._value-o.getValue()<0) ans=1;
-		return ans;
-	}
-
+	
 	public CL_Pokemon(Point3D p, int t, double v) {
 		_type = t;
 		_value = v;
 		_pos = p;
-		//	_speed = s;
 		_edge=null;
 		ID=id;
 		id++;
 	}
+	/**
+	 * This function is getting a String object(JSON string) and builds a new pokemon
+	 * according to the information in the JSON string.
+	 * @param json- JSON string;
+	 */
 	public CL_Pokemon init_from_json(String json) {
 		CL_Pokemon ans = null;
 		try {
@@ -62,35 +50,70 @@ public class CL_Pokemon implements Comparable<CL_Pokemon> {
 		}
 		return ans;
 	}
+	/**
+	 * This function returns a string object which provides the value and the type oh this pokemon.
+	 * @return returns string of value and type of this pokemon.
+	 */
 	public String toString() {return "F:{v="+_value+", t="+_type+"}";}
+	/**
+	 * This function returns the pokemon's current edge.
+	 * @return edge_data:the pokemon's current edge.
+	 */
 	public edge_data get_edge() {
 		return _edge;
 	}
-
+	/**
+	 * This function allows to change this pokemon's  current edge.
+	 * @param _edge the new edge.
+	 */
 	public void set_edge(edge_data _edge) {
 		this._edge = _edge;
 	}
-
+	/**
+	 * This function returns the pokemon's location.
+	 * @return returns Point3D:the pokemon's location.
+	 */
 	public Point3D getLocation() {
 		return _pos;
 	}
+	/**
+	 * This function returns the pokemon's type.
+	 * @return returns int:the pokemon's type.
+	 */
 	public int getType() {return _type;}
-//	public double getSpeed() {return _speed;}
+	/**
+	 * This function returns the pokemon's value.
+	 * @return returns double: the pokemon's value.
+	 */
 	public double getValue() {return _value;}
+	/**
+	 * This function returns the pokemon's info.
+	 * @return returns string: the pokemon's info.
+	 */
+	public String getInfo() {
+		return this.info;
+	}
+	/**
+	 * This function allows to change this pokemon's info.
+	 * @param info- the new info.
+	 */
+	public void setInfo(String info) {
+		this.info=info;
+	}
+	/**
+	 * This function returns the pokemon's id.
+	 * @return returns the pokemon's id.
+	 */
+	public int getID() {
+		return this.ID;
+	}
+	@Override
+	public int compareTo(CL_Pokemon o) {
+		int ans=0;
+		if(this._value-o.getValue()>0) ans=-1;
+		else if(this._value-o.getValue()<0) ans=1;
+		return ans;
+	}
 
-//	public double getMin_dist() {
-//		return min_dist;
-//	}
-//
-//	public void setMin_dist(double mid_dist) {
-//		this.min_dist = mid_dist;
-//	}
-//
-//	public int getMin_ro() {
-//		return min_ro;
-//	}
-//
-//	public void setMin_ro(int min_ro) {
-//		this.min_ro = min_ro;
-//	}
+
 }

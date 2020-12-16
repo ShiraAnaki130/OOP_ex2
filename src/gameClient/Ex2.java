@@ -16,8 +16,15 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-<<<<<<< HEAD
+/**
+ * This class is the main class of the project.
+ * By using this class- the game will start at the scenario number of the game.
+ * There are two options for starting the game:
+ * 1. from the Command Prompt- by using the command: java -jar Ex2.jar **your id** **scenario number**.
+ * 2. by running this class and input you id and scenario number at the correct fields.
+ * one can choose only scenario number at the range [0,23].
+ * @author Lea&Shira.
+ */
 public class Ex2 implements ActionListener {
 	private static JLabel idLabel;
 	private static JTextField idText;
@@ -46,7 +53,7 @@ public class Ex2 implements ActionListener {
 			e.printStackTrace();
 		}
         pic=new JLabel(new ImageIcon(image)); 
-      //  pic.show();
+    
         _panel.add(pic);
         Font font= new Font("Forte", Font.BOLD, 18); 
         idLabel=new JLabel("id");
@@ -78,25 +85,16 @@ public class Ex2 implements ActionListener {
           	  int _id = 208375600; //Integer.parseInt(args[0]);
               int _scenario_num = 11; //Integer.parseInt(args[1]);
               Thread game1 = new Thread(new Ex2_Client(_id,_scenario_num));
-              game1.start();
-          	
+              game1.start();	
           }
-    
-=======
-        int _id = 999; //Integer.parseInt(args[0]);
-        int _scenario_num = 22; //Integer.parseInt(args[1]);
-        Thread game1 = new Thread(new Ex2_Client(_id,_scenario_num));
-        game1.start();
->>>>>>> 67ba3b21ee8e68bb9ee07436f1c1d4e60ea30f2f
     }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		id=Integer.parseInt(idText.getText());
 		game_scenario= Integer.parseInt(scenario_numText.getText());
-		if(id==-1||game_scenario<0||game_scenario>23) {
-			success.setText("Invalid game number");
-		}
+		if(idText.getText().isBlank()||scenario_numText.getText().isBlank()||game_scenario<0||game_scenario>23)
+			success.setText("Invalid game number");	
 		else {
 			Thread game1 = new Thread(new Ex2_Client(id,game_scenario));
 			game1.start();

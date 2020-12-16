@@ -2,9 +2,254 @@ package api;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-
-
+/**
+ * This class represents a directional weighted graph.
+ * Each vertex in the graph is from the type of node_data and
+ * every edge is from the type of edge_data has a positive weight.
+ * This class represents the graph uses the data structure from the type of HahMap.
+ * The class uses two HashMap -> one for the vertexes in the graph with the pair of <key,node>
+ * and another <key,edges_direction> for the collections containing all the edges 
+ * which getting out of every vertex in the graph. 
+ * The object edges_direction stores for every vertex the collections containing all the edges 
+ * which getting out of it.
+ * The class supports several operations applicable on a graph,
+ * such as removing or adding a vertex or an edge, returning the weight of existing edge and etc.
+ * @author Lea&Shira.
+ */
 public class DWGraph_DS implements directed_weighted_graph{
+private HashMap<Integer,node_data> Nodes;
+private HashMap<Integer,edges_direction> Edges;
+private HashMap<Integer,Collection<Integer>> meAsDest;
+private int MC;
+private int e_size;
+
+	/**
+	 * default constructor create a empty graph.
+	 */
+	public DWGraph_DS(){
+	this.Nodes = new HashMap<>();
+	this.Edges = new HashMap<>();
+	this.meAsDest = new HashMap<>();
+	this.MC = 0;
+	this.e_size= 0;
+}
+/**
+ * This function is a copy constructor of DWGraph_DS.
+ * The function is getting a graph from the type of directed_weighted_graph and 
+ * builds a new one by copying all of the values of the excepted graph to the new graph.  
+ * Note: needed for DWGraph_Algo.
+ * @param other- this is the graph which the function makes an identical copy of.
+ */
+public DWGraph_DS(directed_weighted_graph other) {
+	this.Nodes = new HashMap<Integer,node_data>();
+	this.Edges = new HashMap<Integer,edges_direction>();
+	this.meAsDest = new HashMap<Integer, Collection<Integer>>();
+	node_data nodeToAddSrc;
+	node_data nodeToAddDest;
+	edges_direction ni;
+	Collection<Integer> as_dest;
+	int src;int dest;double w;
+	for(node_data node:other.getV()){
+		src=node.getKey();
+		if(!this.Nodes.containsKey(src)) {
+			nodeToAddSrc=new NodeData(src);
+			this.Nodes.put(src, nodeToAddSrc);
+			ni=new edges_direction();
+			this.Edges.put(src, ni);
+			as_dest = new HashSet<>();
+			this.meAsDest.put(src,as_dest);
+		}
+		for(edge_data edge:other.getE(src)) {
+			dest=edge.getDest();
+			w=edge.getWeight();
+			if(!this.Nodes.containsKey(dest)) {
+				nodeToAddDest=new NodeData(dest);
+				this.Nodes.put(dest, nodeToAddDest);
+				ni=new edges_direction();
+				this.Edges.put(dest, ni);
+				as_dest = new HashSet<>();
+				this.meAsDest.put(dest,as_dest);
+			}
+			connect(src,dest,w);
+			this.Edges.get(src).getEdge_(dest).setInfo(edge.getInfo());
+			this.Edges.get(src).getEdge_(dest).setTag(edge.getTag());
+			this.meAsDest.get(dest).add(src);
+	}
+	}
+	this.MC=other.getMC();
+	this.e_size=other.edgeSize();
+	
+}
+/**
+ * This function returns the node_data by the node_id.
+ * @param key - this is the node_id.
+ * @return the node_data by the node_id, null if none.
+ */
+@Override
+public node_data getNode(int key) {
+	return Nodes.get(key);
+}
+/**
+ * This function returns,in O(1),the data of the edge (src-->dest), null if none.
+ * @param src- this is the node_id which the edge start at.
+ * @param dest- this is the nide_id which the edge ends at.
+ * @return the data of the edge getting out of src to dest, or null if this edge isn't existent.
+ */
+@Override
+public edge_data getEdge(int src, int dest) {
+	if(src!=dest && Nodes.containsKey(src)&&Nodes.containsKey(dest)){
+		if(Edges.get(src).hasNi(dest)){
+			return Edges.get(src).getEdge_(dest);
+		}
+		return null;
+	}
+	return null;
+}
+/**
+ * This function adds,in O(1),a new node to the graph with the given node_data- 
+ * in case there is already a node with such a key.
+ * @param n- this is the id of the new vertex to add.
+ */
+@Override
+public void addNode(node_data n) {
+	if(!Nodes.containsKey(n.getKey())){
+		Nodes.put(n.getKey(),n);
+		edges_direction e = new edges_direction();
+		Collection<Integer> me_as_dest = new HashSet<>() ;
+		meAsDest.put(n.getKey(),me_as_dest);
+		Edges.put(n.getKey(),e);
+		MC++;
+	}
+	
+}
+/**
+ *This function connects,in O(1),an edge between src to dest with weight w. 
+ * @param src - the source of the edge.
+ * @param dest - the destination of the edge.
+ * @param w - positive weight representing the cost.
+ */
+@Override
+public void connect(int src, int dest, double w) {
+	if(this.Nodes.containsKey(src)&&this.Nodes.containsKey(dest)&&(src!=dest)){
+		if(!Edges.get(src).hasNi(dest)) {
+	       edge_data toAdd=new EdgeData(src,dest,w);
+	       meAsDest.get(dest).add(src);
+	       Edges.get(src).addNi(dest, toAdd);
+	       MC++;
+	       e_size++;
+		}	
+	}
+	return;
+}
+/**
+ * This function creates in O(1), another pointer for the collection which
+ * representing all the nodes in the graph.
+ * @return return Collection<node_data>- the another pointer. 
+ */
+@Override
+public Collection<node_data> getV() {
+	return Nodes.values();
+}
+/**
+ *This method returns a collection containing all the 
+ *edges which getting out of the given node_id.
+ * @return Collection<node_data>.
+ */
+@Override
+public Collection<edge_data> getE(int node_id) {
+	if(Nodes.containsKey(node_id)) {
+		return Edges.get(node_id).getNi().values();
+	}
+	return null;
+}
+/**
+* This function removes the node from the graph by it's node_id,
+* and removes all edges which starts or ends at this node.
+* This method should run in O(k), V.degree=k, as all the edges should be removed.
+* @return the data of the removed node (null if none). 
+* @param key
+ */
+@Override
+public node_data removeNode(int key) {
+	node_data toRemove=getNode(key);
+	if(toRemove==null) return toRemove;
+	for(Integer k :meAsDest.get(key)) {
+			 Edges.get(k).removeNode(key);
+			  e_size--;
+		   }
+	e_size-=getE(key).size();
+	Edges.remove(key);
+	meAsDest.remove(key);
+	MC++;
+	return Nodes.remove(key);
+}
+/**
+ * This function deletes,in O(1), the edge src-->dest from the graph,
+* @param src - the source of the edge.
+ * @param dest - the destination of the edge.
+ * @return the data of the removed edge or null if the edge doesn't exist in the graph.
+ */
+@Override
+public edge_data removeEdge(int src, int dest) {
+	edge_data toRemove=getEdge(src,dest);
+	if(toRemove!=null) {
+		Edges.get(src).removeNode(dest);
+		meAsDest.get(dest).remove(src);
+		MC++;
+		e_size--;
+	}
+	return toRemove;
+}
+/**
+ * This function finds in O(1), the numbers of the nodes in the graph.
+ */
+@Override
+public int nodeSize() {
+	return this.Nodes.size();
+}
+/**
+ * This function returns in O(1), the number of the edges in the graph.
+ * @return return the number of the edges.
+ */
+@Override
+public int edgeSize() {
+	return this.e_size;
+}
+/**
+ * This function returns in O(1), the number of the changes that have been made in the graph.
+ * @return return MC- the number of the changes.
+ */
+@Override
+public int getMC() {
+	return this.MC;
+}
+
+	/**
+	 * this function check each node in the graph ,for each node the function checks if the graphs as the same edges
+	 * Associated, and the weight of the edges is the same.
+	 * @param g
+	 * @return
+	 */
+	@Override
+	public boolean equals(Object g){
+	boolean answer = true;
+	directed_weighted_graph other = (directed_weighted_graph)g;
+	for(node_data node :this.getV()){
+		if(other.getNode(node.getKey()) != null){
+			for(edge_data edge: this.getE(node.getKey())){
+				if(other.getEdge(edge.getSrc(),edge.getDest())==null){
+					answer = false;
+					break;
+				}
+			}
+			}
+		else {
+			answer = false;
+			break;
+		}
+	}
+	return answer;
+	}
 	/**
 	 * This class represents a node (vertex) in an directional weighted graph.
 	 * Every node consist of a unique key,weight, location, and tag and info for marking.
@@ -440,241 +685,6 @@ public static class edges_direction{
 		return edgesNi.get(key);
 	}
 }
-//DWGraph_DS:
-
-private HashMap<Integer,node_data> Nodes;
-private HashMap<Integer,edges_direction> Edges;
-private HashMap<Integer,Collection<Integer>> meAsDest;
-private int MC;
-private int e_size;
-
-	/**
-	 * default constructor create a empty graph.
-	 */
-	public DWGraph_DS(){
-	this.Nodes = new HashMap<>();
-	this.Edges = new HashMap<>();
-	this.meAsDest = new HashMap<>();
-	this.MC = 0;
-	this.e_size= 0;
-}
-/**
- * This function is a copy constructor of DWGraph_DS.
- * The function is getting a graph from the type of directed_weighted_graph and 
- * builds a new one by copying all of the values of the excepted graph to the new graph.  
- * Note: needed for DWGraph_Algo.
- * @param other- this is the graph which the function makes an identical copy of.
- */
-public DWGraph_DS(directed_weighted_graph other) {
-	this.Nodes = new HashMap<Integer,node_data>();
-	this.Edges = new HashMap<Integer,edges_direction>();
-	this.meAsDest = new HashMap<Integer, Collection<Integer>>();
-	node_data nodeToAddSrc;
-	node_data nodeToAddDest;
-	edges_direction ni;
-	Collection<Integer> as_dest;
-	int src;int dest;double w;
-	for(node_data node:other.getV()){
-		src=node.getKey();
-		if(!this.Nodes.containsKey(src)) {
-			nodeToAddSrc=new NodeData(src);
-			this.Nodes.put(src, nodeToAddSrc);
-			ni=new edges_direction();
-			this.Edges.put(src, ni);
-			as_dest = new HashSet<>();
-			this.meAsDest.put(src,as_dest);
-		}
-		for(edge_data edge:other.getE(src)) {
-			dest=edge.getDest();
-			w=edge.getWeight();
-			if(!this.Nodes.containsKey(dest)) {
-				nodeToAddDest=new NodeData(dest);
-				this.Nodes.put(dest, nodeToAddDest);
-				ni=new edges_direction();
-				this.Edges.put(dest, ni);
-				as_dest = new HashSet<>();
-				this.meAsDest.put(dest,as_dest);
-			}
-			connect(src,dest,w);
-			this.Edges.get(src).getEdge_(dest).setInfo(edge.getInfo());
-			this.Edges.get(src).getEdge_(dest).setTag(edge.getTag());
-			this.meAsDest.get(dest).add(src);
-	}
-	}
-	this.MC=other.getMC();
-	this.e_size=other.edgeSize();
-	
-}
-/**
- * This function returns the node_data by the node_id.
- * @param key - this is the node_id.
- * @return the node_data by the node_id, null if none.
- */
-@Override
-public node_data getNode(int key) {
-	return Nodes.get(key);
-}
-/**
- * This function returns,in O(1),the data of the edge (src-->dest), null if none.
- * @param src- this is the node_id which the edge start at.
- * @param dest- this is the nide_id which the edge ends at.
- * @return the data of the edge getting out of src to dest, or null if this edge isn't existent.
- */
-@Override
-public edge_data getEdge(int src, int dest) {
-	if(src!=dest && Nodes.containsKey(src)&&Nodes.containsKey(dest)){
-		if(Edges.get(src).hasNi(dest)){
-			return Edges.get(src).getEdge_(dest);
-		}
-		return null;
-	}
-	return null;
-}
-/**
- * This function adds,in O(1),a new node to the graph with the given node_data- 
- * in case there is already a node with such a key.
- * @param n- this is the id of the new vertex to add.
- */
-@Override
-public void addNode(node_data n) {
-	if(!Nodes.containsKey(n.getKey())){
-		Nodes.put(n.getKey(),n);
-		edges_direction e = new edges_direction();
-		Collection<Integer> me_as_dest = new HashSet<>() ;
-		meAsDest.put(n.getKey(),me_as_dest);
-		Edges.put(n.getKey(),e);
-		MC++;
-	}
-	
-}
-/**
- *This function connects,in O(1),an edge between src to dest with weight w. 
- * @param src - the source of the edge.
- * @param dest - the destination of the edge.
- * @param w - positive weight representing the cost.
- */
-@Override
-public void connect(int src, int dest, double w) {
-	if(this.Nodes.containsKey(src)&&this.Nodes.containsKey(dest)&&(src!=dest)){
-		if(!Edges.get(src).hasNi(dest)) {
-	       edge_data toAdd=new EdgeData(src,dest,w);
-	       meAsDest.get(dest).add(src);
-	       Edges.get(src).addNi(dest, toAdd);
-	       MC++;
-	       e_size++;
-		}	
-	}
-	return;
-}
-/**
- * This function creates in O(1), another pointer for the collection which
- * representing all the nodes in the graph.
- * @return return Collection<node_data>- the another pointer. 
- */
-@Override
-public Collection<node_data> getV() {
-	return Nodes.values();
-}
-/**
- *This method returns a collection containing all the 
- *edges which getting out of the given node_id.
- * @return Collection<node_data>.
- */
-@Override
-public Collection<edge_data> getE(int node_id) {
-	if(Nodes.containsKey(node_id)) {
-		return Edges.get(node_id).getNi().values();
-	}
-	return null;
-}
-/**
-* This function removes the node from the graph by it's node_id,
-* and removes all edges which starts or ends at this node.
-* This method should run in O(k), V.degree=k, as all the edges should be removed.
-* @return the data of the removed node (null if none). 
-* @param key
- */
-@Override
-public node_data removeNode(int key) {
-	node_data toRemove=getNode(key);
-	if(toRemove==null) return toRemove;
-	for(Integer k :meAsDest.get(key)) {
-			 Edges.get(k).removeNode(key);
-			  e_size--;
-		   }
-	e_size-=getE(key).size();
-	Edges.remove(key);
-	meAsDest.remove(key);
-	MC++;
-	return Nodes.remove(key);
-}
-/**
- * This function deletes,in O(1), the edge src-->dest from the graph,
-* @param src - the source of the edge.
- * @param dest - the destination of the edge.
- * @return the data of the removed edge or null if the edge doesn't exist in the graph.
- */
-@Override
-public edge_data removeEdge(int src, int dest) {
-	edge_data toRemove=getEdge(src,dest);
-	if(toRemove!=null) {
-		Edges.get(src).removeNode(dest);
-		meAsDest.get(dest).remove(src);
-		MC++;
-		e_size--;
-	}
-	return toRemove;
-}
-/**
- * This function finds in O(1), the numbers of the nodes in the graph.
- */
-@Override
-public int nodeSize() {
-	return this.Nodes.size();
-}
-/**
- * This function returns in O(1), the number of the edges in the graph.
- * @return return the number of the edges.
- */
-@Override
-public int edgeSize() {
-	return this.e_size;
-}
-/**
- * This function returns in O(1), the number of the changes that have been made in the graph.
- * @return return MC- the number of the changes.
- */
-@Override
-public int getMC() {
-	return this.MC;
-}
-
-	/**
-	 * this function check each node in the graph ,for each node the function checks if the graphs as the same edges
-	 * Associated, and the weight of the edges is the same.
-	 * @param g
-	 * @return
-	 */
-	@Override
-	public boolean equals(Object g){
-	boolean answer = true;
-	directed_weighted_graph other = (directed_weighted_graph)g;
-	for(node_data node :this.getV()){
-		if(other.getNode(node.getKey()) != null){
-			for(edge_data edge: this.getE(node.getKey())){
-				if(other.getEdge(edge.getSrc(),edge.getDest())==null){
-					answer = false;
-					break;
-				}
-			}
-			}
-		else {
-			answer = false;
-			break;
-		}
-	}
-	return answer;
-	}
 }
 
 

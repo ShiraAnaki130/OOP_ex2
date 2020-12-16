@@ -7,26 +7,28 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+/**
+ * This class 
+ * @author User
+ *
+ */
 
 public class Ex2_Client implements Runnable {
 	private static MyFrame _win;
 	private static Arena _ar;
 	private int scenario_num ;
 	private	int id;
-
-	private static int count=0;
-	private static HashMap<Integer,CL_Pokemon> takenPokemons;
-//	public static void main(String[] args) {
-//		Thread client = new Thread(new Ex2_Client());
-//		client.start();
-//	}
 	public Ex2_Client(int id,int scenario_num){
 		this.scenario_num = scenario_num;
 		this.id = id;
 	}
+	/**
+	 * This function runs as long as the game is running.
+	 * The function 
+	 */
 	@Override
 	public void run() {
-		game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
+		game_service game = Game_Server_Ex2.getServer(scenario_num); 
 		//	game.login(id);
 		String g = game.getGraph();
 		directed_weighted_graph graph=new DWGraph_DS();
@@ -52,18 +54,13 @@ public class Ex2_Client implements Runnable {
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
-		takenPokemons =new HashMap<Integer,CL_Pokemon>();
 		game.startGame();
 		_win.setTitle("Game's level number " + scenario_num);
-		int count=0;
 		int dt = 100;
 		while (game.isRunning()) {
 			synchronized (game_service.class) {
 				try {	
-					takenPokemons =new HashMap<Integer,CL_Pokemon>();
 					moveAgants(game, graph);
-//					System.out.println("count "+count);
-					count++;
 					_win.repaint();
 					Thread.sleep(dt);
 				} catch (Exception e) {
@@ -78,13 +75,12 @@ public class Ex2_Client implements Runnable {
 	}
 
 	/**
-	 * Moves each of the agents along the edge,
-	 * in case the agent is on a node the next destination (next edge) is chosen (randomly).
-	 *
-	 * @param game
-	 * @param gg
-	 * @param
-	 * @throws JSONException
+	 * This function moves each agent to the next destination that set for him.
+	 * Moreover, in case the agent is on a node- the agent's next destination
+	 * will be choose by the algorithms which checks which of pokemon's that on
+	 * the graph is closer and more preferable for the current agent.
+	 * @param game- the game service.
+	 * @param gg- the game's graph. 
 	 */
 	private void moveAgants(game_service game, directed_weighted_graph gg) {
 		dw_graph_algorithms ga = new DWGraph_Algo();
@@ -155,8 +151,6 @@ private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_d
 			}
 		}
 }
-
-
 	private static int nextNode(directed_weighted_graph g, int src, List<CL_Pokemon> allPo) {
 		dw_graph_algorithms ga = new DWGraph_Algo();
 		ga.init(g);
@@ -216,9 +210,9 @@ return -1;
 
 }
 	/**
-	 * A private function witch set to each pokemon the edge the pokemon is on it.
-	 * @param g
-	 * @param allPo
+	 * A private function which set for each pokemon the edge that it's on it.
+	 * @param g- the graph of the current game.
+	 * @param allPo- the pokemons's list
 	 */
 	private static void pokemonSetEdge(directed_weighted_graph g,List<CL_Pokemon>allPo)  {
 		for(CL_Pokemon p: allPo) {
@@ -226,9 +220,9 @@ return -1;
 		}
 	}
 	/**
-	 * a very simple random walk implementation!
-	 * @param game
-	 * @return
+	 * This function inits the agents at their starting nodes before beginning of the game.
+	 * @param game- the current game service.
+	 * @param graph- the graph of the current game
 	 * @throws JSONException 
 	 */
 	private void init(game_service game,directed_weighted_graph graph) throws JSONException {

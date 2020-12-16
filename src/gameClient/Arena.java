@@ -18,9 +18,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * This class represents a multi Agents Arena which move on a graph - grabs Pokemons and avoid the Zombies.
- * @author boaz.benmoshe
- *
+ * This class represents a multi Agents Arena which move on a graph - 
+ * grabs Pokemons.
+ * @author Lea&Shira.
  */
 public class Arena {
 	public static final double EPS1 = 0.001, EPS2=EPS1*EPS1, EPS=EPS2;
@@ -152,7 +152,7 @@ public class Arena {
 			}
 		}
 	}
-
+	
 	private static boolean isOnEdge(geo_location p, geo_location src, geo_location dest ) {
 		boolean ans = false;
 		double dist = src.distance(dest);

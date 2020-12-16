@@ -11,8 +11,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.*;
-
-
+/**
+ * This class represents the algorithms which applicable on a  directional weighted graph.
+ * the algorithms including- 
+ * 1.a deep copy of the graph.
+ * 2.init(graph).
+ * 3.getGraph();
+ * 4.isConnected();
+ * 5. double shortestPathDist(int src, int dest);
+ * 6. List<node_data> shortestPath(int src, int dest);
+ * 7. Save(file)- in JSON format;
+ * 8. Load(file)- gets a JSON format file;
+ * @author Lea&Shira.
+ */
 public class DWGraph_Algo implements dw_graph_algorithms{
 	
 	private directed_weighted_graph graph;
