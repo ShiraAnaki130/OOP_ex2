@@ -108,8 +108,8 @@ public class MyPanel extends JPanel {
 
     private void drawAgants(Graphics g) {
         List<CL_Agent> agent = _ar.getAgents();
-        //g.setColor(Color.pink);
-        //g.fillRect(this.getWidth()-260,10,200,agent.size()*50);
+        g.setColor(Color.yellow);
+        g.fillRect(this.getWidth()-260,10,200,agent.size()*50);
         int r = 15;
         for (CL_Agent ag : agent) {
             Font font = g.getFont().deriveFont(20.0f);
@@ -117,7 +117,8 @@ public class MyPanel extends JPanel {
             g.setColor(Color.red);
             String agent_info = "ID: "+ag.getID()+"    grade: "+ag.getValue();
             g.drawString(agent_info, this.getWidth()-250,40+agent.indexOf(ag)*50);
-            g.drawImage(_pokeboll.get(ag.getID()).getImage(),this.getWidth()-300,20+agent.indexOf(ag)*50,this);
+            int pb = ag.getID()%_pokeboll.size();
+            g.drawImage(_pokeboll.get(pb).getImage(),this.getWidth()-300,20+agent.indexOf(ag)*50,this);
             geo_location c = ag.getLocation();
             if (c != null) {
                 font = g.getFont().deriveFont(10.0f);
@@ -153,16 +154,16 @@ public class MyPanel extends JPanel {
             int r = 15;
             if (c != null) {
                 geo_location fp = this._w2f.world2frame(c);
-                if(f.getType()<0&&f.getValue()<10){
+                if(f.getType()>0&&f.getValue()<10){
                     g.drawImage(_pokemon.get(0).getImage(),(int)fp.x()-r,(int) fp.y()-r,this);
                 }
-                if(f.getType()>0&&f.getValue()<10){
+                if(f.getType()<0&&f.getValue()<10){
                     g.drawImage(_pokemon.get(1).getImage(),(int)fp.x()-r,(int) fp.y()-r,this);
                 }
-                if(f.getType()<0&&f.getValue()>10){
+                if(f.getType()>0&&f.getValue()>=10){
                     g.drawImage(_pokemon.get(2).getImage(),(int)fp.x()-r,(int) fp.y()-r,this);
                 }
-                if(f.getType()>0&&f.getValue()>10){
+                if(f.getType()<0&&f.getValue()>=10){
                     g.drawImage(_pokemon.get(3).getImage(),(int)fp.x()-r,(int) fp.y()-r,this);
                 }
                 String pokemon_s = "V:"+f.getValue();
