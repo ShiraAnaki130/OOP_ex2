@@ -18,7 +18,7 @@ public class Ex2_Client implements Runnable {
 	private static Arena _ar;
 	private int scenario_num ;
 	private	int id;
-
+	private long dt;
 	public Ex2_Client(int id, int scenario_num) {
 		this.scenario_num = scenario_num;
 		this.id = id;
@@ -52,13 +52,13 @@ public class Ex2_Client implements Runnable {
 		}
 		game.startGame();
 		_win.setTitle("Game's level number " + scenario_num);
-		int dt = 100;
+		this.dt=115;
 		while (game.isRunning()) {
 			synchronized (game_service.class) {
 				try {
 					_win.repaint();
 					moveAgants(game, graph);
-					Thread.sleep(dt);
+					Thread.sleep(this.dt);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -78,6 +78,7 @@ public class Ex2_Client implements Runnable {
 	 * @param gg- the game's graph. 
 	 */
 	private void moveAgants(game_service game, directed_weighted_graph gg) {
+		this.dt=115;
 		dw_graph_algorithms ga = new DWGraph_Algo();
 		ga.init(gg);
 		String lg = game.move();
@@ -95,10 +96,7 @@ public class Ex2_Client implements Runnable {
 			double v = agent.getValue();
 			if (dest == -1) {
 				dest = nextNode(gg, src, listP);
-				if (dest == -1) {
-					dest = randomDest(src, listP);
-				}
-			 path = ga.shortestPath(src,dest);
+			path = ga.shortestPath(src,dest);
 			if (path != null) {
 				boolean upS = path.size() > 3;
 				if (upS) {
@@ -110,21 +108,28 @@ public class Ex2_Client implements Runnable {
 					setPokemon(agent, listP, node.getKey(), path);
 					game.chooseNextEdge(agent.getID(), node.getKey());
 				}
-				agent.set_SDT(path.size() *3);
-				try {
-					Thread.sleep(agent.get_sg_dt());
-				} catch (Exception e) {
-					e.printStackTrace();
-
-				}
+				pokemonSetEdge(gg, listP);
+				setPokemon(agent, listP, dest, path);
+				edge_data edge= gg.getEdge(src,dest);
+				agent.set_curr_edge(edge);
+				if(agent.get_curr_fruit()!=null) {
+					agent.set_SDT(path.size()*3);
+					try {
+						Thread.sleep(agent.get_sg_dt());
+					} catch (Exception e) {
+						e.printStackTrace();}
+					this.dt=40;
+					}
 				if (upS) {
 					double s = agent.getSpeed();
 					agent.setSpeed(s - path.size());
 				}
 			}
-		}
+			}
+			
+		
 		System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
-	}
+		}
 
 }
 private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_data> path){
@@ -177,26 +182,10 @@ private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_d
 				int dest = p.get_edge().getDest();
 				int src = p.get_edge().getSrc();
 				if(path.contains(dest)||path.contains(src))
-					p.setInfo("t");
+					p.get_edge().setInfo("t");
 			}
 		}
 	}
-private int randomDest(int src,List<CL_Pokemon> allPo) {
-PriorityQueue<CL_Pokemon> priQ= new PriorityQueue<CL_Pokemon>();
-if(allPo!=null) {
-	for(CL_Pokemon p: allPo) {
-		priQ.add(p);
-	}
-	CL_Pokemon p=priQ.poll();
-	while (p.get_edge().getInfo().equals("f")&&!priQ.isEmpty()) {
-		p = priQ.poll();
-	}
-	if(p.get_edge().getDest()==src) return p.get_edge().getSrc();
-	return p.get_edge().getDest();
-	}
-return -1;
-
-}
 	/**
 	 * A private function which set for each pokemon the edge that it's on it.
 	 * @param g- the graph of the current game.

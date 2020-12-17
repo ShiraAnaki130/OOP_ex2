@@ -32,29 +32,16 @@ public class Ex2 implements ActionListener {
 	private static JTextField scenario_numText;
 	private static JButton button;
 	private static JLabel success;
-	private static JLabel pic;
-	private static BufferedImage image;
-	private static int game_scenario=-1;
-	private static int id=-1;
-	
-	
+	private static int game_scenario;
+	private static int id;
     public static void main(String[] args){
     	if(args.length==0) {
         JPanel _panel= new JPanel();
         JFrame _frame= new JFrame();
-        _frame.setSize(350, 250);
+        _frame.setSize(350, 170);
         _frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       
         _panel.setLayout(null); 
-        _panel.setBackground(Color.YELLOW);
-        try {
-			image = ImageIO.read(new File("data/pokemonsStart.jpg"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-        pic=new JLabel(new ImageIcon(image)); 
-    
-        _panel.add(pic);
+        _panel.setBackground(Color.magenta);
         Font font= new Font("Forte", Font.BOLD, 18); 
         idLabel=new JLabel("id");
         idLabel.setFont(font);
@@ -91,11 +78,15 @@ public class Ex2 implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		id=Integer.parseInt(idText.getText());
-		game_scenario= Integer.parseInt(scenario_numText.getText());
-		if(idText.getText().isBlank()||scenario_numText.getText().isBlank()||game_scenario<0||game_scenario>23)
-			success.setText("Invalid game number");	
+		boolean bol=false;
+		for(int i=0;(i<idText.getText().length())&&(bol==false);i++) {
+			if(!(idText.getText().charAt(i)>=48&&idText.getText().charAt(i)<=57))
+				bol=true;
+		}
+		if(bol||idText.getText().isBlank()||idText.getText().length()>9)success.setText("Invalid id number");
 		else {
+			id=Integer.parseInt(idText.getText());
+			game_scenario= Integer.parseInt(scenario_numText.getText());
 			Thread game1 = new Thread(new Ex2_Client(id,game_scenario));
 			game1.start();
 		}

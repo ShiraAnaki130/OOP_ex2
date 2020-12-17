@@ -44,24 +44,33 @@ public class test {
 //		}
 		
 //	
-		Point3D p1= new Point3D(2,3,4);
-		Point3D p2= new Point3D(5,7,1);
-		CL_Pokemon a= new CL_Pokemon(p1,1,45);
-		
-		CL_Pokemon b= new CL_Pokemon(p2,1,78);
-		PriorityQueue<CL_Pokemon> priQ= new PriorityQueue<CL_Pokemon>();
-		priQ.add(b);
-		priQ.add(a);
-		//a.setTag(9);
-	
-		CL_Pokemon p=priQ.poll();
-		System.out.println();
-		System.out.println("p "+ p.getValue());
+//		Point3D p1= new Point3D(2,3,4);
+//		Point3D p2= new Point3D(5,7,1);
+//		CL_Pokemon a= new CL_Pokemon(p1,1,45);
+//		
+//		CL_Pokemon b= new CL_Pokemon(p2,1,78);
+//		PriorityQueue<CL_Pokemon> priQ= new PriorityQueue<CL_Pokemon>();
+//		priQ.add(b);
+//		priQ.add(a);
+//		//a.setTag(9);
+//	
+//		CL_Pokemon p=priQ.poll();
+//		System.out.println();
+//		System.out.println("p "+ p.getValue());
 //		HashMap<edge_data,Double> hash= new HashMap<edge_data,Double>();
 //		hash.put(a, 5.5);
 //		hash.put(b, 770.0);
 //		System.out.println(hash.get(a));
 //		
+//		String g="11ss";
+//		try {
+//		int r=Integer.parseInt(g);
+//		System.out.println(r);
+//		} catch(NumberFormatException e) {
+//			e.printStackTrace();
+//		}
+		String g="222";
+		if(g==null) System.out.println("yesss");
 		
 		
 		
