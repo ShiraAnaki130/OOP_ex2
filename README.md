@@ -71,7 +71,7 @@ The pokemon game is a game in which there are pokemon, that scattered randomly o
 ***How does the game work?***
 The game is played by a server,the communication with the server is conducted by the given API:
 
-![](../data/server's%20metods%20.jpg)
+![](data/server's%20metods%20.jpg)
 
 All the methods of the server above are helping to program the pokemon game.
 programing the game:
