@@ -212,7 +212,7 @@ public class CL_Agent {
 				}
 				double norm = dist/de;
 				double dt = w*norm / this.getSpeed(); 
-				ddt = (long)(ddtt*dt);
+				ddt = (long)(dt*100);
 			}
 			this.set_sg_dt(ddt);
 		}
