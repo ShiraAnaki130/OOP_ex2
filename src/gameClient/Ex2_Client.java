@@ -54,7 +54,6 @@ public class Ex2_Client implements Runnable {
 		_win.setTitle("Game's level number " + scenario_num);
 		this.dt=100;
 		while (game.isRunning()) {
-			synchronized (game_service.class) {
 				try {
 					_win.repaint();
 					moveAgants(game, graph);
@@ -62,7 +61,6 @@ public class Ex2_Client implements Runnable {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}
 		}
 		String res = game.toString();
 		System.out.println(res);
@@ -78,54 +76,60 @@ public class Ex2_Client implements Runnable {
 	 * @param gg- the game's graph. 
 	 */
 	private void moveAgants(game_service game, directed_weighted_graph gg) {
-		this.dt = 100;
-		dw_graph_algorithms ga = new DWGraph_Algo();
-		ga.init(gg);
-		String lg = game.move();
-		List<CL_Agent> listAgents = Arena.getAgents(lg, gg);
-		_ar.setAgents(listAgents);
-		String fs = game.getPokemons();
-		List<CL_Pokemon> listP = Arena.json2Pokemons(fs);
-		_ar.setPokemons(listP);
-		pokemonSetEdge(gg, listP);
-		List<node_data> path = null;
-		for (CL_Agent agent : listAgents) {
-			int id = agent.getID();
-			int dest = agent.getNextNode();
-			int src = agent.getSrcNode();
-			double v = agent.getValue();
-			if (dest == -1) {
-				dest = nextNode(gg, src, listP);
-				path = ga.shortestPath(src,dest);
-				if (path != null) {
-					boolean upS = path.size() > 3&&agent.getSpeed()<10;
-					if (upS) {
-						double s = agent.getSpeed();
-						agent.setSpeed(s + path.size()*3);
-					}
-					setPkemons(listP, path);
-					setPokemon(agent, listP, dest, path);
-					for (node_data node : path) {
-						setPokemon(agent, listP, node.getKey(), path);
-						game.chooseNextEdge(agent.getID(), node.getKey());
-					}
-					if(agent.get_curr_fruit()!=null) {
-						agent.set_SDT(path.size());
-						try {
-							Thread.sleep(agent.get_sg_dt());
-						} catch (Exception e) {
-							e.printStackTrace();}
-						this.dt = 40;
-					}
-					if (upS) {
-						double s = agent.getSpeed();
-						agent.setSpeed(s - path.size()*3);
+		synchronized (_ar) {
+			this.dt = 100;
+			dw_graph_algorithms ga = new DWGraph_Algo();
+			ga.init(gg);
+			String lg = game.move();
+			List<CL_Agent> listAgents = Arena.getAgents(lg, gg);
+			_ar.setAgents(listAgents);
+			String fs = game.getPokemons();
+			List<CL_Pokemon> listP = Arena.json2Pokemons(fs);
+			_ar.setPokemons(listP);
+			pokemonSetEdge(gg, listP);
+			List<node_data> path = null;
+			for (CL_Agent agent : listAgents) {
+				int id = agent.getID();
+				int dest = agent.getNextNode();
+				int src = agent.getSrcNode();
+				double v = agent.getValue();
+				if (dest == -1) {
+					dest = nextNode(gg, src, listP);
+					path = ga.shortestPath(src, dest);
+					if (path != null) {
+						boolean upS = path.size() > 3 && agent.getSpeed() < 10;
+						if (upS) {
+							double s = agent.getSpeed();
+							agent.setSpeed(s + path.size() * 3);
+						}
+						setPkemons(listP, path);
+						int prev = src;
+						for (node_data node : path) {
+							edge_data edge = gg.getEdge(prev, node.getKey());
+							agent.set_curr_edge(edge);
+							setPokemon(agent, listP, node.getKey(), path);
+							game.chooseNextEdge(agent.getID(), node.getKey());
+							prev = node.getKey();
+						}
+						if (agent.get_curr_fruit() != null && agent.get_curr_edge() != null) {
+							agent.set_SDT(10);
+							try {
+								System.out.println(agent.get_sg_dt());
+								Thread.sleep(agent.get_sg_dt());
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							this.dt = 40;
+						}
+						if (upS) {
+							double s = agent.getSpeed();
+							agent.setSpeed(s - path.size() * 3);
+						}
 					}
 				}
+				System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
 			}
-		System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
 		}
-
 }
 	/**
 	 * set the target of the agent to the closed pokemon on the path
@@ -178,7 +182,7 @@ private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_d
 					if (ans == src) ans = pokemon.get_edge().getSrc();
 				}
 			}
-			if (min == bigpokemon) {
+			if (min == bigpokemon&&p.get_edge().getInfo().equals("f")) {
 				ans = p.get_edge().getDest();
 				if (ans == src)
 					ans = p.get_edge().getSrc();
