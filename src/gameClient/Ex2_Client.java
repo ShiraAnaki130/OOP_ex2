@@ -54,6 +54,7 @@ public class Ex2_Client implements Runnable {
 		_win.setTitle("Game's level number " + scenario_num);
 		this.dt=100;
 		while (game.isRunning()) {
+			synchronized (game) {
 				try {
 					_win.repaint();
 					moveAgants(game, graph);
@@ -61,6 +62,7 @@ public class Ex2_Client implements Runnable {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			}
 		}
 		String res = game.toString();
 		System.out.println(res);
@@ -126,7 +128,7 @@ public class Ex2_Client implements Runnable {
 						}
 					}
 				}
-				//System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
+//				System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
 			}
 		}
 }

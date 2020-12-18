@@ -2,8 +2,15 @@ package gameClient;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.awt.image.*;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,7 +41,7 @@ public class Ex2 implements ActionListener {
         _frame.setSize(350, 170);
         _frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         _panel.setLayout(null); 
-        _panel.setBackground(Color.orange);
+        _panel.setBackground(Color.ORANGE);
         Font font= new Font("Forte", Font.BOLD, 18); 
         idLabel=new JLabel("id");
         idLabel.setFont(font);
@@ -62,8 +69,8 @@ public class Ex2 implements ActionListener {
         _frame.setVisible(true);
     	}
     	else {
-          	  int _id = 208375600; //Integer.parseInt(args[0]);
-              int _scenario_num = 11; //Integer.parseInt(args[1]);
+          	  int _id = Integer.parseInt(args[0]);
+              int _scenario_num = Integer.parseInt(args[1]);
               Thread game1 = new Thread(new Ex2_Client(_id,_scenario_num));
               game1.start();	
           }

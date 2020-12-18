@@ -223,9 +223,9 @@ public class MyPanel extends JPanel {
         g.setColor(Color.BLACK);
         Font font= new Font("Forte", Font.CENTER_BASELINE, 30);
         g.setFont(font);
-        g.drawString(scenario,40,30);
+        g.drawString(scenario,10,30);
         g.setFont(font);
-        g.drawString(time,45,80);
+        g.drawString(time,15,80);
 
     }
 }
