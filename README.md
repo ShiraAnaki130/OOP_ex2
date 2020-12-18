@@ -74,6 +74,7 @@ This class implements the algorithms of the interface called 'dw_graph_algorithm
 The pokemon game is a game in which there are pokemon, that scattered randomly on the graph, and agents who need to catch the pokemons in a limited time.
 **The target of the game** 
 is to catch as many pokemons as possible with up to 10 moves(game.move() function) for a second by the agents before the time of the game is over.
+
 :chart_with_upwards_trend: **why using this game?**
 on our project we program a good-performing algorithm which move the agents on the graph in a way of getting high grade with the demand of up to ten server's move.
 
