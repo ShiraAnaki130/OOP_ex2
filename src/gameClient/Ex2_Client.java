@@ -52,7 +52,7 @@ public class Ex2_Client implements Runnable {
 		}
 		game.startGame();
 		_win.setTitle("Game's level number " + scenario_num);
-		this.dt=115;
+		this.dt=100;
 		while (game.isRunning()) {
 			synchronized (game_service.class) {
 				try {
@@ -78,7 +78,7 @@ public class Ex2_Client implements Runnable {
 	 * @param gg- the game's graph. 
 	 */
 	private void moveAgants(game_service game, directed_weighted_graph gg) {
-		this.dt=115;
+		this.dt = 100;
 		dw_graph_algorithms ga = new DWGraph_Algo();
 		ga.init(gg);
 		String lg = game.move();
@@ -96,42 +96,44 @@ public class Ex2_Client implements Runnable {
 			double v = agent.getValue();
 			if (dest == -1) {
 				dest = nextNode(gg, src, listP);
-			path = ga.shortestPath(src,dest);
-			if (path != null) {
-				boolean upS = path.size() > 3;
-				if (upS) {
-					double s = agent.getSpeed();
-					agent.setSpeed(s + path.size());
-				}
-				setPkemons(listP, path);
-				for (node_data node : path) {
-					setPokemon(agent, listP, node.getKey(), path);
-					game.chooseNextEdge(agent.getID(), node.getKey());
-				}
-				pokemonSetEdge(gg, listP);
-				setPokemon(agent, listP, dest, path);
-				edge_data edge= gg.getEdge(src,dest);
-				agent.set_curr_edge(edge);
-				if(agent.get_curr_fruit()!=null) {
-					agent.set_SDT(path.size()*3);
-					try {
-						Thread.sleep(agent.get_sg_dt());
-					} catch (Exception e) {
-						e.printStackTrace();}
-					this.dt=40;
+				path = ga.shortestPath(src,dest);
+				if (path != null) {
+					boolean upS = path.size() > 3&&agent.getSpeed()<10;
+					if (upS) {
+						double s = agent.getSpeed();
+						agent.setSpeed(s + path.size()*3);
 					}
-				if (upS) {
-					double s = agent.getSpeed();
-					agent.setSpeed(s - path.size());
+					setPkemons(listP, path);
+					setPokemon(agent, listP, dest, path);
+					for (node_data node : path) {
+						setPokemon(agent, listP, node.getKey(), path);
+						game.chooseNextEdge(agent.getID(), node.getKey());
+					}
+					if(agent.get_curr_fruit()!=null) {
+						agent.set_SDT(path.size());
+						try {
+							Thread.sleep(agent.get_sg_dt());
+						} catch (Exception e) {
+							e.printStackTrace();}
+						this.dt = 40;
+					}
+					if (upS) {
+						double s = agent.getSpeed();
+						agent.setSpeed(s - path.size()*3);
+					}
 				}
 			}
-			}
-			
-		
 		System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
 		}
 
 }
+	/**
+	 * set the target of the agent to the closed pokemon on the path
+	 * @param ag
+	 * @param allPo
+	 * @param dest
+	 * @param path
+	 */
 private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_data> path){
 		if(allPo!=null&&path!=null){
 			for(CL_Pokemon p : allPo){
@@ -144,6 +146,14 @@ private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_d
 			}
 		}
 }
+	/**
+	 *order the pokemons by value and choose the biggest one and then check for closer pokemon with info "f
+	 *return -1 if all pokemons with info "t"
+	 * @param g
+	 * @param src
+	 * @param allPo
+	 * @return
+	 */
 	private static int nextNode(directed_weighted_graph g, int src, List<CL_Pokemon> allPo) {
 		dw_graph_algorithms ga = new DWGraph_Algo();
 		ga.init(g);
@@ -176,12 +186,17 @@ private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_d
 		}
 		return ans;
 	}
+	/**
+	 * set mark "t" one the pokemon edges in the path
+	 * @param allPo
+	 * @param path
+	 */
 	private void setPkemons(List<CL_Pokemon> allPo,List<node_data> path){
 		if(allPo!=null&&path!=null){
 			for(CL_Pokemon p : allPo){
 				int dest = p.get_edge().getDest();
 				int src = p.get_edge().getSrc();
-				if(path.contains(dest)||path.contains(src))
+				if(path.contains(dest)&&path.contains(src))
 					p.get_edge().setInfo("t");
 			}
 		}
