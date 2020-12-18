@@ -69,7 +69,10 @@ This class implements the algorithms of the interface called 'dw_graph_algorithm
 
 - load( String file): load a graph to this graph algorithm.
 
-## About the pokemon game: ![](data/thegame.jpg)
+## About the pokemon game: 
+
+![](data/thegame.jpg)
+
 ### Description:
 The pokemon game is a game in which there are pokemon, that scattered randomly on the graph, and agents who need to catch the pokemons in a limited time.
 **The target of the game** 
