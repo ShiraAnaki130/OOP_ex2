@@ -89,7 +89,7 @@ There are two option for playing the game:
 
 :white_check_mark: by **clicking here directly on the Ex2.jar** : (*****) and input your id and the game's scenario number at the current fields and than press 'start':
 
-![](data/startingWindow.jpg)
+![](data/startingwidow.jpg)
 
 :heavy_exclamation_mark: At this repotisity attached 24 game's scenarios with the numbers of [0,23] for your choice, 
 if the willing to add more game's scenario you can creates a JSON string of your own with the following pattern, and save this file on data's folder: (https://github.com/ShiraAnaki130/OOP_ex2/blob/master/data/A0)
