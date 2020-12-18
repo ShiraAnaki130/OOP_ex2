@@ -114,7 +114,6 @@ public class Ex2_Client implements Runnable {
 						if (agent.get_curr_fruit() != null && agent.get_curr_edge() != null) {
 							agent.set_SDT(10);
 							try {
-								System.out.println(agent.get_sg_dt());
 								Thread.sleep(agent.get_sg_dt());
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -127,7 +126,7 @@ public class Ex2_Client implements Runnable {
 						}
 					}
 				}
-				System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
+				//System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
 			}
 		}
 }

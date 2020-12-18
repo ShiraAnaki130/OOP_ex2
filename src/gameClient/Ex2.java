@@ -2,15 +2,8 @@ package gameClient;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.awt.image.*;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -41,7 +34,7 @@ public class Ex2 implements ActionListener {
         _frame.setSize(350, 170);
         _frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         _panel.setLayout(null); 
-        _panel.setBackground(Color.magenta);
+        _panel.setBackground(Color.orange);
         Font font= new Font("Forte", Font.BOLD, 18); 
         idLabel=new JLabel("id");
         idLabel.setFont(font);
