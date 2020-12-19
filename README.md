@@ -86,11 +86,17 @@ Our game's scenarios results:
  
 
 ***How to play the game?***
-There are two option for playing the game:
+
+:link: **In order to use the project's codes** you need first to write the following commend on you Command Prompt: 
+
+(you new folder’s address) git clone  https://github.com/ShiraAnaki130/OOP_ex2.git.
+
+***There are two option for playing the game (after cloning the project):***
 
 :white_check_mark: by using the **Command Prompt**, with the commad: java -jar Ex2.jar (your id) (the game's scenario number)
 
-:white_check_mark: by **clicking here directly on the Ex2.jar** : (*****) and input your id and the game's scenario number at the current fields and than press 'start':
+:white_check_mark: by creating a new folder with the Ex2.jar file: (*****) and with the data' folder: (*******).
+After that you need to click on the jar file, and then input your id and the game's scenario number at the current fields and than press 'start':
 
 ![](data/startingwidow.jpg)
 
@@ -99,9 +105,6 @@ if the willing to add more game's scenario you can creates a JSON string of your
 
 :heavy_exclamation_mark: The arena of those given game's scenarios is a connected directional weighted graph, but the game's program fits to diconnected graph arena as well.
 
-:link: **In order to use the project's codes** you need to write the following commend on you Command Prompt: 
-
-(you new folder’s address) git clone  https://github.com/ShiraAnaki130/OOP_ex2.git.
 
 :lock: Please don't make any change on the codes without our permission.
 
