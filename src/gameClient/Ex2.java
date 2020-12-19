@@ -41,7 +41,7 @@ public class Ex2 implements ActionListener {
         _frame.setSize(350, 170);
         _frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         _panel.setLayout(null); 
-        _panel.setBackground(Color.ORANGE);
+        _panel.setBackground(Color.orange);
         Font font= new Font("Forte", Font.BOLD, 18); 
         idLabel=new JLabel("id");
         idLabel.setFont(font);
