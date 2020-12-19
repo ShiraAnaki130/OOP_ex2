@@ -69,7 +69,10 @@ This class implements the algorithms of the interface called 'dw_graph_algorithm
 
 - load( String file): load a graph to this graph algorithm.
 
-## About the pokemon game: ![](data/thegame.jpg)
+## About the pokemon game: 
+
+![](data/thegame.jpg)
+
 ### Description:
 The pokemon game is a game in which there are pokemon, that scattered randomly on the graph, and agents who need to catch the pokemons in a limited time.
 **The target of the game** 
@@ -83,22 +86,25 @@ Our game's scenarios results:
  
 
 ***How to play the game?***
-There are two option for playing the game:
+
+:link: **In order to use the project's codes** you need first to write the following commend on you Command Prompt: 
+
+(you new folder’s address) git clone  https://github.com/ShiraAnaki130/OOP_ex2.git.
+
+***There are two option for playing the game (after cloning the project):***
 
 :white_check_mark: by using the **Command Prompt**, with the commad: java -jar Ex2.jar (your id) (the game's scenario number)
 
-:white_check_mark: by **clicking here directly on the Ex2.jar** : (*****) and input your id and the game's scenario number at the current fields and than press 'start':
+:white_check_mark: by creating a new folder with the Ex2.jar file: (*****) and with the data' folder: (*******).
+After that you need to click on the jar file, and then input your id and the game's scenario number at the current fields and than press 'start':
 
-![](data/startingWindow.jpg)
+![](data/startingwidow.jpg)
 
 :heavy_exclamation_mark: At this repotisity attached 24 game's scenarios with the numbers of [0,23] for your choice, 
 if the willing to add more game's scenario you can creates a JSON string of your own with the following pattern, and save this file on data's folder: (https://github.com/ShiraAnaki130/OOP_ex2/blob/master/data/A0)
 
 :heavy_exclamation_mark: The arena of those given game's scenarios is a connected directional weighted graph, but the game's program fits to diconnected graph arena as well.
 
-:link: **In order to use the project's codes** you need to write the following commend on you Command Prompt: 
-
-(you new folder’s address) git clone  https://github.com/ShiraAnaki130/OOP_ex2.git.
 
 :lock: Please don't make any change on the codes without our permission.
 

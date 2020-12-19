@@ -58,8 +58,10 @@ public class Ex2_Client implements Runnable {
 		}
 		game.startGame();
 		_win.setTitle("Game's level number " + scenario_num);
+		_win.repaint();
 		this.dt=100;
 		while (game.isRunning()) {
+			synchronized (game) {
 				try {
 					_win.repaint();
 					moveAgants(game, graph);
@@ -67,6 +69,7 @@ public class Ex2_Client implements Runnable {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			}
 		}
 		String res = game.toString();
 		System.out.println(res);
@@ -95,6 +98,7 @@ public class Ex2_Client implements Runnable {
 			pokemonSetEdge(gg, listP);
 			List<node_data> path = null;
 			for (CL_Agent agent : listAgents) {
+
 				int id = agent.getID();
 				int dest = agent.getNextNode();
 				int src = agent.getSrcNode();
@@ -103,10 +107,10 @@ public class Ex2_Client implements Runnable {
 					dest = nextNode(gg, src, listP);
 					path = ga.shortestPath(src, dest);
 					if (path != null) {
-						boolean upS = path.size() > 3 && agent.getSpeed() < 10;
+						boolean upS = path.size() >2 && agent.getSpeed() < 5;
 						if (upS) {
 							double s = agent.getSpeed();
-							agent.setSpeed(s + path.size() * 3);
+							agent.setSpeed(s + path.size());
 						}
 						setPkemons(listP, path);
 						int prev = src;
@@ -128,12 +132,13 @@ public class Ex2_Client implements Runnable {
 						}
 						if (upS) {
 							double s = agent.getSpeed();
-							agent.setSpeed(s - path.size() * 3);
+							agent.setSpeed(s - path.size());
 						}
 					}
 				}
 			}
 		}
+
 }
 	/**
 	 * This function sets the target(fruit) of the agent to be the pokemon which chosen on the 'nextNode' function.
@@ -175,21 +180,22 @@ private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_d
 				priQ.add(p);
 			}
 			CL_Pokemon p = priQ.poll();
+			CL_Pokemon pokemon;
 			double dist;
 			double bigpokemon = ga.shortestPathDist(src, p.get_edge().getDest());
 			double min = bigpokemon;
-			for (int i = 0; i < allPo.size(); i++) {
-				CL_Pokemon pokemon = allPo.get(i);
+			while (!priQ.isEmpty()) {
+				pokemon = priQ.poll();
 				dist = ga.shortestPathDist(src, pokemon.get_edge().getDest());
 				if (dist == -1)
 					dist = ga.shortestPathDist(src, pokemon.get_edge().getSrc());
-				if (pokemon.get_edge().getInfo().equals("f") && dist < min) {
+				if (pokemon.getInfo().equals("f") && dist < min) {
 					min = dist;
 					ans = pokemon.get_edge().getDest();
 					if (ans == src) ans = pokemon.get_edge().getSrc();
 				}
 			}
-			if (min == bigpokemon&&p.get_edge().getInfo().equals("f")) {
+			if (min == bigpokemon&& p.getInfo().equals("f")) {
 				ans = p.get_edge().getDest();
 				if (ans == src)
 					ans = p.get_edge().getSrc();
@@ -208,7 +214,7 @@ private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_d
 				int dest = p.get_edge().getDest();
 				int src = p.get_edge().getSrc();
 				if(path.contains(dest)&&path.contains(src))
-					p.get_edge().setInfo("t");
+					p.setInfo("t");
 			}
 		}
 	}

@@ -394,7 +394,7 @@ public int getMC() {
 		 * This class represent a geographic 3D point location of a node data.
 		 * @author Lea.shira;
 		 */
-		public class Geo_Location implements geo_location{
+		public static class Geo_Location implements geo_location{
 			private double _x;
 			private double _y;
 			private double _z;
