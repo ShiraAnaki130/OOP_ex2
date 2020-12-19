@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * This class is a container class in which represents a space for
  * drawing the pokemon game: the arena, pokemons, agents, and etc. 
- * @author Lea&Shira.
+ * @author Lea.Shira;
  */
 public class MyPanel extends JPanel {
     private Arena _ar;
@@ -65,7 +65,7 @@ public class MyPanel extends JPanel {
     }
     /**
      * This function updates the arena's field.
-     * @param ar
+     * @param ar- this is the game's arena.
      */
     public void update(Arena ar) {
         this._ar = ar;

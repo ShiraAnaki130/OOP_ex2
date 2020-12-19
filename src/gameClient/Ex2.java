@@ -16,7 +16,7 @@ import javax.swing.JTextField;
  * 1. from the Command Prompt- by using the command: java -jar Ex2.jar **your id** **scenario number**.
  * 2. by running this class and input you id and scenario number at the correct fields.
  * one can choose only scenario number at the range [0,23].
- * @author Lea&Shira.
+ * @author Lea.Shira;
  */
 public class Ex2 implements ActionListener {
 	private static JLabel idLabel;

@@ -19,10 +19,10 @@ import java.util.*;
  * 3.getGraph();
  * 4.isConnected();
  * 5. double shortestPathDist(int src, int dest);
- * 6. List<node_data> shortestPath(int src, int dest);
+ * 6. the shortestPath(int src, int dest);
  * 7. Save(file)- in JSON format;
  * 8. Load(file)- gets a JSON format file;
- * @author Lea&Shira.
+ * @author Lea.Shira;
  */
 public class DWGraph_Algo implements dw_graph_algorithms{
 	
@@ -37,6 +37,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 	}
 	/**
 	 * This function init the graph on which this set of algorithms operates on.
+	 *  @param g- a directional weighted graph.
 	 */
 	@Override
 	public void init(directed_weighted_graph g) {
@@ -52,7 +53,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 	}
 	/**
 	 * This function creates another graph which is a copy of this graph.
-	 * @return returns the new identical graph.
+	 * @return returns the new identical directional weighted graph.
 	 */
 	@Override
 	public directed_weighted_graph copy() {
@@ -63,6 +64,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 	 *This function check if the grath is connected with BFS algorithm for directed graphs
 	 * if the algorithm finished with answer ture the algorithm swap the directions of the edges and
 	 * do the BFS algorithm again to ensure the connection
+	 * @return returns true this graph is a strongly connected component, otherwise returns false.
 	 */
 	@Override
 	public boolean isConnected() {
@@ -88,7 +90,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 	 * check the shortest weight directed distance from source node to the destination node with Dijkstra's algorithm
 	 * @param src - start node
 	 * @param dest - end (target) node
-	 * @return
+	 * @return returns the smallest distance between src(node_id) and dest(node_id).
 	 */
 	@Override
 	public double shortestPathDist(int src, int dest) {
@@ -136,7 +138,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 	 * return list of nodes data
 	 * @param src - start node
 	 * @param dest - end (target) node
-	 * @return List<node_data>
+	 * @return returns the shortest path with the lowest distance between src and dest 
 	 */
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
@@ -199,11 +201,10 @@ public class DWGraph_Algo implements dw_graph_algorithms{
      * This function saves this weighted directed graph to the given
      * file name - in JSON format.
      * @param file - the file name (may include a relative path).
-     * @return return true, if the file was successfully saved, or false in case it wasn't.
-	 * @throws JSONException 
+     * @return return true, if the file was successfully saved, or false in case it wasn't. 
      */
 	@Override
-	public boolean save(String file) throws JSONException {
+	public boolean save(String file) {
 		boolean ans=false;
 		JSONObject allArray=new JSONObject();
 	    JSONArray Edges=new JSONArray();
@@ -214,19 +215,47 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 	    for(node_data node_:getGraph().getV()) {
 	    	node=new JSONObject();
 	    	String pos=""+node_.getLocation().x()+","+node_.getLocation().y()+","+node_.getLocation().z();
-	    	node.put("pos", pos);
-	    	node.put("id", node_.getKey());
+	    	try {
+				node.put("pos", pos);
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+	    	try {
+				node.put("id", node_.getKey());
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
 	    	Nodes.put(node);
 	    	for(edge_data edge_:getGraph().getE(node_.getKey())) {
 	    		edge=new JSONObject();
-	    		edge.put("src", edge_.getSrc());
-	    		edge.put("w", edge_.getWeight());
-	    		edge.put("dest", edge_.getDest());
+	    		try {
+					edge.put("src", edge_.getSrc());
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+	    		try {
+					edge.put("w", edge_.getWeight());
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+	    		try {
+					edge.put("dest", edge_.getDest());
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 	    		Edges.put(edge);	
 	    	}
 	    }
-	    allArray.put("Edges",Edges);
-	    allArray.put("Nodes",Nodes);
+	    try {
+			allArray.put("Edges",Edges);
+		} catch (JSONException e1) {
+			e1.printStackTrace();
+		}
+	    try {
+			allArray.put("Nodes",Nodes);
+		} catch (JSONException e1) {
+			e1.printStackTrace();
+		}
 	try {
 	    FileWriter file_ = new FileWriter(file);
 	    file_.write(allArray.toString());
@@ -237,6 +266,7 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 	    catch (IOException e) {
 	        e.printStackTrace();
 	    }
+	
 		return ans;
 	}
 	 /**
@@ -246,10 +276,9 @@ public class DWGraph_Algo implements dw_graph_algorithms{
      * graph was not loaded the original graph should remain "as is".
      * @param file - file name of JSON file.
      * @return return true, if the file was successfully saved, or false in case it wasn't.
-	 * @throws JSONException 
      */
 	@Override
-	public boolean load(String file) throws JSONException {
+	public boolean load(String file) {
 		try {
 			directed_weighted_graph new_graph=new DWGraph_DS();
 			Scanner scanner = new Scanner(new File(file));
@@ -286,7 +315,10 @@ public class DWGraph_Algo implements dw_graph_algorithms{
 		   catch (FileNotFoundException e) {
 			   		e.printStackTrace();
 			   		return false;
-		    }
+		    } catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	/**

@@ -1,10 +1,14 @@
 package gameClient;
 import gameClient.util.Point3D;
 import org.json.JSONObject;
+
+import api.DWGraph_DS;
+import api.directed_weighted_graph;
 import api.edge_data;
+import api.node_data;
 /**
  * This class represents a pokemon for the pokemon game.
- * @author Lea&Shira.
+ * @author Lea.Shira;
  */
 public class CL_Pokemon implements Comparable<CL_Pokemon> {
 	private double _value;
@@ -20,13 +24,21 @@ public class CL_Pokemon implements Comparable<CL_Pokemon> {
 		_value = v;
 		_pos = p;
 		_edge=null;
-		ID=id;
+		this.ID=id;
 		id++;
+	}
+	@Override
+	public boolean equals(Object po){
+	if(!(po instanceof CL_Pokemon)) return false;
+	CL_Pokemon other = (CL_Pokemon)po;
+	if(other.getType()==this.getType()&&other.getValue()==this.getValue()&&other.getLocation()==this.getLocation()) return true;
+	return false;
 	}
 	/**
 	 * This function is getting a String object(JSON string) and builds a new pokemon
 	 * according to the information in the JSON string.
 	 * @param json- JSON string;
+	 * @return a new pokemon according to the information in the JSON string.
 	 */
 	public CL_Pokemon init_from_json(String json) {
 		CL_Pokemon ans = null;

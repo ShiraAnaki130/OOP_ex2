@@ -2,19 +2,21 @@ package api;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+
+import gameClient.CL_Pokemon;
 /**
  * This class represents a directional weighted graph.
  * Each vertex in the graph is from the type of node_data and
  * every edge is from the type of edge_data has a positive weight.
  * This class represents the graph uses the data structure from the type of HahMap.
- * The class uses two HashMap -> one for the vertexes in the graph with the pair of <key,node>
- * and another <key,edges_direction> for the collections containing all the edges 
+ * The class uses two HashMap: one for the vertexes in the graph with the pair of (key,node)
+ * and another (key,edges_direction) for the collections containing all the edges 
  * which getting out of every vertex in the graph. 
  * The object edges_direction stores for every vertex the collections containing all the edges 
  * which getting out of it.
  * The class supports several operations applicable on a graph,
  * such as removing or adding a vertex or an edge, returning the weight of existing edge and etc.
- * @author Lea&Shira.
+ * @author Lea.Shira;
  */
 public class DWGraph_DS implements directed_weighted_graph{
 private HashMap<Integer,node_data> Nodes;
@@ -90,7 +92,7 @@ public node_data getNode(int key) {
 	return Nodes.get(key);
 }
 /**
- * This function returns,in O(1),the data of the edge (src-->dest), null if none.
+ * This function returns,in O(1),the data of the edge (src--dest), null if none.
  * @param src- this is the node_id which the edge start at.
  * @param dest- this is the nide_id which the edge ends at.
  * @return the data of the edge getting out of src to dest, or null if this edge isn't existent.
@@ -144,7 +146,7 @@ public void connect(int src, int dest, double w) {
 /**
  * This function creates in O(1), another pointer for the collection which
  * representing all the nodes in the graph.
- * @return return Collection<node_data>- the another pointer. 
+ * @return returns another pointer to the collection of the graph's vertexes. 
  */
 @Override
 public Collection<node_data> getV() {
@@ -153,7 +155,8 @@ public Collection<node_data> getV() {
 /**
  *This method returns a collection containing all the 
  *edges which getting out of the given node_id.
- * @return Collection<node_data>.
+ *@param node_id- this is the vertex_id in which the edge's collection belong to.
+ * @return another pointer to the edge's collection of the chosen vertex's id. 
  */
 @Override
 public Collection<edge_data> getE(int node_id) {
@@ -166,8 +169,8 @@ public Collection<edge_data> getE(int node_id) {
 * This function removes the node from the graph by it's node_id,
 * and removes all edges which starts or ends at this node.
 * This method should run in O(k), V.degree=k, as all the edges should be removed.
-* @return the data of the removed node (null if none). 
-* @param key
+* @return the data of the removed node (null if none).
+* @param key- this is the node_id which need to be removed. 
  */
 @Override
 public node_data removeNode(int key) {
@@ -176,16 +179,18 @@ public node_data removeNode(int key) {
 	for(Integer k :meAsDest.get(key)) {
 			 Edges.get(k).removeNode(key);
 			  e_size--;
+			  MC++;
 		   }
 	e_size-=getE(key).size();
+	MC+=getE(key).size();
 	Edges.remove(key);
 	meAsDest.remove(key);
 	MC++;
 	return Nodes.remove(key);
 }
 /**
- * This function deletes,in O(1), the edge src-->dest from the graph,
-* @param src - the source of the edge.
+ * This function deletes,in O(1), the edge src--dest from the graph,
+ * @param src - the source of the edge.
  * @param dest - the destination of the edge.
  * @return the data of the removed edge or null if the edge doesn't exist in the graph.
  */
@@ -202,6 +207,7 @@ public edge_data removeEdge(int src, int dest) {
 }
 /**
  * This function finds in O(1), the numbers of the nodes in the graph.
+ * @return returns the number of vertices (nodes) in the graph.
  */
 @Override
 public int nodeSize() {
@@ -209,7 +215,7 @@ public int nodeSize() {
 }
 /**
  * This function returns in O(1), the number of the edges in the graph.
- * @return return the number of the edges.
+ * @return returns the number of the edges in the graph.
  */
 @Override
 public int edgeSize() {
@@ -217,7 +223,7 @@ public int edgeSize() {
 }
 /**
  * This function returns in O(1), the number of the changes that have been made in the graph.
- * @return return MC- the number of the changes.
+ * @return returns MC- the number of the changes.
  */
 @Override
 public int getMC() {
@@ -225,14 +231,15 @@ public int getMC() {
 }
 
 	/**
-	 * this function check each node in the graph ,for each node the function checks if the graphs as the same edges
+	 * This function check each node in the graph ,for each node the function checks if the graphs as the same edges
 	 * Associated, and the weight of the edges is the same.
-	 * @param g
-	 * @return
+	 * @param g- this is the other object.
+	 * @return returns true if this  DWGraph_DS and the other object are equals, otherwise returns false.
 	 */
 	@Override
 	public boolean equals(Object g){
 	boolean answer = true;
+	if(g==null||!(g instanceof DWGraph_DS)) return false;
 	directed_weighted_graph other = (directed_weighted_graph)g;
 	for(node_data node :this.getV()){
 		if(other.getNode(node.getKey()) != null){
@@ -253,7 +260,7 @@ public int getMC() {
 	/**
 	 * This class represents a node (vertex) in an directional weighted graph.
 	 * Every node consist of a unique key,weight, location, and tag and info for marking.
-	 * @author Lea&shira.
+	 * @author Lea.shira;
 	 */
 	public static class NodeData implements node_data{
 		private int id;
@@ -277,7 +284,7 @@ public int getMC() {
 
 		/**
 		 * constructor by key, create new node data with a given key and a default location
-		 * @param key
+		 * @param key- this is the given node_id.
 		 */
 		public NodeData(int key) {
 			this.id=key;
@@ -288,25 +295,11 @@ public int getMC() {
 		}
 
 		/**
-		 * constructor that make a new node with given prams
-		 * @param key
-		 * @param info
-		 * @param tag
-		 * @param weight
-		 * @param x
-		 * @param y
-		 * @param z
-		 */
-		public NodeData(int key, String info,int tag, double weight,double x, double y, double z) {
-			this.id=key;
-			this.info=info;
-			this.tag=tag;
-			this.weight = weight;
-			this.pos=new Geo_Location(x,y,z);
-		}
-		/**
-		 * constructor by key, create new node data with a given key and set 3D point location by given values (x,y,z)
-		 * @param key
+		 * constructor by key and geo_location.
+		 * @param key- this is the given node_id.
+		 * @param x- this is the x field of the geo_location.
+		 * @param y- this is the y field of the geo_location.
+		 * @param z- this is the z field of the geo_location.
 		 */
 		public NodeData(int key,double x, double y, double z) {
 			this.id=key;
@@ -317,8 +310,8 @@ public int getMC() {
 		}
 
 		/**
-		 * return the node's key
-		 * @return
+		 * This function returns the node's key
+		 * @return returns the node's key
 		 */
 		@Override
 		public int getKey() {
@@ -326,8 +319,8 @@ public int getMC() {
 		}
 
 		/**
-		 * return the 3D point location of the node.
-		 * @return
+		 * This function returns the 3D point location of the node.
+		 * @return returns the node's location.
 		 */
 		@Override
 		public geo_location getLocation() {
@@ -335,8 +328,8 @@ public int getMC() {
 		}
 
 		/**
-		 * set the 3D point location of the node by given location
-		 * @param p -new location  (position) of this node.
+		 * This function sets the 3D point location of the node by given location
+		 * @param p -new location (position) of this node.
 		 */
 		@Override
 		public void setLocation(geo_location p) {
@@ -344,8 +337,8 @@ public int getMC() {
 		}
 
 		/**
-		 * return the wight of the node.
-		 * @return
+		 * This function returns the weight of the node.
+		 * @return returns the node's weight.
 		 */
 		@Override
 		public double getWeight() {
@@ -353,18 +346,17 @@ public int getMC() {
 		}
 
 		/**
-		 * set the weight of the node by given weight
-		 * @param w - the new weight
+		 * This function sets the weight of the node by a given weight.
+		 * @param w - the new weight.
 		 */
 		@Override
 		public void setWeight(double w) {
 			this.weight=w;
-			
 		}
 
 		/**
-		 *return the info of the node
-		 * @return
+		 * This function returns the info of this node.
+		 * @return returns node's info.
 		 */
 		@Override
 		public String getInfo() {
@@ -372,18 +364,17 @@ public int getMC() {
 		}
 
 		/**
-		 * set the info of the node by given string
-		 * @param s
+		 * This function sets the info of the node by a given string.
+		 * @param s - the new node's info.
 		 */
 		@Override
 		public void setInfo(String s) {
-			this.info=""+s;
-			
+			this.info=""+s;	
 		}
 
 		/**
-		 * return a tag mark of the node (used for algorithms)
-		 * @return
+		 *This function returns a tag mark of the node (used for algorithms)
+		 * @return the node's tag.
 		 */
 		@Override
 		public int getTag() {
@@ -391,17 +382,17 @@ public int getMC() {
 		}
 
 		/**
-		 * set a tag mark of the node (used for algorithms)
-		 * @param t - the new value of the tag
+		 * This function sets a tag mark of the node (used for algorithms)
+		 * @param t - the new value of the tag.
 		 */
 		@Override
 		public void setTag(int t) {
-			tag=t;
-			
+			this.tag=t;
 		}
 
 		/**
-		 * this class represent a geographic 3D point location of a node data
+		 * This class represent a geographic 3D point location of a node data.
+		 * @author Lea.shira;
 		 */
 		public class Geo_Location implements geo_location{
 			private double _x;
@@ -418,8 +409,8 @@ public int getMC() {
 			}
 
 			/**
-			 * copy constructor of the graph set the this location to a given location
-			 * @param p
+			 * copy constructor of the graph set the this location to a given location.
+			 * @param p- the other geo_location.
 			 */
 			public Geo_Location(geo_location p) {
 				this._x=p.x();
@@ -429,9 +420,9 @@ public int getMC() {
 
 			/**
 			 * this constructor create a new geographic location by given (x,y,z) values
-			 * @param x
-			 * @param y
-			 * @param z
+			 * @param x- this is the x field of the geo_location.
+			 * @param y- this is the y field of the geo_location.
+			 * @param z- this is the z field of the geo_location.
 			 */
 			public Geo_Location(double x,double y,double z) {
 				this._x=x;
@@ -440,8 +431,8 @@ public int getMC() {
 			}
 
 			/**
-			 * return the x position of the node.
-			 * @return
+			 * This function returns the x position of the node.
+			 * @return returns the x position of the node.
 			 */
 			@Override
 			public double x() {
@@ -449,8 +440,8 @@ public int getMC() {
 			}
 
 			/**
-			 * return the y position of the node.
-			 * @return
+			 *This function returns the y position of the node.
+			 * @return returns the y position of the node.
 			 */
 			@Override
 			public double y() {
@@ -458,8 +449,8 @@ public int getMC() {
 			}
 
 			/**
-			 * return the z position of the node.
-			 * @return
+			 * This function returns the z position of the node.
+			 * @return returns the z position of the node.
 			 */
 			@Override
 			public double z() {
@@ -467,9 +458,9 @@ public int getMC() {
 			}
 
 			/**
-			 * calculate the distance between this node geographic location to a given geographic location.
-			 * @param g
-			 * @return
+			 * This function calculates the distance between this node geographic location to a given geographic location.
+			 * @param g- the other geo_location.
+			 * @return returns the distance between this node geographic location to a given geographic location.
 			 */
 			@Override
 			public double distance(geo_location g) {
@@ -477,6 +468,18 @@ public int getMC() {
 				double dis_y=Math.pow(this._y-g.y(), 2);
 				double dis_z=Math.pow(this._z-g.z(), 2);
 				return Math.sqrt(dis_x+dis_y+dis_z);
+			}
+			/**
+			 * This function checks the given object is equals to this geo_location.
+			 * @param pos- this is the other object.
+			 * @return returns true if this  geo_location and the other object are equals, otherwise returns false.
+			 */
+			@Override
+			public boolean equals(Object pos){
+			if(pos==null||!(pos instanceof Geo_Location)) return false;
+			Geo_Location other = (Geo_Location)pos;
+			if(other.x()==this.x()&&other.y()==this.y()&&other.z()==this.z()) return true;
+			return false;
 			}
 
 		}
@@ -486,7 +489,7 @@ public int getMC() {
  * This public class represents an edge in an directional weighted graph.
  * Every edge consist of src(edge's start node_id), dest(edge's end node_id), edge's weight,
  * tag and info(for marking).
- * @author Lea&Shira.
+ * @author Lea.Shira;
  *
  */
 
@@ -498,27 +501,10 @@ public static class EdgeData implements edge_data,Comparable<edge_data>{
 	private int tag;
 
 	/**
-	 * constructor that create a new edge with a given params.
-	 * @param src
-	 * @param dest
-	 * @param weight
-	 * @param info
-	 * @param tag
-	 */
-	public EdgeData(int src,int dest,double weight,String info,int tag) {
-		this.src=src;
-		this.dest=dest;
-		this.w=weight;
-		this.info=info;
-		this.tag=tag;
-	}
-
-	/**
-	 * default constructor create a new edge
-	 * need sources and destination keys ,and the weight of the edge.
-	 * @param src
-	 * @param dest
-	 * @param weight
+	 * default constructor create a new edge.
+	 * @param src- the node_id of the edge's starting point.
+	 * @param dest- the node_id of the edge's destination.
+	 * @param weight- the edge's weight.
 	 */
 	public EdgeData(int src,int dest,double weight) {
 		this.src=src;
@@ -529,7 +515,7 @@ public static class EdgeData implements edge_data,Comparable<edge_data>{
 	}
 	/**
 	 * The function returns the id of the source node of this edge.
-	 * @return
+	 * @return returns id of the source node of this edge.
 	 */
 	@Override
 	public int getSrc() {
@@ -537,7 +523,7 @@ public static class EdgeData implements edge_data,Comparable<edge_data>{
 	}
 	/**
 	 * This function returns the id of the destination node of this edge.
-	 * @return 
+	 * @return returns id of the destination node of this edge.
 	 */
 	@Override
 	public int getDest() {
@@ -545,7 +531,7 @@ public static class EdgeData implements edge_data,Comparable<edge_data>{
 	}
 	/**
 	 *This function returns the weight of this edge (only positive value).
-	 *  @return
+	 * @return returns the edge's weight.
 	 */
 	@Override
 	public double getWeight() {
@@ -553,7 +539,7 @@ public static class EdgeData implements edge_data,Comparable<edge_data>{
 	}
 	/**
 	 * Returns the remark (meta data) associated with this edge.
-	 * @return
+	 * @return returns the edge's info.
 	 */
 	@Override
 	public String getInfo() {
@@ -561,7 +547,7 @@ public static class EdgeData implements edge_data,Comparable<edge_data>{
 	}
 	/**
 	 * Allows changing the remark (meta data) associated with this edge.
-	 * @param s
+	 * @param s - the new edge's info.
 	 */
 	@Override
 	public void setInfo(String s) {
@@ -570,6 +556,7 @@ public static class EdgeData implements edge_data,Comparable<edge_data>{
 	}
 	/**
 	 * This function returns the Temporal data of this edge.
+	 *  @return returns the edge's tag.
 	 */
 	@Override
 	public int getTag() {
@@ -585,22 +572,23 @@ public static class EdgeData implements edge_data,Comparable<edge_data>{
 	}
 
 	/**
-	 * check if this edge equals to a given edge by source and destination keys and the edge weight.
-	 * @param other
-	 * @return
+	 * This function checks if this edge equals to a given edge by source and destination keys and the edge weight.
+	 * @param other- this is the other object.
+	 * @return returns true if this edge and the other object are equals, otherwise returns false.
 	 */
 	@Override
 	public boolean equals(Object other) {
-		if(!(other instanceof edge_data)) return false;
+		if(other==null||!(other instanceof edge_data)) return false;
 		edge_data edge=(edge_data)other;
 		if(getSrc()==edge.getSrc()&&getDest()==edge.getDest()&&getWeight()==edge.getWeight()) return true;
 		return false;
 	}
 
 	/**
-	 * compering this edge with other edge by the associated tag mark
-	 * @param o
-	 * @return
+	 * This function is comparing this edge with other edge by the associated tag mark
+	 * @param o- the other edge.
+	 * @return returns -1: if this tag is bigger then o.tag,
+	 * return 1: if this tag is smaller then o.tag, or returns 0 if the tags are equals.
 	 */
 	@Override
 	public int compareTo(edge_data o) {
@@ -613,6 +601,7 @@ public static class EdgeData implements edge_data,Comparable<edge_data>{
 /**
  * This private class represents all the edges getting out of a given node.
  * uses a data structure from the type of HahMap.
+ * @author Lea.shira;
  */
 public static class edges_direction{
 	HashMap<Integer,edge_data> edgesNi;
@@ -649,14 +638,16 @@ public static class edges_direction{
 		return false;
 	}
 	/**
-	 * This function adds node other to be another neighbor of this current node_info. 
-	 * @param other- this is the node which need to be add as a new neighbor.
+	 * This function adds edge to be another neighbor of this current node_id. 
+	 * @param other- this is the id of the destination node of this edge.
+	 * @param edge- this is the new edge which this node is the source 
+	 * of this edge and 'other' is the id of the edge's destination.
 	 */
 	public void addNi(int other, edge_data edge) {
 		edgesNi.put(other, edge);
 	}
 	/**
-	 * This function removes the edge this -->other.
+	 * This function removes the edge this --other.
 	 * @param other- this is the node which the edge ends at.
 	 */
 	public void removeNode(int other) {
@@ -666,9 +657,9 @@ public static class edges_direction{
 	}
 	/**
 	 * This function returns the weight of the edge from this to other: 
-	 * this-->other,in case the edge is existent.
+	 * this--other,in case the edge is existent.
 	 * @param other- this is the other node_id,which may the edge ends at.
-	 * @return the weight of the edge from this-->(to)other,or -1 in case the edge isn't existent. 
+	 * @return the weight of the edge from this--(to)other,or -1 in case the edge isn't existent. 
 	 */
 	public double getWeight(int other) {
 		if(hasNi(other)) {

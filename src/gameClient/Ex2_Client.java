@@ -8,9 +8,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 /**
- * This class 
- * @author User
- *
+ * This class represents the 'pokemon game'.
+ *This class is getting a server to the chosen game and by using this class the game will 
+ *start and run with strategic moves as long as the time of the game is'nt over. 
+ * @author Lea.Shira;
  */
 
 public class Ex2_Client implements Runnable {
@@ -23,6 +24,14 @@ public class Ex2_Client implements Runnable {
 		this.scenario_num = scenario_num;
 		this.id = id;
 	}
+	/**
+	 * This function runs as long as the game is running.
+	 * Before the game starts this function creates the game's graph by loading the JSON string of the game's graph,
+	 * inits the agents at their starting locations and starts the game.
+	 * While the game is running this function moves the agents according to their chosen
+	 * next edge, and chooses for the next agent's edge.
+	 * At the end of the game, this function shows the game's results to the player.
+	 */
 	@Override
 	public void run() {
 		game_service game = Game_Server_Ex2.getServer(scenario_num); 
@@ -41,10 +50,7 @@ public class Ex2_Client implements Runnable {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
 		}
-
 		try {
 			init(game, graph);
 		} catch (JSONException e1) {
@@ -112,7 +118,7 @@ public class Ex2_Client implements Runnable {
 							prev = node.getKey();
 						}
 						if (agent.get_curr_fruit() != null && agent.get_curr_edge() != null) {
-							agent.set_SDT(10);
+							agent.set_SDT(25);
 							try {
 								Thread.sleep(agent.get_sg_dt());
 							} catch (Exception e) {
@@ -126,16 +132,15 @@ public class Ex2_Client implements Runnable {
 						}
 					}
 				}
-				//System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
 			}
 		}
 }
 	/**
-	 * set the target of the agent to the closed pokemon on the path
-	 * @param ag
-	 * @param allPo
-	 * @param dest
-	 * @param path
+	 * This function sets the target(fruit) of the agent to be the pokemon which chosen on the 'nextNode' function.
+	 * @param ag- the current agent.
+	 * @param allPo- the current pokemons list.
+	 * @param dest- the agent's next destination.
+	 * @param path the chosen current path of the agent.
 	 */
 private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_data> path){
 		if(allPo!=null&&path!=null){
@@ -150,12 +155,15 @@ private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_d
 		}
 }
 	/**
-	 *order the pokemons by value and choose the biggest one and then check for closer pokemon with info "f
-	 *return -1 if all pokemons with info "t"
-	 * @param g
-	 * @param src
-	 * @param allPo
-	 * @return
+	 *This function chooses the most preferable next destination for the current agent .
+	 *The choosing is conducted by prioritize the pokemons by value and choosing the biggest one. 
+	 *In case, there is a closer pokemon than the higher value's pokemon, the current agent will go to him.
+	 *Otherwise, the agent's next destination will be the destination of the higher value's pokemon's.
+	 * @param g- the graph of the game.
+	 * @param src- the agent's current node_id.
+	 * @param allPo-  the current pokemons list. 
+	 * @return- returns the preferable next destination of the 
+	 * current agent or -1 if all pokemons's info are "t".
 	 */
 	private static int nextNode(directed_weighted_graph g, int src, List<CL_Pokemon> allPo) {
 		dw_graph_algorithms ga = new DWGraph_Algo();
@@ -190,9 +198,9 @@ private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_d
 		return ans;
 	}
 	/**
-	 * set mark "t" one the pokemon edges in the path
-	 * @param allPo
-	 * @param path
+	 * set mark "t" one the pokemon's edges which in the path.
+	 * @param allPo- the current pokemon list . 
+	 * @param path- the chosen current path of the agent.
 	 */
 	private void setPkemons(List<CL_Pokemon> allPo,List<node_data> path){
 		if(allPo!=null&&path!=null){

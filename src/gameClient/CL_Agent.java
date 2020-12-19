@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import java.util.List;
 /**
  * This class represents an agent for the pokemon game.
- * @author Lea&Shira.
+ * @author Lea.Shira;
  */
 public class CL_Agent {
 		public static final double EPS = 0.0001;
@@ -24,7 +24,7 @@ public class CL_Agent {
 		private CL_Pokemon _curr_fruit;
 		private long _sg_dt;
 		private double _value;
-		private static int id=0;
+		
 
 		public CL_Agent(directed_weighted_graph g, int start_node) {
 			_gg = g;
@@ -33,6 +33,13 @@ public class CL_Agent {
 			_pos = _curr_node.getLocation();
 			_id =-1;
 			setSpeed(0);
+		}
+		@Override
+		public boolean equals(Object ag){
+		if(!(ag instanceof CL_Agent)) return false;
+		CL_Agent other = (CL_Agent)ag;
+		if(other.getID()==this.getID()&&other.getValue()==this.getValue()&&other.getLocation()==this.getLocation()&&other.getSpeed()==this.getSpeed()&&other.getSrcNode()==this.getSrcNode()&&other.getNextNode()==this.getNextNode()) return true;
+		return false;
 		}
 		/**
 		 * This function is getting a String object(JSON string) and set this agent' fields
@@ -66,7 +73,7 @@ public class CL_Agent {
 		}
 		/**
 		 * This function build a JSON string according to the fields's values of this agent.
-		 * @return
+		 * @return returns the JSON string according to the fields's values of this agent.
 		 */
 		public String toJSON() {
 			int d = this.getNextNode();
@@ -143,6 +150,9 @@ public class CL_Agent {
 		public int getID() {
 			return this._id;
 		}
+		public void setID(int id) {
+			 this._id=id;
+		}
 		/**
 		 * This function returns the location of this agent.
 		 * @return the agent's location.
@@ -173,14 +183,14 @@ public class CL_Agent {
 		}
 		/**
 		 * This function returns the current speed of this agent.
-		 * @return
+		 * @return he current speed of this agent.
 		 */
 		public double getSpeed() {
 			return this._speed;
 		}
 		/**
 		 * This function allows to set this agent's speed.
-		 * @param v
+		 * @param v- the new agent's speed
 		 */
 		public void setSpeed(double v) {
 			this._speed = v;

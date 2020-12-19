@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * This class represents a GUI class for presenting a game on a graph.
  * This class uses 'MyPanel' class where the game is actually drawning.
+ *  @author Lea.Shira;
  */
 public class MyFrame extends JFrame {
 	private int _ind;

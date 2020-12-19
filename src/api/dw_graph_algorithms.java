@@ -9,7 +9,7 @@ import org.json.JSONException;
  * 1. init(graph);
  * 2. isConnected(); // strongly (all ordered pais connected)
  * 3. double shortestPathDist(int src, int dest);
- * 4. List<node_data> shortestPath(int src, int dest);
+ * 4. List shortestPath(int src, int dest);
  * 5. Save(file); // JSON file
  * 6. Load(file); // JSON file
  *
@@ -19,42 +19,42 @@ import org.json.JSONException;
 public interface dw_graph_algorithms {
     /**
      * Init the graph on which this set of algorithms operates on.
-     * @param g
+     * @param g- a directional weighted graph.
      */
     public void init(directed_weighted_graph g);
 
     /**
      * Return the underlying graph of which this class works.
-     * @return
+     * @return returns a graph from the type of directed_weighted_graph. 
      */
     public directed_weighted_graph getGraph();
     /**
      * Compute a deep copy of this weighted graph.
-     * @return
+     * @return returns the new identical directional weighted graph.
      */
     public directed_weighted_graph copy();
     /**
      * Returns true if and only if (iff) there is a valid path from each node to each
      * other node. NOTE: assume directional graph (all n*(n-1) ordered pairs).
-     * @return
+     * @return returns true this graph is a strongly connected component, otherwise returns false.
      */
     public boolean isConnected();
     /**
      * returns the length of the shortest path between src to dest
-     * Note: if no such path --> returns -1
+     * Note: if no such path: returns -1
      * @param src - start node
      * @param dest - end (target) node
-     * @return
+     * @return returns the smallest distance between src(node_id) and dest(node_id).
      */
     public double shortestPathDist(int src, int dest);
     /**
      * returns the the shortest path between src to dest - as an ordered List of nodes:
-     * src--> n1-->n2-->...dest
+     * src-- n1--n2--...dest
      * see: https://en.wikipedia.org/wiki/Shortest_path_problem
-     * Note if no such path --> returns null;
+     * Note if no such path -- returns null;
      * @param src - start node
      * @param dest - end (target) node
-     * @return
+     * @return returns the shortest path with the lowest distance between src and dest 
      */
     public List<node_data> shortestPath(int src, int dest);
 
@@ -63,9 +63,8 @@ public interface dw_graph_algorithms {
      * file name - in JSON format
      * @param file - the file name (may include a relative path).
      * @return true - iff the file was successfully saved
-     * @throws JSONException 
      */
-    public boolean save(String file) throws JSONException;
+    public boolean save(String file);
 
     /**
      * This method load a graph to this graph algorithm.
@@ -74,8 +73,7 @@ public interface dw_graph_algorithms {
      * graph was not loaded the original graph should remain "as is".
      * @param file - file name of JSON file
      * @return true - iff the graph was successfully loaded.
-     * @throws JSONException 
      */
-    public boolean load(String file) throws JSONException;
+    public boolean load(String file);
 }
 
