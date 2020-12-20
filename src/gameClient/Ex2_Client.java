@@ -34,8 +34,8 @@ public class Ex2_Client implements Runnable {
 	 */
 	@Override
 	public void run() {
-		game_service game = Game_Server_Ex2.getServer(scenario_num); 
-		//	game.login(id);
+		game_service game = Game_Server_Ex2.getServer(scenario_num);
+		//game.login(id);
 		String g = game.getGraph();
 		directed_weighted_graph graph = new DWGraph_DS();
 		try {
@@ -61,11 +61,12 @@ public class Ex2_Client implements Runnable {
 		_win.repaint();
 		this.dt=100;
 		while (game.isRunning()) {
-			synchronized (game) {
+			synchronized (Ex2_Client.class) {
 				try {
 					_win.repaint();
 					moveAgants(game, graph);
 					Thread.sleep(this.dt);
+					System.out.println(dt);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -98,7 +99,6 @@ public class Ex2_Client implements Runnable {
 			pokemonSetEdge(gg, listP);
 			List<node_data> path = null;
 			for (CL_Agent agent : listAgents) {
-
 				int id = agent.getID();
 				int dest = agent.getNextNode();
 				int src = agent.getSrcNode();
@@ -107,10 +107,10 @@ public class Ex2_Client implements Runnable {
 					dest = nextNode(gg, src, listP);
 					path = ga.shortestPath(src, dest);
 					if (path != null) {
-						boolean upS = path.size() >2 && agent.getSpeed() < 5;
+						boolean upS = path.size() > 3 && agent.getSpeed() < 10;
 						if (upS) {
 							double s = agent.getSpeed();
-							agent.setSpeed(s + path.size());
+							agent.setSpeed(s + path.size() * 3);
 						}
 						setPkemons(listP, path);
 						int prev = src;
@@ -122,24 +122,27 @@ public class Ex2_Client implements Runnable {
 							prev = node.getKey();
 						}
 						if (agent.get_curr_fruit() != null && agent.get_curr_edge() != null) {
-							agent.set_SDT(25);
+							agent.set_SDT(10);
 							try {
+								System.out.println(agent.get_sg_dt());
 								Thread.sleep(agent.get_sg_dt());
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
-							this.dt = 40;
+							if(listAgents.size()>1)
+								this.dt = 40;
 						}
 						if (upS) {
 							double s = agent.getSpeed();
-							agent.setSpeed(s - path.size());
+							agent.setSpeed(s - path.size() * 3);
 						}
 					}
 				}
+				System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
 			}
 		}
 
-}
+	}
 	/**
 	 * This function sets the target(fruit) of the agent to be the pokemon which chosen on the 'nextNode' function.
 	 * @param ag- the current agent.
@@ -152,7 +155,7 @@ private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_d
 			for(CL_Pokemon p : allPo){
 				int src = p.get_edge().getSrc();
 				node_data nodeSrc = _ar.getGraph().getNode(src);
-				if(p.get_edge().getDest()==dest&&path.contains(nodeSrc)){
+				if(p.get_edge().getDest()==dest && path.contains(nodeSrc)){
 					ag.set_curr_fruit(p);
 					return;
 				}
@@ -167,25 +170,22 @@ private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_d
 	 * @param g- the graph of the game.
 	 * @param src- the agent's current node_id.
 	 * @param allPo-  the current pokemons list. 
-	 * @return- returns the preferable next destination of the 
+	 * @return - returns the preferable next destination of the 
 	 * current agent or -1 if all pokemons's info are "t".
 	 */
-	private static int nextNode(directed_weighted_graph g, int src, List<CL_Pokemon> allPo) {
+	public static int nextNode(directed_weighted_graph g, int src, List<CL_Pokemon> allPo) {
 		dw_graph_algorithms ga = new DWGraph_Algo();
 		ga.init(g);
 		int ans = -1;
+		double dist ;
+		double min = Double.MAX_EXPONENT;
 		PriorityQueue<CL_Pokemon> priQ = new PriorityQueue<CL_Pokemon>();
 		if (allPo != null) {
 			for (CL_Pokemon p : allPo) {
 				priQ.add(p);
 			}
-			CL_Pokemon p = priQ.poll();
-			CL_Pokemon pokemon;
-			double dist;
-			double bigpokemon = ga.shortestPathDist(src, p.get_edge().getDest());
-			double min = bigpokemon;
 			while (!priQ.isEmpty()) {
-				pokemon = priQ.poll();
+				CL_Pokemon pokemon = priQ.poll();
 				dist = ga.shortestPathDist(src, pokemon.get_edge().getDest());
 				if (dist == -1)
 					dist = ga.shortestPathDist(src, pokemon.get_edge().getSrc());
@@ -194,11 +194,6 @@ private void setPokemon(CL_Agent ag,List<CL_Pokemon> allPo, int dest,List<node_d
 					ans = pokemon.get_edge().getDest();
 					if (ans == src) ans = pokemon.get_edge().getSrc();
 				}
-			}
-			if (min == bigpokemon&& p.getInfo().equals("f")) {
-				ans = p.get_edge().getDest();
-				if (ans == src)
-					ans = p.get_edge().getSrc();
 			}
 		}
 		return ans;

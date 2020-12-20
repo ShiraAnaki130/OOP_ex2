@@ -4,7 +4,7 @@ import api.directed_weighted_graph;
 import api.edge_data;
 import api.geo_location;
 import api.node_data;
-import gameClient.util.Point3D;
+import gameClient.util.*;
 import org.json.JSONObject;
 import java.util.List;
 /**
@@ -221,8 +221,8 @@ public class CL_Agent {
 					 dist = _curr_fruit.getLocation().distance(this._pos);
 				}
 				double norm = dist/de;
-				double dt = w*norm / this.getSpeed(); 
-				ddt = (long)(dt*ddt);
+				double dt = (w*norm*EPS)/this.getSpeed();
+				ddt = (long)(dt*100000/ddt);
 			}
 			this.set_sg_dt(ddt);
 		}
@@ -241,4 +241,3 @@ public class CL_Agent {
 		}
 
 	}
-

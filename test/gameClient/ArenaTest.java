@@ -11,7 +11,9 @@ import api.DWGraph_Algo;
 import api.DWGraph_DS;
 import api.directed_weighted_graph;
 import api.node_data;
-
+/**
+ * This JUnit test case is for the of class Arena on gameClient's folder.
+ */
 
 public class ArenaTest {
 	private Arena arena=new Arena();
@@ -49,14 +51,5 @@ public class ArenaTest {
 		directed_weighted_graph fromArena=arena.getGraph();
 		assertEquals(toInit,fromArena);
 	}
-	@Test
-	void getAgents() {
-		List<CL_Agent> fromArena=null;
-		String file="data/agentTest";
-		fromArena=arena.getAgents(file, toInit);
-		CL_Agent agent=new CL_Agent(toInit,2);
-		agent.setID(0);
-		assertEquals(agent,fromArena.get(0));
-	}
-
+	
 }

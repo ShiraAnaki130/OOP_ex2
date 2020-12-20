@@ -182,7 +182,6 @@ public node_data removeNode(int key) {
 			  MC++;
 		   }
 	e_size-=getE(key).size();
-	MC+=getE(key).size();
 	Edges.remove(key);
 	meAsDest.remove(key);
 	MC++;
@@ -279,7 +278,7 @@ public int getMC() {
 			this.info="f";
 			this.tag=Integer.MAX_VALUE;
 			this.weight = 0;
-			this.pos=new Geo_Location();
+			this.pos=new GeoLocation();
 		}
 
 		/**
@@ -291,7 +290,7 @@ public int getMC() {
 			this.info="f";
 			this.tag=Integer.MAX_VALUE;
 			this.weight = 0;
-			this.pos=new Geo_Location();
+			this.pos=new GeoLocation();
 		}
 
 		/**
@@ -306,7 +305,7 @@ public int getMC() {
 			this.info="f";
 			this.tag=Integer.MAX_VALUE;
 			this.weight = 0;
-			this.pos=new Geo_Location(x,y,z);
+			this.pos=new GeoLocation(x,y,z);
 		}
 
 		/**
@@ -333,7 +332,7 @@ public int getMC() {
 		 */
 		@Override
 		public void setLocation(geo_location p) {
-			pos=new Geo_Location(p);
+			pos=new GeoLocation(p);
 		}
 
 		/**
@@ -389,12 +388,13 @@ public int getMC() {
 		public void setTag(int t) {
 			this.tag=t;
 		}
+	}
 
 		/**
 		 * This class represent a geographic 3D point location of a node data.
 		 * @author Lea.shira;
 		 */
-		public static class Geo_Location implements geo_location{
+		public static class GeoLocation implements geo_location{
 			private double _x;
 			private double _y;
 			private double _z;
@@ -402,7 +402,7 @@ public int getMC() {
 			/**
 			 * Default geographic location constructor(0.0,0.0,0.0)
 			 */
-			public Geo_Location() {
+			public GeoLocation() {
 				this._x=0.0;
 				this._y=0.0;
 				this._z=0.0;
@@ -412,7 +412,7 @@ public int getMC() {
 			 * copy constructor of the graph set the this location to a given location.
 			 * @param p- the other geo_location.
 			 */
-			public Geo_Location(geo_location p) {
+			public GeoLocation(geo_location p) {
 				this._x=p.x();
 				this._y=p.y();
 				this._z=p.z();
@@ -424,7 +424,7 @@ public int getMC() {
 			 * @param y- this is the y field of the geo_location.
 			 * @param z- this is the z field of the geo_location.
 			 */
-			public Geo_Location(double x,double y,double z) {
+			public GeoLocation(double x,double y,double z) {
 				this._x=x;
 				this._y=y;
 				this._z=z;
@@ -476,14 +476,14 @@ public int getMC() {
 			 */
 			@Override
 			public boolean equals(Object pos){
-			if(pos==null||!(pos instanceof Geo_Location)) return false;
-			Geo_Location other = (Geo_Location)pos;
+			if(pos==null||!(pos instanceof GeoLocation)) return false;
+			GeoLocation other = (GeoLocation)pos;
 			if(other.x()==this.x()&&other.y()==this.y()&&other.z()==this.z()) return true;
 			return false;
 			}
 
 		}
-	}
+	
 
 /**
  * This public class represents an edge in an directional weighted graph.

@@ -12,9 +12,9 @@ public class CL_AgentTest {
         node_data n1 = new DWGraph_DS.NodeData();
         node_data n2 = new DWGraph_DS.NodeData();
         node_data n3 = new DWGraph_DS.NodeData();
-        geo_location g1 = new DWGraph_DS.NodeData.Geo_Location(3,5,0);
-        geo_location g2 = new DWGraph_DS.NodeData.Geo_Location(1,2,0);
-        geo_location g3 = new DWGraph_DS.NodeData.Geo_Location(6,2,0);
+        geo_location g1 = new DWGraph_DS.GeoLocation(3,5,0);
+        geo_location g2 = new DWGraph_DS.GeoLocation(1,2,0);
+        geo_location g3 = new DWGraph_DS.GeoLocation(6,2,0);
         n1.setLocation(g1);
         n2.setLocation(g2);
         n3.setLocation(g3);

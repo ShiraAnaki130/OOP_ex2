@@ -4,7 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import api.*;
 import gameClient.util.Point3D;
-
+/**
+ * This JUnit test case is for the of class CL_Pokemon on gameClient's folder.
+ */
 public class CL_PokemonTest {
 	private Point3D point=new Point3D(2,4,0);
 	private CL_Pokemon pokemon= new CL_Pokemon(point,-1,5.0);
