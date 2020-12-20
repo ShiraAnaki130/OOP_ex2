@@ -35,7 +35,7 @@ public class Ex2_Client implements Runnable {
 	@Override
 	public void run() {
 		game_service game = Game_Server_Ex2.getServer(scenario_num);
-		//game.login(id);
+		game.login(id);
 		String g = game.getGraph();
 		directed_weighted_graph graph = new DWGraph_DS();
 		try {
@@ -107,41 +107,39 @@ public class Ex2_Client implements Runnable {
 					dest = nextNode(gg, src, listP);
 					path = ga.shortestPath(src, dest);
 					if (path != null) {
-						boolean upS = path.size() > 3 && agent.getSpeed() < 10;
+						boolean upS = path.size() > 2 && agent.getSpeed() < 5;
 						if (upS) {
 							double s = agent.getSpeed();
-							agent.setSpeed(s + path.size() * 3);
+							agent.setSpeed(s + path.size() * 2);
 						}
 						setPkemons(listP, path);
 						int prev = src;
 						for (node_data node : path) {
+							game.chooseNextEdge(agent.getID(), node.getKey());
 							edge_data edge = gg.getEdge(prev, node.getKey());
 							agent.set_curr_edge(edge);
 							setPokemon(agent, listP, node.getKey(), path);
-							game.chooseNextEdge(agent.getID(), node.getKey());
 							prev = node.getKey();
 						}
 						if (agent.get_curr_fruit() != null && agent.get_curr_edge() != null) {
 							agent.set_SDT(10);
 							try {
-								System.out.println(agent.get_sg_dt());
 								Thread.sleep(agent.get_sg_dt());
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
-							if(listAgents.size()>1)
-								this.dt = 40;
+						if(listAgents.size()>1)
+							this.dt =50;
 						}
 						if (upS) {
 							double s = agent.getSpeed();
-							agent.setSpeed(s - path.size() * 3);
+							agent.setSpeed(s - path.size() * 2);
 						}
 					}
 				}
 				System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
 			}
 		}
-
 	}
 	/**
 	 * This function sets the target(fruit) of the agent to be the pokemon which chosen on the 'nextNode' function.
