@@ -81,8 +81,10 @@ is to catch as many pokemons as possible with up to 10 moves(game.move() functio
 :chart_with_upwards_trend: **why using this game?**
 on our project we program a good-performing algorithm which move the agents on the graph in a way of getting high grade with the demand of up to ten server's move.
 
-Our game's scenarios results:
-![](data/ee.jpg)
+**Our game's scenarios results:**
+
+
+![](data/resultTable.jpeg)
  
 
 ***How to play the game?***
@@ -96,6 +98,7 @@ Our game's scenarios results:
 :white_check_mark: by using the **Command Prompt**, with the commad: java -jar Ex2.jar (your id) (the game's scenario number)
 
 :white_check_mark: by creating a new folder with the Ex2.jar file and with the data' folder.
+
 After that you need to click on the jar file, and then input your id and the game's scenario number at the current fields and than press 'start':
 
 ![](data/startingwidow.jpg)
